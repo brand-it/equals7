@@ -40,7 +40,7 @@ public class Game extends Canvas {
 		
 		// This is what is going to handle the loading of the mouse. Working on clean up the code is going to be needed.
 		spriteStore = new SpriteStore();
-		cursorImage = spriteStore.getSprite("images/cursor.jpg");
+		cursorImage = spriteStore.getSprite("images/cursor.gif");
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		hiddenCursor = toolkit.createCustomCursor(cursorImage, new Point(0,0), "hiddenCursor");
 		frame.setCursor(hiddenCursor);
