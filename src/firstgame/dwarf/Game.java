@@ -42,7 +42,7 @@ public class Game extends Canvas {
 		spriteStore = new SpriteStore();
 		cursorImage = spriteStore.getSprite("images/cursor.gif");
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		hiddenCursor = toolkit.createCustomCursor(cursorImage, new Point(0,0), "hiddenCursor");
+		hiddenCursor = toolkit.createCustomCursor(cursorImage, new Point(12,17), "hiddenCursor");
 		frame.setCursor(hiddenCursor);
 		
 		
