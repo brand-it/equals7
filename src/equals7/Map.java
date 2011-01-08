@@ -1,4 +1,4 @@
-package firstgame.dwarf;
+package equals7;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

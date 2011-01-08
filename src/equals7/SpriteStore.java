@@ -1,4 +1,4 @@
-package firstgame.dwarf;
+package equals7;
 
 import java.awt.Image;
 import java.io.IOException;
