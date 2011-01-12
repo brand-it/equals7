@@ -2,17 +2,15 @@ package equals7;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Toolkit;
 
 // By using the buffer we can increase the frame rate.
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 // Use the canvas class to make this hole thing build the UI
 public class Game extends Canvas {
@@ -20,15 +18,12 @@ public class Game extends Canvas {
 	private BufferStrategy strategy;
 	private static final int ORIGINx = 0;
 	private static final int ORIGINy = 0;
-	private Image cursorImage;
 	private Map map;
-
-	private SpriteStore spriteStore;
 
 	int height = 900;
 	int width = 1000;
 
-	private Cursor hiddenCursor;
+//	private Cursor hiddenCursor;
 
 	// Need to create the new frame out side of everything
 	Frame frame = new Frame("First Game");
@@ -39,13 +34,12 @@ public class Game extends Canvas {
 
 		// This is what is going to handle the loading of the mouse. Working on
 		// clean up the code is going to be needed.
-		spriteStore = new SpriteStore();
-		cursorImage = spriteStore.getSprite("images/cursor.gif");
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		toolkit.getBestCursorSize(12, 17);
-		hiddenCursor = toolkit.createCustomCursor(cursorImage, new Point(0, 0),
-				"hiddenCursor");
-		frame.setCursor(hiddenCursor);
+		// Image cursor = SpriteStore.get().getImage("images/cursor.gif", 0, 0);
+		// Toolkit toolkit = Toolkit.getDefaultToolkit();
+		// toolkit.getBestCursorSize(12, 17);
+		// hiddenCursor = toolkit.createCustomCursor(cursor, new Point(0, 0),
+		// "hiddenCursor");
+		// frame.setCursor(hiddenCursor);
 
 		frame.setLayout(null);
 
@@ -84,27 +78,28 @@ public class Game extends Canvas {
 	// May be trying to do to much in this method may want to spread it out a
 	// bit.
 	public void gameLoop() {
-
 		boolean gameRunning = true;
 		int getSizeHeight;
 		int getSizeWidth;
+
 
 		while (gameRunning) {
 
 			getSizeHeight = frame.getSize().height;
 			getSizeWidth = frame.getSize().width;
 
-			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
+			Graphics g = (Graphics) strategy.getDrawGraphics();
 
 			g.setColor(Color.black);
 
 			g.fillRect(ORIGINx, ORIGINy, width, height);
-			g.translate(ORIGINx, ORIGINy);
 
 			g.translate(ORIGINx, ORIGINy);
 			map.paint(g);
+			
 
 			g.dispose();
+			
 			strategy.show();
 			try {
 				Thread.sleep(4);
