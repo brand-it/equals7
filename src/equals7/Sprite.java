@@ -62,7 +62,6 @@ public class Sprite {
 		BufferedImage[] strip = new BufferedImage[numberW * numberH];
 		Graphics2D stripGC;
 
-
 		// each BufferedImage from the strip file is stored in strip[]
 		int count = 0;
 		for (int h = 0; h < numberH; h++) {

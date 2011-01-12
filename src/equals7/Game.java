@@ -4,26 +4,24 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 // By using the buffer we can increase the frame rate.
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 
 // Use the canvas class to make this hole thing build the UI
 public class Game extends Canvas {
 
 	private BufferStrategy strategy;
-	private static final int ORIGINx = 0;
-	private static final int ORIGINy = 0;
+	private static final int ORIGINx = 4;
+	private static final int ORIGINy = 15;
 	private Map map;
 
 	int height = 900;
 	int width = 1000;
 
-//	private Cursor hiddenCursor;
+	// private Cursor hiddenCursor;
 
 	// Need to create the new frame out side of everything
 	Frame frame = new Frame("First Game");
@@ -82,7 +80,6 @@ public class Game extends Canvas {
 		int getSizeHeight;
 		int getSizeWidth;
 
-
 		while (gameRunning) {
 
 			getSizeHeight = frame.getSize().height;
@@ -96,10 +93,9 @@ public class Game extends Canvas {
 
 			g.translate(ORIGINx, ORIGINy);
 			map.paint(g);
-			
 
 			g.dispose();
-			
+
 			strategy.show();
 			try {
 				Thread.sleep(4);
