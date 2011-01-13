@@ -1,0 +1,89 @@
+Workshops
+-------------
+Farm			Farmer
+	Duskblossom		-Incense
+	Goldsap Trees		-Incense
+	Amberwheat		-Bread, Beer
+	CocoaGourd		-Beer
+	Hops			-Beer
+
+Mill			Miller
+	Amberwheat Flour		-Bread
+
+Bakery			Baker
+	Amberwheat Biscuits
+
+Kitchen			Chef
+	Snail Nuggets
+
+Glassworks		Glazier
+
+
+Forge			Blacksmith
+
+
+Forge			Goldsmith
+
+
+Pottery			Potter
+
+
+Carpenter		Carpenter
+
+
+Mason			Stonemason
+
+
+Library			Archivist
+
+
+   --			Wizard
+
+
+			Engineer
+
+
+			Star-Reader
+
+
+Apothecary		Apothecarist
+
+
+			Miner
+
+
+			King
+
+
+			Leatherworker
+
+
+			Forester
+
+
+			Fisherdwarf
+
+
+Brewery			Brewer
+
+
+			Guard
+
+
+			Warrior
+
+
+			Tradesdwarf
+
+
+			Butcher
+
+
+Stables			Handler
+
+
+
+Dwarf Health 100
+Fists 7
+Dagger 15
+Sword 25
