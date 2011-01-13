@@ -5,14 +5,18 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Map {
-	private int width = 43;
-	private int height = 43;
-	private int[][] data = new int[height][width];
-	private int[][] orentation = new int[height][width];
+	private static int MATERIALS = 2;
 	private static int TILE_SIZE = 23;
+	public static int CLEAR = 2;
+
+	private static int WIDTH = 43;
+	private static int HEIGHT = 43;
+
+	private int[][] data = new int[HEIGHT][WIDTH];
+	private int[][] orentation = new int[HEIGHT][WIDTH];
+
 	BufferedImage[][] image;
 	BufferedImage clearImage;
-	public static int CLEAR = 2;
 
 	public Map(Game game) {
 		// for loop here
@@ -24,22 +28,113 @@ public class Map {
 		 * in this array you would run the x and y backwards. you would first
 		 * find the height then your would build the width.
 		 */
+
 		Random generator = new Random();
 
-		int randomNumber = 3;
+		int numberOf = generator.nextInt(50);
+		numberOf += 10;
+		for (int m = 1; m <= MATERIALS; m++) {
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				randomNumber = generator.nextInt(3);
-				
-				data[y][x] = randomNumber;
+			for (int n = 0; n < numberOf; n++) {
+
+				int amount = generator.nextInt(10);
+				amount += 10;
+				int yRandLoc = generator.nextInt(HEIGHT);
+				int xRandLoc = generator.nextInt(WIDTH);
+				int nextLocation;
+				for (int a = 0; a <= amount; a++) {
+					if (yRandLoc < HEIGHT && xRandLoc < WIDTH)
+						if (lookAround(yRandLoc, xRandLoc)) {
+							data[yRandLoc][xRandLoc] = m;
+							nextLocation = generator.nextInt(4);
+							if (nextLocation == 0 && lookUp(yRandLoc, xRandLoc)) {
+								yRandLoc -= 1;
+							} else if (nextLocation == 1
+									&& lookLeft(yRandLoc, xRandLoc)) {
+
+								xRandLoc -= 1;
+							} else if (nextLocation == 2
+									&& lookRight(yRandLoc, xRandLoc)) {
+								xRandLoc += 1;
+							} else if (nextLocation == 3
+									&& lookRight(yRandLoc, xRandLoc)) {
+								yRandLoc += 1;
+							}
+						}
+				}
 			}
 		}
+
 		doubleCheck();
 
 		Sprite sprite = new Sprite();
 		image = sprite.loadStripImageArray("images/imageMap.jpg", 4, 4, 1, 2);
 		clearImage = sprite.loadImage("images/darkFloorStone.jpg");
+	}
+
+	public boolean lookAround(int y, int x) {
+		if (x <= WIDTH && x >= 0 && y <= HEIGHT && y >= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean lookUp(int y, int x) {
+		if (y != 0) {
+			if (data[y - 1][x] < CLEAR) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public boolean lookDown(int y, int x) {
+		if (y < HEIGHT - 1) {
+			if (data[y + 1][x] < CLEAR) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
+	}
+
+	public boolean lookRight(int y, int x) {
+		if (x < WIDTH - 1) {
+			if (data[y][x + 1] < CLEAR) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public boolean lookLeft(int y, int x) {
+		if (x != 0) {
+			if (data[y][x - 1] < CLEAR) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isClear(int y, int x) {
+		if (data[y][x] != CLEAR) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void doubleCheck() {
@@ -50,32 +145,23 @@ public class Map {
 		int right = 4;
 		int bottom = 8;
 
-
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = 0; y < HEIGHT; y++) {
+			for (int x = 0; x < WIDTH; x++) {
 				total = 0;
-				if (data[y][x] != CLEAR) {
+				if (isClear(y, x)) {
 
-					if (y != 0) {
-						if (data[y - 1][x] < CLEAR) {
-							total += top;
-						}
+					if (lookUp(y, x)) {
+						total += top;
 					}
-					if (y < height - 1) {
-						if (data[y + 1][x] < CLEAR) {
-							total += bottom;
-						}
+					if (lookDown(y, x)) {
+						total += bottom;
 					}
 
-					if (x < width - 1) {
-						if (data[y][x + 1] < CLEAR) {
-							total += right;
-						}
+					if (lookRight(y, x)) {
+						total += right;
 					}
-					if (x != 0) {
-						if (data[y][x - 1] < CLEAR) {
-							total += left;
-						}
+					if (lookLeft(y, x)) {
+						total += left;
 					}
 					orentation[y][x] = total;
 				}
@@ -86,17 +172,16 @@ public class Map {
 
 	public void paint(Graphics g) {
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				
-				if (data[y][x] == CLEAR){
-					g.drawImage(clearImage, x * TILE_SIZE, y * TILE_SIZE,
-							null);
-				}else{
-					g.drawImage(image[data[y][x]][orentation[y][x]], x * TILE_SIZE, y * TILE_SIZE,
-							null);
+		for (int y = 0; y < HEIGHT; y++) {
+			for (int x = 0; x < WIDTH; x++) {
+
+				if (data[y][x] == CLEAR) {
+					g.drawImage(clearImage, x * TILE_SIZE, y * TILE_SIZE, null);
+				} else {
+					g.drawImage(image[data[y][x]][orentation[y][x]], x
+							* TILE_SIZE, y * TILE_SIZE, null);
 				}
-				
+
 			}
 		}
 	}

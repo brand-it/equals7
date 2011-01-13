@@ -56,7 +56,7 @@ public class Sprite {
 		}
 		int imWidth = stripIm.getWidth();
 		int imHeight = stripIm.getHeight();
-		
+
 		int chunks = (chunksW + chunksH) - 1;
 
 		int tileWidth = imWidth / (numberW * chunksW);
@@ -77,11 +77,11 @@ public class Sprite {
 		int topLeftImLocY = 0;
 		int bottomRightImLocX = 0;
 		int bottomRightImLocY = 0;
-		
+
 		for (int c = 0; c < chunks; c++) {
 			chunkLocW = chunkW * c;
 			chunkLocH = chunkH * c;
-			if (imWidth == chunkLocW ){
+			if (imWidth == chunkLocW) {
 				chunkLocW = 0;
 			}
 			count = 0;
@@ -92,11 +92,15 @@ public class Sprite {
 					// create a graphics context
 					topLeftImLocX = (w * tileWidth) + chunkLocW;
 					topLeftImLocY = (h * tileHeight) + chunkLocH;
-					bottomRightImLocX = ((w * tileWidth) + tileWidth) + chunkLocW;
-					bottomRightImLocY = ((h * tileHeight) + tileHeight) + chunkLocH;
+					bottomRightImLocX = ((w * tileWidth) + tileWidth)
+							+ chunkLocW;
+					bottomRightImLocY = ((h * tileHeight) + tileHeight)
+							+ chunkLocH;
 					stripGC = strip[c][count].createGraphics();
 					// copy images
-					stripGC.drawImage(stripIm, 0, 0, tileWidth, tileHeight, topLeftImLocX, topLeftImLocY, bottomRightImLocX, bottomRightImLocY, null);
+					stripGC.drawImage(stripIm, 0, 0, tileWidth, tileHeight,
+							topLeftImLocX, topLeftImLocY, bottomRightImLocX,
+							bottomRightImLocY, null);
 					stripGC.dispose();
 					count++;
 				}
