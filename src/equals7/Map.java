@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Map {
-	private static int MATERIALS = 2;
+	private static int MATERIALS = 4;
 	private static int TILE_SIZE = 23;
-	public static int CLEAR = 2;
+	public static int CLEAR = MATERIALS;
 
 	private static int WIDTH = 43;
 	private static int HEIGHT = 43;
@@ -68,7 +68,7 @@ public class Map {
 		doubleCheck();
 
 		Sprite sprite = new Sprite();
-		image = sprite.loadStripImageArray("images/imageMap.jpg", 4, 4, 1, 2);
+		image = sprite.loadStripImageArray("images/imageMap.jpg", 4, 4, 2, 2);
 		clearImage = sprite.loadImage("images/darkFloorStone.jpg");
 	}
 
