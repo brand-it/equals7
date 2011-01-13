@@ -8,8 +8,11 @@ public class Map {
 	private int width = 43;
 	private int height = 43;
 	private int[][] data = new int[height][width];
+	private int[][] orentation = new int[height][width];
 	private static int TILE_SIZE = 23;
-	BufferedImage[] image;
+	BufferedImage[][] image;
+	BufferedImage clearImage;
+	public static int CLEAR = 2;
 
 	public Map(Game game) {
 		// for loop here
@@ -23,19 +26,20 @@ public class Map {
 		 */
 		Random generator = new Random();
 
-		int randomNumber = 17;
+		int randomNumber = 3;
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				randomNumber = generator.nextInt(2);
-
-				data[y][x] = 15 + randomNumber;
+				randomNumber = generator.nextInt(3);
+				
+				data[y][x] = randomNumber;
 			}
 		}
 		doubleCheck();
 
 		Sprite sprite = new Sprite();
-		image = sprite.loadStripImageArray("images/imageMap.jpg", 5, 4);
+		image = sprite.loadStripImageArray("images/imageMap.jpg", 4, 4, 1, 2);
+		clearImage = sprite.loadImage("images/darkFloorStone.jpg");
 	}
 
 	public void doubleCheck() {
@@ -45,35 +49,35 @@ public class Map {
 		int left = 2;
 		int right = 4;
 		int bottom = 8;
-		int clear = 16;
+
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				total = 0;
-				if (data[y][x] != clear) {
+				if (data[y][x] != CLEAR) {
 
 					if (y != 0) {
-						if (data[y - 1][x] < clear) {
+						if (data[y - 1][x] < CLEAR) {
 							total += top;
 						}
 					}
 					if (y < height - 1) {
-						if (data[y + 1][x] < clear) {
+						if (data[y + 1][x] < CLEAR) {
 							total += bottom;
 						}
 					}
 
 					if (x < width - 1) {
-						if (data[y][x + 1] < clear) {
+						if (data[y][x + 1] < CLEAR) {
 							total += right;
 						}
 					}
 					if (x != 0) {
-						if (data[y][x - 1] < clear) {
+						if (data[y][x - 1] < CLEAR) {
 							total += left;
 						}
 					}
-					data[y][x] = total;
+					orentation[y][x] = total;
 				}
 			}
 		}
@@ -84,10 +88,15 @@ public class Map {
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				g.drawImage(image[data[y][x]], x * TILE_SIZE, y * TILE_SIZE,
-						null);
-				// g.drawImage(image, locationX, locationY, x + TILE_SIZE, y +
-				// TILE_SIZE, 0, 0, 23, 23, null);
+				
+				if (data[y][x] == CLEAR){
+					g.drawImage(clearImage, x * TILE_SIZE, y * TILE_SIZE,
+							null);
+				}else{
+					g.drawImage(image[data[y][x]][orentation[y][x]], x * TILE_SIZE, y * TILE_SIZE,
+							null);
+				}
+				
 			}
 		}
 	}
