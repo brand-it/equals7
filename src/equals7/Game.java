@@ -14,16 +14,18 @@ import java.awt.event.WindowEvent;
 // By using the buffer we can increase the frame rate.
 import java.awt.image.BufferStrategy;
 
+import javax.swing.event.MouseInputAdapter;
+
 // Use the canvas class to make this hole thing build the UI
 public class Game extends Canvas {
 
 	private BufferStrategy strategy;
-	private static final int ORIGINx = 4;
-	private static final int ORIGINy = 15;
+	public static final int ORIGINx = 4;
+	public static final int ORIGINy = 15;
 	private int element = 0;
+	private boolean weBeDragging = false;
+	private int mouseDragX, mouseDragY, xPressed, yPressed;
 	private Map map;
-	boolean isMousePressed = false;
-	boolean isMouseReleased = false;
 	int height = 900;
 	int width = 1000;
 
@@ -65,12 +67,14 @@ public class Game extends Canvas {
 		frame.setVisible(true);
 		addMouseListener(new mouseInputHandler());
 		addKeyListener(new keyInputHandler());
-
+		frame.addMouseMotionListener(new mouseDragHandler());
+		addMouseMotionListener(new mouseDragHandler());
 		// Make sure you create the buffer strategy
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 
 		map = new Map(this);
+		
 		gameLoop();
 	}
 
@@ -97,7 +101,7 @@ public class Game extends Canvas {
 				element = 0;
 			}
 			if (e.getKeyCode() == KeyEvent.VK_5) {
-				element = 4;
+				element = Map.CLEAR;
 			}
 		}
 
@@ -106,28 +110,38 @@ public class Game extends Canvas {
 	// This is not a good way to use this we just created a way to change the
 	// object
 	private class mouseInputHandler extends MouseAdapter {
-		int xPressed, yPressed, xReleased, yReleased;
-
+		int xReleased, yReleased;
 		public void mousePressed(MouseEvent e) {
-			isMousePressed = true;
 			if (e.getButton() == 1) {
-				xPressed = (e.getX() - ORIGINx) / 23;
-				yPressed = (e.getY() - ORIGINy) / 23;
+				xPressed = e.getX();
+				yPressed = e.getY();
+				System.out.println(xPressed);
+				System.out.println(yPressed);
 			}
 		}
+
+
+
 		public void mouseReleased(MouseEvent e) {
-			isMouseReleased = true;
 			if (e.getButton() == 1) {
-				xReleased = ((e.getX() - ORIGINx) / 23);
-				yReleased = ((e.getY() - ORIGINy) / 23);
+				xReleased = e.getX();
+				yReleased = e.getY();
+				weBeDragging = false;
 			}
+			map.changeTiles(xPressed, yPressed, xReleased, yReleased,
+						element);
+		}
+		
 
-			if (isMouseReleased && isMousePressed) {
-				 map.changeTiles(xPressed, yPressed, xReleased, yReleased, element);
-			}
-
+	}
+	private class mouseDragHandler extends MouseInputAdapter {
+		public void mouseDragged(MouseEvent e) {
+			weBeDragging = true;
+			mouseDragX = e.getX();
+			mouseDragY = e.getY();
 		}
 	}
+
 
 	// May be trying to do to much in this method may want to spread it out a
 	// bit.
@@ -137,7 +151,7 @@ public class Game extends Canvas {
 		int getSizeWidth;
 
 		while (gameRunning) {
-
+			
 			getSizeHeight = frame.getSize().height;
 			getSizeWidth = frame.getSize().width;
 
@@ -149,6 +163,10 @@ public class Game extends Canvas {
 
 			g.translate(ORIGINx, ORIGINy);
 			map.paint(g);
+			if (weBeDragging){
+				
+				map.highlight(g, xPressed, yPressed, mouseDragX, mouseDragY);
+			}
 
 			g.dispose();
 

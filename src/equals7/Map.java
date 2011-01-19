@@ -85,7 +85,7 @@ public class Map {
 			return false;
 		}
 	}
-
+	// This is to check to see if there is a tile above
 	public boolean lookUp(int y, int x) {
 		if (y != 0) {
 			if (data[y - 1][x] < CLEAR) {
@@ -97,7 +97,7 @@ public class Map {
 			return false;
 		}
 	}
-
+	// This is to check to see if there is a tile below 
 	public boolean lookDown(int y, int x) {
 		if (y < HEIGHT - 1) {
 			if (data[y + 1][x] < CLEAR) {
@@ -110,7 +110,7 @@ public class Map {
 			return false;
 		}
 	}
-
+	// This is to check to see if there is a tile to the right
 	public boolean lookRight(int y, int x) {
 		if (x < WIDTH - 1) {
 			if (data[y][x + 1] < CLEAR) {
@@ -122,7 +122,7 @@ public class Map {
 			return false;
 		}
 	}
-
+	// This is to check to see if there is a tile to the left
 	public boolean lookLeft(int y, int x) {
 		if (x != 0) {
 			if (data[y][x - 1] < CLEAR) {
@@ -134,7 +134,7 @@ public class Map {
 			return false;
 		}
 	}
-
+	// This is to check to see if there is a tile that is not blank
 	public boolean isClear(int y, int x) {
 		if (data[y][x] != CLEAR) {
 			return true;
@@ -179,7 +179,11 @@ public class Map {
 	public void changeTiles(int xPressed, int yPressed, int xReleased,
 			int yReleased, int element) {
 		int xStart, yStart, xEnd, yEnd;
-
+		// Handles the calculation for generalization of were the mouse is.
+		yReleased = (yReleased - Game.ORIGINy) / TILE_SIZE;
+		yPressed = (yPressed - Game.ORIGINy) / TILE_SIZE;
+		xReleased = (xReleased - Game.ORIGINx) / TILE_SIZE;
+		xPressed = (xPressed - Game.ORIGINx) / TILE_SIZE;
 		if (xPressed < xReleased) {
 			xStart = xPressed;
 			xEnd = xReleased;
@@ -194,28 +198,44 @@ public class Map {
 			yStart = yReleased;
 			yEnd = yPressed;
 		}
-		System.out.println("Going threw loop");
+		
 		for (int y = yStart; y <= yEnd; y++) {
 			for (int x = xStart; x <= xEnd; x++) {
-				data[y][x] = element;
-				System.out.println("X, Y " + x + ", " + y);
+				try {
+					data[y][x] = element;
+				}catch(ArrayIndexOutOfBoundsException e){
+					System.out.println("You have exceded the map size");
+				}
+				
 			}
 		}
 		doubleCheck();
 	}
 
-	public void paint(Graphics g) {
+	// Highlight
+	public void highlight(Graphics g, int xStart, int yStart, int x, int y){
+		int tileSizeWidth, tileSizeHeight;
+		xStart = ((xStart - Game.ORIGINy)/TILE_SIZE) * TILE_SIZE;
+		yStart = ((yStart - Game.ORIGINy)/TILE_SIZE) * TILE_SIZE;
+	
+		tileSizeWidth = (((x - Game.ORIGINy)/TILE_SIZE) - ((xStart - Game.ORIGINy)/TILE_SIZE)) * TILE_SIZE;
+		tileSizeHeight = (((y - Game.ORIGINy)/TILE_SIZE) - ((yStart - Game.ORIGINy)/TILE_SIZE)) * TILE_SIZE;
+		
+		System.out.println("X: "+ tileSizeWidth + " Y: " + tileSizeWidth);
+		
+		g.setColor(g.getColor().darker());
+		g.drawRect(xStart, yStart , tileSizeWidth, tileSizeHeight);
+	}
 
+	public void paint(Graphics g) {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-
 				if (data[y][x] == CLEAR) {
 					g.drawImage(clearImage, x * TILE_SIZE, y * TILE_SIZE, null);
 				} else {
 					g.drawImage(image[data[y][x]][orentation[y][x]], x
 							* TILE_SIZE, y * TILE_SIZE, null);
 				}
-
 			}
 		}
 	}
