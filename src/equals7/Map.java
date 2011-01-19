@@ -85,6 +85,7 @@ public class Map {
 			return false;
 		}
 	}
+
 	// This is to check to see if there is a tile above
 	public boolean lookUp(int y, int x) {
 		if (y != 0) {
@@ -97,7 +98,8 @@ public class Map {
 			return false;
 		}
 	}
-	// This is to check to see if there is a tile below 
+
+	// This is to check to see if there is a tile below
 	public boolean lookDown(int y, int x) {
 		if (y < HEIGHT - 1) {
 			if (data[y + 1][x] < CLEAR) {
@@ -110,6 +112,7 @@ public class Map {
 			return false;
 		}
 	}
+
 	// This is to check to see if there is a tile to the right
 	public boolean lookRight(int y, int x) {
 		if (x < WIDTH - 1) {
@@ -122,6 +125,7 @@ public class Map {
 			return false;
 		}
 	}
+
 	// This is to check to see if there is a tile to the left
 	public boolean lookLeft(int y, int x) {
 		if (x != 0) {
@@ -134,6 +138,7 @@ public class Map {
 			return false;
 		}
 	}
+
 	// This is to check to see if there is a tile that is not blank
 	public boolean isClear(int y, int x) {
 		if (data[y][x] != CLEAR) {
@@ -198,33 +203,34 @@ public class Map {
 			yStart = yReleased;
 			yEnd = yPressed;
 		}
-		
+
 		for (int y = yStart; y <= yEnd; y++) {
 			for (int x = xStart; x <= xEnd; x++) {
 				try {
 					data[y][x] = element;
-				}catch(ArrayIndexOutOfBoundsException e){
+				} catch (ArrayIndexOutOfBoundsException e) {
 					System.out.println("You have exceded the map size");
 				}
-				
+
 			}
 		}
 		doubleCheck();
 	}
 
 	// Highlight
-	public void highlight(Graphics g, int xStart, int yStart, int x, int y){
+	public void highlight(Graphics g, int xStart, int yStart, int x, int y) {
 		int tileSizeWidth, tileSizeHeight;
-		xStart = ((xStart - Game.ORIGINy)/TILE_SIZE) * TILE_SIZE;
-		yStart = ((yStart - Game.ORIGINy)/TILE_SIZE) * TILE_SIZE;
-	
-		tileSizeWidth = (((x - Game.ORIGINy)/TILE_SIZE) - ((xStart - Game.ORIGINy)/TILE_SIZE)) * TILE_SIZE;
-		tileSizeHeight = (((y - Game.ORIGINy)/TILE_SIZE) - ((yStart - Game.ORIGINy)/TILE_SIZE)) * TILE_SIZE;
 		
-		System.out.println("X: "+ tileSizeWidth + " Y: " + tileSizeWidth);
-		
+		x = x - Game.ORIGINx;
+		y = y - Game.ORIGINy;
+		xStart = ((xStart - Game.ORIGINx) / TILE_SIZE) * TILE_SIZE;
+		yStart = ((yStart - Game.ORIGINy) / TILE_SIZE) * TILE_SIZE;
+
+		tileSizeWidth = (((x / TILE_SIZE) - (xStart / TILE_SIZE)) * TILE_SIZE) + TILE_SIZE;
+		tileSizeHeight = (((y / TILE_SIZE) - (yStart / TILE_SIZE)) * TILE_SIZE) + TILE_SIZE;
+
 		g.setColor(g.getColor().darker());
-		g.drawRect(xStart, yStart , tileSizeWidth, tileSizeHeight);
+		g.drawRect(xStart, yStart, tileSizeWidth, tileSizeHeight);
 	}
 
 	public void paint(Graphics g) {

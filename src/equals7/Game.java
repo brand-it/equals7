@@ -4,6 +4,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -14,7 +16,6 @@ import java.awt.event.WindowEvent;
 // By using the buffer we can increase the frame rate.
 import java.awt.image.BufferStrategy;
 
-import javax.swing.event.MouseInputAdapter;
 
 // Use the canvas class to make this hole thing build the UI
 public class Game extends Canvas {
@@ -28,6 +29,7 @@ public class Game extends Canvas {
 	private Map map;
 	int height = 900;
 	int width = 1000;
+	private boolean mousePressed = false;
 
 	// private Cursor hiddenCursor;
 
@@ -67,14 +69,14 @@ public class Game extends Canvas {
 		frame.setVisible(true);
 		addMouseListener(new mouseInputHandler());
 		addKeyListener(new keyInputHandler());
-		frame.addMouseMotionListener(new mouseDragHandler());
 		addMouseMotionListener(new mouseDragHandler());
+		
 		// Make sure you create the buffer strategy
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 
 		map = new Map(this);
-		
+		new mouseDragHandler();
 		gameLoop();
 	}
 
@@ -115,8 +117,6 @@ public class Game extends Canvas {
 			if (e.getButton() == 1) {
 				xPressed = e.getX();
 				yPressed = e.getY();
-				System.out.println(xPressed);
-				System.out.println(yPressed);
 			}
 		}
 
@@ -126,7 +126,7 @@ public class Game extends Canvas {
 			if (e.getButton() == 1) {
 				xReleased = e.getX();
 				yReleased = e.getY();
-				weBeDragging = false;
+				mousePressed = false;
 			}
 			map.changeTiles(xPressed, yPressed, xReleased, yReleased,
 						element);
@@ -134,9 +134,9 @@ public class Game extends Canvas {
 		
 
 	}
-	private class mouseDragHandler extends MouseInputAdapter {
+	private class mouseDragHandler extends MouseAdapter {
 		public void mouseDragged(MouseEvent e) {
-			weBeDragging = true;
+			mousePressed = true;
 			mouseDragX = e.getX();
 			mouseDragY = e.getY();
 		}
@@ -149,9 +149,8 @@ public class Game extends Canvas {
 		boolean gameRunning = true;
 		int getSizeHeight;
 		int getSizeWidth;
-
+		
 		while (gameRunning) {
-			
 			getSizeHeight = frame.getSize().height;
 			getSizeWidth = frame.getSize().width;
 
@@ -163,10 +162,12 @@ public class Game extends Canvas {
 
 			g.translate(ORIGINx, ORIGINy);
 			map.paint(g);
-			if (weBeDragging){
-				
+			
+			if (mousePressed){
 				map.highlight(g, xPressed, yPressed, mouseDragX, mouseDragY);
 			}
+			
+			
 
 			g.dispose();
 
