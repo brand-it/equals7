@@ -81,9 +81,7 @@ public class Sprite {
 		for (int ch = 0; ch < chunksH; ch++)
 			for (int cw = 0; cw < chunksW; cw++) {
 				chunkLocH = chunkH * ch;
-				chunkLocW = chunkW * cw;
-				System.out.println(ch);
-				System.out.println(cw);
+				chunkLocW = chunkW * cw;	
 				count = 0;
 				for (int h = 0; h < numberH; h++) {
 					for (int w = 0; w < numberW; w++) {

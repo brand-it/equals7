@@ -4,6 +4,10 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,8 +20,10 @@ public class Game extends Canvas {
 	private BufferStrategy strategy;
 	private static final int ORIGINx = 4;
 	private static final int ORIGINy = 15;
+	private int element = 0;
 	private Map map;
-
+	boolean isMousePressed = false;
+	boolean isMouseReleased = false;
 	int height = 900;
 	int width = 1000;
 
@@ -57,6 +63,9 @@ public class Game extends Canvas {
 		});
 
 		frame.setVisible(true);
+		addMouseListener(new mouseInputHandler());
+		addKeyListener(new keyInputHandler());
+
 		// Make sure you create the buffer strategy
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
@@ -71,6 +80,53 @@ public class Game extends Canvas {
 		height = getSizeHeight;
 		width = getSizeWidth;
 		gameLoop();
+	}
+
+	private class keyInputHandler extends KeyAdapter {
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_1) {
+				element = 1;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_2) {
+				element = 2;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_3) {
+				element = 3;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_4) {
+				element = 0;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_5) {
+				element = 4;
+			}
+		}
+
+	}
+
+	// This is not a good way to use this we just created a way to change the
+	// object
+	private class mouseInputHandler extends MouseAdapter {
+		int xPressed, yPressed, xReleased, yReleased;
+
+		public void mousePressed(MouseEvent e) {
+			isMousePressed = true;
+			if (e.getButton() == 1) {
+				xPressed = (e.getX() - ORIGINx) / 23;
+				yPressed = (e.getY() - ORIGINy) / 23;
+			}
+		}
+		public void mouseReleased(MouseEvent e) {
+			isMouseReleased = true;
+			if (e.getButton() == 1) {
+				xReleased = ((e.getX() - ORIGINx) / 23);
+				yReleased = ((e.getY() - ORIGINy) / 23);
+			}
+
+			if (isMouseReleased && isMousePressed) {
+				 map.changeTiles(xPressed, yPressed, xReleased, yReleased, element);
+			}
+
+		}
 	}
 
 	// May be trying to do to much in this method may want to spread it out a

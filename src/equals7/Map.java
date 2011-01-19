@@ -28,6 +28,12 @@ public class Map {
 		 * in this array you would run the x and y backwards. you would first
 		 * find the height then your would build the width.
 		 */
+		/*
+		 * There is no way to create a effective method for loop with out
+		 * sacking a lot of resorces. Sadly means that there is going to be more
+		 * code but it will run a lot faster. I will just have to keep double
+		 * checking the code and putting what I in methods.
+		 */
 
 		Random generator = new Random();
 
@@ -168,6 +174,34 @@ public class Map {
 			}
 		}
 
+	}
+
+	public void changeTiles(int xPressed, int yPressed, int xReleased,
+			int yReleased, int element) {
+		int xStart, yStart, xEnd, yEnd;
+
+		if (xPressed < xReleased) {
+			xStart = xPressed;
+			xEnd = xReleased;
+		} else {
+			xStart = xReleased;
+			xEnd = xPressed;
+		}
+		if (yPressed < yReleased) {
+			yStart = yPressed;
+			yEnd = yReleased;
+		} else {
+			yStart = yReleased;
+			yEnd = yPressed;
+		}
+		System.out.println("Going threw loop");
+		for (int y = yStart; y <= yEnd; y++) {
+			for (int x = xStart; x <= xEnd; x++) {
+				data[y][x] = element;
+				System.out.println("X, Y " + x + ", " + y);
+			}
+		}
+		doubleCheck();
 	}
 
 	public void paint(Graphics g) {
