@@ -57,7 +57,7 @@ public class Sprite {
 		int imWidth = stripIm.getWidth();
 		int imHeight = stripIm.getHeight();
 
-		int chunks = (chunksW + chunksH);
+		int chunks = (chunksW * chunksH);
 
 		int tileWidth = imWidth / (numberW * chunksW);
 		int tileHeight = imHeight / (numberH * chunksH);
@@ -81,11 +81,11 @@ public class Sprite {
 		for (int ch = 0; ch < chunksH; ch++)
 			for (int cw = 0; cw < chunksW; cw++) {
 				chunkLocH = chunkH * ch;
-				chunkLocW = chunkW * cw;	
+				chunkLocW = chunkW * cw;
 				count = 0;
 				for (int h = 0; h < numberH; h++) {
 					for (int w = 0; w < numberW; w++) {
-						
+
 						strip[chunk][count] = gc.createCompatibleImage(
 								tileWidth, tileHeight, transparency);
 						// create a graphics context

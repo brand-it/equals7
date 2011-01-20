@@ -5,18 +5,30 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Map {
-	private static int MATERIALS = 4;
+	private static int WALL_ARRAY_NUMBER = 4;
 	private static int TILE_SIZE = 23;
-	public static int CLEAR = MATERIALS;
-
+	// The clear number is to indicate a material that is not going to have to make rounded corners and such
+	private static int CLEAR = WALL_ARRAY_NUMBER;
+	// You set the single images to numbers like 5 and 6 indicating grass and stoneFloor
+	public static int STONE = 0;
+	public static int RED = 1;
+	public static int GOLD = 2;
+	public static int GREEN = 3;
+	// EveryThing bellow this is considered walk able
+	public static int GRASS = 4;
+	public static int STONE_FLOOR = 5;
+	// This is the total amount of elements this is used to create random maps
+	public static int TOTAL_ELEMENTS = 5;
+	// This indicates how many tiles there should be in each chunk
 	private static int WIDTH = 43;
 	private static int HEIGHT = 43;
-
+	// This is the array used to store the type of material that is being used
 	private int[][] data = new int[HEIGHT][WIDTH];
+	// This handles the tile if it needs to be a wall.
 	private int[][] orentation = new int[HEIGHT][WIDTH];
 
 	BufferedImage[][] image;
-	BufferedImage clearImage;
+	BufferedImage stoneFloor, grass;
 
 	public Map(Game game) {
 		// for loop here
@@ -39,7 +51,8 @@ public class Map {
 
 		int numberOf = generator.nextInt(50);
 		numberOf += 10;
-		for (int m = 1; m <= MATERIALS; m++) {
+		
+		for (int m = 0; m <= TOTAL_ELEMENTS; m++) {
 
 			for (int n = 0; n < numberOf; n++) {
 
@@ -48,10 +61,12 @@ public class Map {
 				int yRandLoc = generator.nextInt(HEIGHT);
 				int xRandLoc = generator.nextInt(WIDTH);
 				int nextLocation;
+				
 				for (int a = 0; a <= amount; a++) {
 					if (yRandLoc < HEIGHT && xRandLoc < WIDTH)
 						if (lookAround(yRandLoc, xRandLoc)) {
 							data[yRandLoc][xRandLoc] = m;
+							// The number of direction that the random element move can move is 4 it can't move more then 5
 							nextLocation = generator.nextInt(4);
 							if (nextLocation == 0 && lookUp(yRandLoc, xRandLoc)) {
 								yRandLoc -= 1;
@@ -75,7 +90,13 @@ public class Map {
 
 		Sprite sprite = new Sprite();
 		image = sprite.loadStripImageArray("images/imageMap.jpg", 4, 4, 2, 2);
-		clearImage = sprite.loadImage("images/darkFloorStone.jpg");
+		loadImages(sprite);
+		
+	}
+	
+	public void loadImages(Sprite sprite){
+		grass = sprite.loadImage("images/grass.jpg");
+		stoneFloor = sprite.loadImage("images/darkFloorStone.jpg");
 	}
 
 	public boolean lookAround(int y, int x) {
@@ -141,7 +162,7 @@ public class Map {
 
 	// This is to check to see if there is a tile that is not blank
 	public boolean isClear(int y, int x) {
-		if (data[y][x] != CLEAR) {
+		if (data[y][x] < CLEAR) {
 			return true;
 		} else {
 			return false;
@@ -220,14 +241,16 @@ public class Map {
 	// Highlight
 	public void highlight(Graphics g, int xStart, int yStart, int x, int y) {
 		int tileSizeWidth, tileSizeHeight;
-		
+
 		x = x - Game.ORIGINx;
 		y = y - Game.ORIGINy;
 		xStart = ((xStart - Game.ORIGINx) / TILE_SIZE) * TILE_SIZE;
 		yStart = ((yStart - Game.ORIGINy) / TILE_SIZE) * TILE_SIZE;
 
-		tileSizeWidth = (((x / TILE_SIZE) - (xStart / TILE_SIZE)) * TILE_SIZE) + TILE_SIZE;
-		tileSizeHeight = (((y / TILE_SIZE) - (yStart / TILE_SIZE)) * TILE_SIZE) + TILE_SIZE;
+		tileSizeWidth = (((x / TILE_SIZE) - (xStart / TILE_SIZE)) * TILE_SIZE)
+				+ TILE_SIZE;
+		tileSizeHeight = (((y / TILE_SIZE) - (yStart / TILE_SIZE)) * TILE_SIZE)
+				+ TILE_SIZE;
 
 		g.setColor(g.getColor().darker());
 		g.drawRect(xStart, yStart, tileSizeWidth, tileSizeHeight);
@@ -236,8 +259,10 @@ public class Map {
 	public void paint(Graphics g) {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-				if (data[y][x] == CLEAR) {
-					g.drawImage(clearImage, x * TILE_SIZE, y * TILE_SIZE, null);
+				if (data[y][x] == STONE_FLOOR) {
+					g.drawImage(stoneFloor, x * TILE_SIZE, y * TILE_SIZE, null);
+				} else if (data[y][x] == GRASS){
+					g.drawImage(grass, x * TILE_SIZE, y * TILE_SIZE, null);
 				} else {
 					g.drawImage(image[data[y][x]][orentation[y][x]], x
 							* TILE_SIZE, y * TILE_SIZE, null);
