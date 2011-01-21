@@ -4,8 +4,6 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -103,8 +101,11 @@ public class Game extends Canvas {
 			if (e.getKeyCode() == KeyEvent.VK_5) {
 				element = Map.STONE_FLOOR;
 			}
-			if (e.getKeyCode() == KeyEvent.VK_6){
-				element = Map.GRASS;
+			if (e.getKeyCode() == KeyEvent.VK_6) {
+				element = Map.DIRT;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_R){
+				map.generateMap();
 			}
 		}
 
