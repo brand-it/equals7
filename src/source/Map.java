@@ -1,8 +1,12 @@
-package equals7;
+package source;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+import org.apache.commons.codec.binary.Base64;
 
 public class Map {
 	private static int TILE_SIZE = 23;
@@ -246,6 +250,30 @@ public class Map {
 			}
 		}
 		doubleCheck();
+	}
+	
+	public void saveMap(){
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter("./bin/save/data"));
+			
+			String mapString = "";
+			for (int y = 0; y < HEIGHT; y++){
+				for (int x = 0; x < WIDTH; x++){
+					mapString += data[y][x];
+				}
+			}
+		      mapString = new String(Base64.encodeBase64(mapString.getBytes()));
+		      
+		      out.write(mapString);
+		      out.close();
+		      System.out.println("Encoded: " + mapString);
+		      System.out.println("Decoded:" 
+		          + new String(Base64.decodeBase64(mapString.getBytes())));
+		}catch(IOException e){
+			System.out.println("Could not save file" + e);
+		}
+	
+
 	}
 
 	// Highlight, For Development as well

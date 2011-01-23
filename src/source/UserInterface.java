@@ -1,4 +1,4 @@
-package equals7;
+package source;
 
 public class UserInterface {
 

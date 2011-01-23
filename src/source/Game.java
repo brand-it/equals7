@@ -1,4 +1,4 @@
-package equals7;
+package source;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -58,6 +58,7 @@ public class Game extends Canvas {
 		// exit the game
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				map.saveMap();
 				System.exit(0);
 			}
 		});

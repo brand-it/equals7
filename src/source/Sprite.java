@@ -1,4 +1,4 @@
-package equals7;
+package source;
 
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
