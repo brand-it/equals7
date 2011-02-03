@@ -9,7 +9,7 @@ import java.util.Random;
 import org.apache.commons.codec.binary.Base64;
 
 public class Map {
-	private static int TILE_SIZE = 23;
+	public static int TILE_SIZE = 23;
 	// This is the total amount of elements that are available to use in the
 	// system start count at zero
 	// This number is used for the random map generator
@@ -33,8 +33,8 @@ public class Map {
 	public static int DIRT = 5;
 	public static int GRASS = 6;
 	// This indicates how many tiles there should be in each chunk
-	private static int WIDTH = 43;
-	private static int HEIGHT = 43;
+	public static int WIDTH = 43;
+	public static int HEIGHT = 43;
 	// Each y and x value indicates a location in the array. Each location
 	// contains a Element.
 	private int[][] data = new int[HEIGHT][WIDTH];
@@ -48,16 +48,16 @@ public class Map {
 	// Image array.
 	BufferedImage stoneFloor, grass;
 
-	public Map(Game game) {
-		
+	public Map() {
+
 		generateMap();
 		Sprite sprite = new Sprite();
 		image = sprite.loadStripImageArray("images/imageMap.jpg", 4, 4, 2, 2);
 		loadImages(sprite);
 
 	}
-	
-	public void generateMap(){
+
+	public void generateMap() {
 		// for loop here
 		// array example
 		/*
@@ -109,7 +109,7 @@ public class Map {
 		}
 		doubleCheck();
 	}
-	
+
 	// You have subtract 1 count starts at 0
 	public int moveRight(int x) {
 		if (x < WIDTH - 1) {
@@ -131,6 +131,7 @@ public class Map {
 		}
 		return y;
 	}
+
 	// You have to subtract 1 count starts at 0
 	public int moveDown(int y) {
 		if (y < HEIGHT - 1) {
@@ -180,7 +181,7 @@ public class Map {
 
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-				
+
 				total = 0;
 				// If this is a wall then we need make sure that only the floor
 				// tiles effect orientation
@@ -199,7 +200,7 @@ public class Map {
 					}
 
 				}
-				
+
 				orentation[y][x] = total;
 				// These currently don't have any function
 				// if (isFloor(x, y)){
@@ -211,7 +212,6 @@ public class Map {
 			}
 		}
 	}
-
 
 	// This is only for development
 	public void changeTiles(int xPressed, int yPressed, int xReleased,
@@ -251,28 +251,28 @@ public class Map {
 		}
 		doubleCheck();
 	}
-	
-	public void saveMap(){
+
+	public void saveMap() {
 		try {
-			BufferedWriter out = new BufferedWriter(new FileWriter("./bin/save/data"));
-			
+			BufferedWriter out = new BufferedWriter(new FileWriter(
+					"./bin/save/data"));
+
 			String mapString = "";
-			for (int y = 0; y < HEIGHT; y++){
-				for (int x = 0; x < WIDTH; x++){
+			for (int y = 0; y < HEIGHT; y++) {
+				for (int x = 0; x < WIDTH; x++) {
 					mapString += data[y][x];
 				}
 			}
-		      mapString = new String(Base64.encodeBase64(mapString.getBytes()));
-		      
-		      out.write(mapString);
-		      out.close();
-		      System.out.println("Encoded: " + mapString);
-		      System.out.println("Decoded:" 
-		          + new String(Base64.decodeBase64(mapString.getBytes())));
-		}catch(IOException e){
+			mapString = new String(Base64.encodeBase64(mapString.getBytes()));
+
+			out.write(mapString);
+			out.close();
+			System.out.println("Encoded: " + mapString);
+			System.out.println("Decoded:"
+					+ new String(Base64.decodeBase64(mapString.getBytes())));
+		} catch (IOException e) {
 			System.out.println("Could not save file" + e);
 		}
-	
 
 	}
 
@@ -300,7 +300,8 @@ public class Map {
 			for (int x = 0; x < WIDTH; x++) {
 				if (data[y][x] == STONE_FLOOR) {
 					g.drawImage(stoneFloor, x * TILE_SIZE, y * TILE_SIZE, null);
-					// Because I don't have grass and dirt is number five and grass is six we have to use dirt here or we get a error.
+					// Because I don't have grass and dirt is number five and
+					// grass is six we have to use dirt here or we get a error.
 				} else if (data[y][x] == DIRT) {
 					g.drawImage(grass, x * TILE_SIZE, y * TILE_SIZE, null);
 				} else {

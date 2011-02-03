@@ -18,11 +18,12 @@ import java.awt.image.BufferStrategy;
 public class Game extends Canvas {
 
 	private BufferStrategy strategy;
-	public static final int ORIGINx = 4;
-	public static final int ORIGINy = 15;
+	public static final int ORIGINx = 0;
+	public static final int ORIGINy = 0;
 	private int element = 0;
 	private int mouseDragX, mouseDragY, xPressed, yPressed;
 	private Map map;
+	private Dwarfs dwarfs;
 	int height = 900;
 	int width = 1000;
 	private boolean mousePressed = false;
@@ -66,13 +67,13 @@ public class Game extends Canvas {
 		frame.setVisible(true);
 		addMouseListener(new mouseInputHandler());
 		addKeyListener(new keyInputHandler());
-		addMouseMotionListener(new mouseDragHandler());
+		// addMouseMotionListener(new mouseDragHandler());
 
 		// Make sure you create the buffer strategy
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
-
-		map = new Map(this);
+		dwarfs = new Dwarfs();
+		map = new Map();
 		new mouseDragHandler();
 		gameLoop();
 	}
@@ -105,7 +106,7 @@ public class Game extends Canvas {
 			if (e.getKeyCode() == KeyEvent.VK_6) {
 				element = Map.DIRT;
 			}
-			if (e.getKeyCode() == KeyEvent.VK_R){
+			if (e.getKeyCode() == KeyEvent.VK_R) {
 				map.generateMap();
 			}
 		}
@@ -162,6 +163,7 @@ public class Game extends Canvas {
 
 			g.translate(ORIGINx, ORIGINy);
 			map.paint(g);
+			dwarfs.paint(g);
 
 			if (mousePressed) {
 				map.highlight(g, xPressed, yPressed, mouseDragX, mouseDragY);
