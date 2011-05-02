@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.util.HashMap;
 import javax.swing.*;
 import com.sun.j3d.utils.timer.J3DTimer;
 
@@ -77,7 +76,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		map = new Map(imsLoader);
 		dwarfs = new Dwarfs(imsLoader);
-		gameInterface = new GameInterface(map);
+		gameInterface = new GameInterface();
 		
 	}
 

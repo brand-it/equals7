@@ -47,12 +47,12 @@ import javax.swing.*; // for ImageIcon
 public class ImagesLoader {
 	public final static String IMAGE_DIR = "images/";
 
-	private HashMap imagesMap;
+	private HashMap<String, ArrayList<BufferedImage>> imagesMap;
 	/*
 	 * The key is the filename prefix, the object (value) is an ArrayList of
 	 * BufferedImages
 	 */
-	private HashMap gNamesMap;
+	private HashMap<String, ArrayList<String>> gNamesMap;
 	/*
 	 * The key is the 'g' <name> string, the object is an ArrayList of filename
 	 * prefixes for the group. This is used to access a group image by its 'g'
@@ -73,8 +73,8 @@ public class ImagesLoader {
 	}
 
 	private void initLoader() {
-		imagesMap = new HashMap();
-		gNamesMap = new HashMap();
+		imagesMap = new HashMap<String, ArrayList<BufferedImage>>();
+		gNamesMap = new HashMap<String, ArrayList<String>>();
 
 		GraphicsEnvironment ge = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
@@ -156,7 +156,7 @@ public class ImagesLoader {
 
 		BufferedImage bi = loadImage(fnm);
 		if (bi != null) {
-			ArrayList imsList = new ArrayList();
+			ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
 			imsList.add(bi);
 			imagesMap.put(name, imsList);
 			System.out.println("Stored " + name + ", " + IMAGE_DIR + fnm);
@@ -236,7 +236,7 @@ public class ImagesLoader {
 	{
 		String imFnm;
 		BufferedImage bi;
-		ArrayList imsList = new ArrayList();
+		ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
 		int loadCount = 0;
 
 		if (number <= 0) {
@@ -312,7 +312,7 @@ public class ImagesLoader {
 		if (strip == null)
 			return 0;
 
-		ArrayList imsList = new ArrayList();
+		ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
 		int loadCount = 0;
 		System.out.println("Adding " + name + "/" + fnm + "... ");
 		for (int i = 0; i < strip.length; i++) {
@@ -375,7 +375,7 @@ public class ImagesLoader {
 		
 		
 
-		ArrayList imsList = new ArrayList();
+		ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
 		
 		int loadCount = 0;
 		System.out.println("Adding " + name + " File Name: " + fnm + "... ");
@@ -412,7 +412,6 @@ public class ImagesLoader {
 		// This is the setup math
 		if (imWidth == imHeight) {
 			int tilesPerChunk = tiles / chunks; // Total number of tiles per chunk
-			int chunksTotal = (int) (Math.sqrt(tiles) / Math.sqrt(chunks)); // This is the total number of chunks
 			int chunksHW = (int) Math.sqrt(chunks); // this is the total number of chunks long ways
 			int tilesHW = (int) Math.sqrt(tilesPerChunk); // The total number of tiles wide and height in each chunk
 			int tileImgHW = (imWidth / chunksHW) / tilesHW; // This will calculate out the Tile Height and Width
@@ -497,7 +496,7 @@ public class ImagesLoader {
 
 			String name = tokens.nextToken();
 
-			ArrayList fnms = new ArrayList();
+			ArrayList<String> fnms = new ArrayList<String>();
 			fnms.add(tokens.nextToken()); // read filenames
 			while (tokens.hasMoreTokens())
 				fnms.add(tokens.nextToken());
@@ -505,7 +504,7 @@ public class ImagesLoader {
 		}
 	} // end of getGroupImages()
 
-	public int loadGroupImages(String name, ArrayList fnms)
+	public int loadGroupImages(String name, ArrayList<String> fnms)
 	/*
 	 * Can be called directly to load a group of images, whose filenames are
 	 * stored in the ArrayList <fnms>. They will be stored under the 'g' name
@@ -523,8 +522,8 @@ public class ImagesLoader {
 		}
 
 		BufferedImage bi;
-		ArrayList nms = new ArrayList();
-		ArrayList imsList = new ArrayList();
+		ArrayList<String> nms = new ArrayList<String>();
+		ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
 		String nm, fnm;
 		int loadCount = 0;
 
@@ -555,7 +554,7 @@ public class ImagesLoader {
 	public int loadGroupImages(String name, String[] fnms)
 	// supply the group filenames in an array
 	{
-		ArrayList al = new ArrayList(Arrays.asList(fnms));
+		ArrayList<String> al = new ArrayList<String>(Arrays.asList(fnms));
 		return loadGroupImages(name, al);
 	}
 
@@ -567,7 +566,7 @@ public class ImagesLoader {
 	 * under that name, return the first one in the list.
 	 */
 	{
-		ArrayList imsList = (ArrayList) imagesMap.get(name);
+		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -584,7 +583,7 @@ public class ImagesLoader {
 	 * than the list's size, then calculate its value modulo the size.
 	 */
 	{
-		ArrayList imsList = (ArrayList) imagesMap.get(name);
+		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -613,7 +612,7 @@ public class ImagesLoader {
 	 * <fnmPrefix>.
 	 */
 	{
-		ArrayList imsList = (ArrayList) imagesMap.get(name);
+		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -636,7 +635,7 @@ public class ImagesLoader {
 	 * position in the list, or -1.
 	 */
 	{
-		ArrayList groupNames = (ArrayList) gNamesMap.get(name);
+		ArrayList<?> groupNames = (ArrayList<?>) gNamesMap.get(name);
 		if (groupNames == null) {
 			System.out.println("No group names for " + name);
 			return -1;
@@ -653,10 +652,10 @@ public class ImagesLoader {
 		return -1;
 	} // end of getGroupPosition()
 
-	public ArrayList getImages(String name)
+	public ArrayList<?> getImages(String name)
 	// return all the BufferedImages for the given name
 	{
-		ArrayList imsList = (ArrayList) imagesMap.get(name);
+		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -669,7 +668,7 @@ public class ImagesLoader {
 	public boolean isLoaded(String name)
 	// is <name> a key in the imagesMap hashMap?
 	{
-		ArrayList imsList = (ArrayList) imagesMap.get(name);
+		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
 		if (imsList == null)
 			return false;
 		return true;
@@ -678,7 +677,7 @@ public class ImagesLoader {
 	public int numImages(String name)
 	// how many images are stored under <name>?
 	{
-		ArrayList imsList = (ArrayList) imagesMap.get(name);
+		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return 0;
@@ -726,42 +725,6 @@ public class ImagesLoader {
 			return null;
 		}
 	} // end of loadImage() using ImageIO
-
-	private void reportTransparency(String fnm, int transparency) {
-		System.out.print(fnm + " transparency: ");
-		switch (transparency) {
-		case Transparency.OPAQUE:
-			System.out.println("opaque");
-			break;
-		case Transparency.BITMASK:
-			System.out.println("bitmask");
-			break;
-		case Transparency.TRANSLUCENT:
-			System.out.println("translucent");
-			break;
-		default:
-			System.out.println("unknown");
-			break;
-		} // end switch
-	} // end of reportTransparency()
-
-	private BufferedImage loadImage2(String fnm)
-	/*
-	 * Load the image from <fnm>, returning it as a BufferedImage. Uses
-	 * ImageIcon.
-	 */
-	{
-		ImageIcon imIcon = new ImageIcon(getClass()
-				.getResource(IMAGE_DIR + fnm));
-		if (imIcon == null)
-			return null;
-
-		int width = imIcon.getIconWidth();
-		int height = imIcon.getIconHeight();
-		Image im = imIcon.getImage();
-
-		return makeBIM(im, width, height);
-	} // end of loadImage() using ImageIcon
 
 	private BufferedImage makeBIM(Image im, int width, int height)
 	// make a BufferedImage copy of im, assuming an alpha channel

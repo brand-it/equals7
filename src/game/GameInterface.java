@@ -1,14 +1,13 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class GameInterface {
 	int locY = 0;
 	int locX = 0;
-	private Map map;
 	
-	public GameInterface(Map map) {
-		this.map = map;
+	public GameInterface() {
 	}
 	
 	public void changeBoxLocation(double mouseX, double mouseY){
@@ -20,7 +19,8 @@ public class GameInterface {
 	
 	
 	public void drawBox(Graphics g) {
-		g.setColor(g.getColor().blue);
+		g.getColor();
+		g.setColor(Color.blue);
 		g.drawRect(locX, locY, Grid.TILE_SIZE, Grid.TILE_SIZE);
 	}
 }
