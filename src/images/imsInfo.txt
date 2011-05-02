@@ -1,0 +1,9 @@
+
+// imsInfo.txt images
+
+// Map images
+a imageMap.png 64 4
+o darkFloorStone.png
+
+// Dwarfs
+o dwarf.gif
