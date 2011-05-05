@@ -1,4 +1,5 @@
 package game;
+
 import java.awt.Container;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -7,7 +8,8 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
-public class GameRunner extends JFrame implements WindowListener, ComponentListener {
+public class GameRunner extends JFrame implements WindowListener,
+		ComponentListener {
 
 	/**
 	 * 
@@ -15,19 +17,18 @@ public class GameRunner extends JFrame implements WindowListener, ComponentListe
 	private static final long serialVersionUID = -1754800786979400078L;
 
 	private Panel p;
- 
-	
+
 	private static int DEFAULT_FPS = 40;
 
 	public GameRunner(long period) {
-	    setLocation(200, 200);
+		setLocation(200, 200);
 
 		this.setTitle("Game Dwarf");
 
 		Container c = getContentPane(); // default BorderLayout used
 		p = new Panel(this, period);
 		c.add(p, "Center");
-		
+
 		p.addComponentListener(this);
 
 		addWindowListener(this);
@@ -82,17 +83,17 @@ public class GameRunner extends JFrame implements WindowListener, ComponentListe
 
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

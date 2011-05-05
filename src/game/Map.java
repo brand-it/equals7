@@ -71,21 +71,22 @@ public class Map extends Tiles {
 		int count = 0;
 		int totalTiles = HEIGHT * WIDTH;
 		Random generator = new Random();
-		DecimalFormat percent = new DecimalFormat("0.0#%");	
+		DecimalFormat percent = new DecimalFormat("0.0#%");
 		System.out.println("Generating Map");
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 				elements[y][x] = generator.nextInt(65);
 				orentation();
 				count++;
-				
+
 			}
-			System.out.println("Percentage: " + percent.format((float) count / (float) totalTiles));
+			System.out.println("Percentage: "
+					+ percent.format((float) count / (float) totalTiles));
 		}
 		System.out.println("Map Generated");
 	}
-	
-	public int returnElement(int x, int y){
+
+	public int returnElement(int x, int y) {
 		return elements[grid.getTileY(y)][grid.getTileX(x)];
 	}
 
@@ -96,14 +97,14 @@ public class Map extends Tiles {
 			elements[y][x] = iron();
 		} else if (elements[y][x] < titanium()) {
 			elements[y][x] = gold();
-		} else if (elements[y][x] < floor()){
+		} else if (elements[y][x] < floor()) {
 			elements[y][x] = titanium();
 		} else {
 			elements[y][x] = floor();
 		}
 	}
-	
-	protected void changeElement(int x, int y, int element){
+
+	protected void changeElement(int x, int y, int element) {
 		elements[grid.getTileY(y)][grid.getTileX(x)] = element;
 		orentation();
 	}
@@ -138,8 +139,6 @@ public class Map extends Tiles {
 		return y;
 	}
 
-
-	
 	private void orentation() {
 		int total;
 		int top = 1;
@@ -165,7 +164,7 @@ public class Map extends Tiles {
 					}
 				}
 				setElementBase(y, x);
-				
+
 				elements[y][x] += total;
 			}
 		}
@@ -174,13 +173,13 @@ public class Map extends Tiles {
 	public void draw(Graphics g) {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-	
-				if (isFloor(elements[y][x])){
+
+				if (isFloor(elements[y][x])) {
 					setFloor();
-				} else if (isWall(elements[y][x])){
+				} else if (isWall(elements[y][x])) {
 					setWall(elements[y][x]);
 				}
-				
+
 				g.drawImage(image, grid.locationX(x), grid.locationY(y), null);
 			}
 		}

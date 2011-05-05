@@ -1,50 +1,61 @@
 package game;
 
+import game.Dwarfs.Dwarf;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 public class GameInterface {
-	int locY = 0;
-	int locX = 0;
+	int locYRollover = 0;
+	int locXRollover = 0;
 
 	private Dwarfs dwarfs;
 	private Map map;
-	
+	private Dwarf selectedDwarf;
+	private Grid grid;
+
 	public GameInterface(Map map, Dwarfs dwarfs) {
 		this.dwarfs = dwarfs;
 		this.map = map;
+		grid = new Grid();
 	}
-	
-	public void mouseClick(int mouseX, int mouseY){
+
+	public void mouseClick(int mouseX, int mouseY) {
 		int currentElement = map.returnElement((int) mouseX, (int) mouseY);
 		if (map.isWall(currentElement)) {
 			map.changeElement(mouseX, mouseY, map.floor());
-		} else if (!dwarfs.isDwarf(mouseX, mouseY)){
-			System.out.println("Creating Dwarf");
+		} else if (dwarfs.getDwarf((int) mouseX, (int) mouseY) == 0) {
 			Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(mouseX, mouseY);
 			dwarfs.saveDwarf(dwarf);
 		} else {
-			dwarfs.selectDwarf(mouseX, mouseY);
-			System.out.println("Unit Selected");
+			selectedDwarf = dwarfs.getDwarfHash(dwarfs.getDwarfID(mouseX,
+					mouseY));
+			System.out.println("Dwarf selected.");
 		}
 	}
-	
-	public void changeBoxLocation(double mouseX, double mouseY){
+
+	public void highlightUnit(Graphics g) {
+		g.setColor(Color.red);
+		if (selectedDwarf != null) {
+			g.drawRect(grid.locationX(selectedDwarf.locX),
+					grid.locationY(selectedDwarf.locY), Grid.TILE_SIZE,
+					Grid.TILE_SIZE);
+		}
+	}
+
+	public void changeBoxLocation(double mouseX, double mouseY) {
 		Grid grid = new Grid();
-		locX = grid.findTileX((int) mouseX);
-		locY = grid.findTileY((int) mouseY);
+		locXRollover = grid.mouseBoxTileX((int) mouseX);
+		locYRollover = grid.mouseBoxTileY((int) mouseY);
 	}
-	
-	public void selectObject(Graphics g, int x, int y){
-		g.getColor();
-		g.setColor(Color.blue);
-		g.drawRect(x, y, Grid.TILE_SIZE, Grid.TILE_SIZE);
-	}
-	
+
 	public void drawBox(Graphics g) {
-		g.getColor();
 		g.setColor(Color.blue);
-		g.drawRect(locX, locY, Grid.TILE_SIZE, Grid.TILE_SIZE);
+		g.drawRect(locXRollover, locYRollover, Grid.TILE_SIZE, Grid.TILE_SIZE);
+	}
+
+	public void draw(Graphics g) {
+		drawBox(g);
+		highlightUnit(g);
 	}
 }

@@ -372,16 +372,14 @@ public class ImagesLoader {
 		if (grid == null) {
 			return 0;
 		}
-		
-		
 
 		ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
-		
+
 		int loadCount = 0;
 		System.out.println("Adding " + name + " File Name: " + fnm + "... ");
 		for (int i = 0; i < grid.length; i++) {
-				loadCount++;
-				imsList.add(grid[i]);
+			loadCount++;
+			imsList.add(grid[i]);
 		}
 		System.out.println();
 
@@ -393,8 +391,7 @@ public class ImagesLoader {
 		return loadCount;
 	} // end of loadStripImages()
 
-	public BufferedImage[] loadGridImageArray(String fnm, int tiles,
-			int chunks) {
+	public BufferedImage[] loadGridImageArray(String fnm, int tiles, int chunks) {
 		if (tiles <= 0) {
 			System.out.println("tiles <= 0; returning null");
 			return null;
@@ -411,15 +408,23 @@ public class ImagesLoader {
 		// Can't do any of this math if the image is not a perfect square
 		// This is the setup math
 		if (imWidth == imHeight) {
-			int tilesPerChunk = tiles / chunks; // Total number of tiles per chunk
-			int chunksHW = (int) Math.sqrt(chunks); // this is the total number of chunks long ways
-			int tilesHW = (int) Math.sqrt(tilesPerChunk); // The total number of tiles wide and height in each chunk
-			int tileImgHW = (imWidth / chunksHW) / tilesHW; // This will calculate out the Tile Height and Width
-//			System.out.println("tileImgHW: " + tileImgHW); // Should be 22
-//			System.out.println("tilesHW: " + tilesHW);
-//			System.out.println("chunksHW: " + chunksHW);
-//			System.out.println("chunksTotal: " + chunksTotal);
-//			System.out.println("tilesPerChunk: " + tilesPerChunk);
+			int tilesPerChunk = tiles / chunks; // Total number of tiles per
+												// chunk
+			int chunksHW = (int) Math.sqrt(chunks); // this is the total number
+													// of chunks long ways
+			int tilesHW = (int) Math.sqrt(tilesPerChunk); // The total number of
+															// tiles wide and
+															// height in each
+															// chunk
+			int tileImgHW = (imWidth / chunksHW) / tilesHW; // This will
+															// calculate out the
+															// Tile Height and
+															// Width
+			// System.out.println("tileImgHW: " + tileImgHW); // Should be 22
+			// System.out.println("tilesHW: " + tilesHW);
+			// System.out.println("chunksHW: " + chunksHW);
+			// System.out.println("chunksTotal: " + chunksTotal);
+			// System.out.println("tilesPerChunk: " + tilesPerChunk);
 
 			int transparency = stripIm.getColorModel().getTransparency();
 
@@ -439,34 +444,38 @@ public class ImagesLoader {
 				for (int cw = 0; cw < chunksHW; cw++) {
 					chunkLocH = (tilesHW * tileImgHW) * ((chunksHW - 1) * ch);
 					chunkLocW = (tilesHW * tileImgHW) * ((chunksHW - 1) * cw);
-//					System.out.println("ch: " + ch);
-//					System.out.println("cw: " + cw);
-//					System.out.println("chunkLocH: " + chunkLocH);
-//					System.out.println("chunkLocW: " + chunkLocW);
-					
+					// System.out.println("ch: " + ch);
+					// System.out.println("cw: " + cw);
+					// System.out.println("chunkLocH: " + chunkLocH);
+					// System.out.println("chunkLocW: " + chunkLocW);
+
 					for (int h = 0; h < tilesHW; h++) {
 						for (int w = 0; w < tilesHW; w++) {
-							strip[tile] = gc.createCompatibleImage(
-									tileImgHW, tileImgHW, transparency);
+							strip[tile] = gc.createCompatibleImage(tileImgHW,
+									tileImgHW, transparency);
 							// create a graphics context
 							topLeftImLocX = (w * tileImgHW) + chunkLocW;
 							topLeftImLocY = (h * tileImgHW) + chunkLocH;
 							bottomRightImLocX = ((w * tileImgHW) + tileImgHW)
 									+ chunkLocW;
-							
+
 							bottomRightImLocY = ((h * tileImgHW) + tileImgHW)
 									+ chunkLocH;
 							stripGC = strip[tile].createGraphics();
 							// copy images
-							stripGC.drawImage(stripIm, 0, 0, tileImgHW, tileImgHW,
-									topLeftImLocX, topLeftImLocY,
+							stripGC.drawImage(stripIm, 0, 0, tileImgHW,
+									tileImgHW, topLeftImLocX, topLeftImLocY,
 									bottomRightImLocX, bottomRightImLocY, null);
 							stripGC.dispose();
 							tile++;
-//							System.out.println("topLeftImLocX: " + topLeftImLocX);
-//							System.out.println("topLeftImLocY: " + topLeftImLocY);
-//							System.out.println("bottomRightImLocX: " + bottomRightImLocX);
-//							System.out.println("bottomRightImLocY: " + bottomRightImLocY);
+							// System.out.println("topLeftImLocX: " +
+							// topLeftImLocX);
+							// System.out.println("topLeftImLocY: " +
+							// topLeftImLocY);
+							// System.out.println("bottomRightImLocX: " +
+							// bottomRightImLocX);
+							// System.out.println("bottomRightImLocY: " +
+							// bottomRightImLocY);
 						}
 					}
 					chunk++;
@@ -595,7 +604,7 @@ public class ImagesLoader {
 			// "; return position 0");
 			return (BufferedImage) imsList.get(0); // return first image
 		} else if (posn >= size) {
-			 System.out.println("No " + name + " image at position " + posn);
+			System.out.println("No " + name + " image at position " + posn);
 			int newPosn = posn % size; // modulo
 			// System.out.println("Return image at position " + newPosn);
 			return (BufferedImage) imsList.get(newPosn);

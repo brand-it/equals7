@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.*;
 import com.sun.j3d.utils.timer.J3DTimer;
 
+@SuppressWarnings("deprecation")
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	/**
@@ -77,7 +78,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		map = new Map(imsLoader);
 		dwarfs = new Dwarfs(imsLoader);
 		gameInterface = new GameInterface(map, dwarfs);
-		
+
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -92,6 +93,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		int mouseY = e.getY();
 
 		gameInterface.mouseClick(mouseX, mouseY);
+
+	}
+
+	public void mouseDragged(MouseEvent e) {
 
 	}
 
@@ -144,6 +149,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		}
 	} // end of gameUpdate()
+
 	public void run() {
 
 		long beforeTime, afterTime, timeDiff, sleepTime;
@@ -203,8 +209,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		createDBImage(width, height);
 	}
 
-	private void createDBImage(int width, int height) 
-	// When you create a db Image it will update all or Make all you varables for the game to run.
+	private void createDBImage(int width, int height)
+	// When you create a db Image it will update all or Make all you varables
+	// for the game to run.
 	{
 		dbImage = createImage(width, height);
 		if (dbImage == null) {
@@ -224,7 +231,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		}
 		map.draw(dbg);
 		dwarfs.draw(dbg);
-		gameInterface.drawBox(dbg);
+		gameInterface.draw(dbg);
 
 	}
 
@@ -247,7 +254,4 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		}
 	} // end of paintScreen()
 
-	public void mouseDragged(MouseEvent e) {
-
-	}
 }
