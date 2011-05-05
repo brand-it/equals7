@@ -150,17 +150,17 @@ public class Map extends Tiles {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 				total = 0;
-				if (ifWall(elements[y][x])) {
-					if (ifWall(elements[moveUp(y)][x])) {
+				if (isWall(elements[y][x])) {
+					if (isWall(elements[moveUp(y)][x])) {
 						total += top;
 					}
-					if (ifWall(elements[moveDown(y)][x])) {
+					if (isWall(elements[moveDown(y)][x])) {
 						total += bottom;
 					}
-					if (ifWall(elements[y][moveLeft(x)])) {
+					if (isWall(elements[y][moveLeft(x)])) {
 						total += left;
 					}
-					if (ifWall(elements[y][moveRight(x)])) {
+					if (isWall(elements[y][moveRight(x)])) {
 						total += right;
 					}
 				}
@@ -175,9 +175,9 @@ public class Map extends Tiles {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 	
-				if (ifFloor(elements[y][x])){
+				if (isFloor(elements[y][x])){
 					setFloor();
-				} else if (ifWall(elements[y][x])){
+				} else if (isWall(elements[y][x])){
 					setWall(elements[y][x]);
 				}
 				

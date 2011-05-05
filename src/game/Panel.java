@@ -76,7 +76,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		map = new Map(imsLoader);
 		dwarfs = new Dwarfs(imsLoader);
-		gameInterface = new GameInterface();
+		gameInterface = new GameInterface(map, dwarfs);
 		
 	}
 
@@ -91,14 +91,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 
-		int currentElement = map.returnElement((int) mouseX, (int) mouseY);
-		if (map.ifWall(currentElement)) {
-			map.changeElement(mouseX, mouseY, map.floor());
-		} else {
-			Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(mouseX, mouseY);
-			dwarfs.saveDwarf(dwarf);
-//			dwarfs.ifDwarf(x, y);
-		}
+		gameInterface.mouseClick(mouseX, mouseY);
 
 	}
 

@@ -81,15 +81,15 @@ public class Tiles extends Thread{
 		setImages("darkFloorStone", 0);
 	}
 	
-	protected boolean ifFloor(int element){
-		if(element >= floor()){
+	protected boolean isFloor(int element){
+		if(element == floor()){
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	protected boolean ifWall(int element){
+	protected boolean isWall(int element){
 		if(element < 64){
 			return true;
 		} else {
