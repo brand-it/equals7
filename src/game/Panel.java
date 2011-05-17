@@ -44,6 +44,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	private Graphics dbg;
 
+	private Pathfinder pathfinder;
 	private Map map;
 	private GameInterface gameInterface;
 	private Image dbImage = null;
@@ -77,7 +78,8 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		map = new Map(imsLoader);
 		dwarfs = new Dwarfs(imsLoader);
-		gameInterface = new GameInterface(map, dwarfs);
+		pathfinder = new Pathfinder(map);
+		gameInterface = new GameInterface(map, dwarfs, pathfinder);
 
 	}
 
@@ -146,7 +148,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
 			gameInterface.changeBoxLocation(mouseX, mouseY);
-
+			pathfinder.move();
 		}
 	} // end of gameUpdate()
 
@@ -232,7 +234,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		map.draw(dbg);
 		dwarfs.draw(dbg);
 		gameInterface.draw(dbg);
-
+		pathfinder.draw(dbg);
 	}
 
 	private void paintScreen()

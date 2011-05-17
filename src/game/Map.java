@@ -75,8 +75,9 @@ public class Map extends Tiles {
 		System.out.println("Generating Map");
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-				elements[y][x] = generator.nextInt(65);
-				orentation();
+//				elements[y][x] = generator.nextInt(65);
+				elements[y][x] = 64;
+				orientation();
 				count++;
 
 			}
@@ -106,7 +107,7 @@ public class Map extends Tiles {
 
 	protected void changeElement(int x, int y, int element) {
 		elements[grid.getTileY(y)][grid.getTileX(x)] = element;
-		orentation();
+		orientation();
 	}
 
 	// You have subtract 1 count starts at 0
@@ -139,7 +140,7 @@ public class Map extends Tiles {
 		return y;
 	}
 
-	private void orentation() {
+	private void orientation() {
 		int total;
 		int top = 1;
 		int left = 2;

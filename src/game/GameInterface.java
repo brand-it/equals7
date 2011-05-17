@@ -13,11 +13,13 @@ public class GameInterface {
 	private Map map;
 	private Dwarf selectedDwarf;
 	private Grid grid;
+	private Pathfinder pathfinder;
 
-	public GameInterface(Map map, Dwarfs dwarfs) {
+	public GameInterface(Map map, Dwarfs dwarfs, Pathfinder pathfinder) {
 		this.dwarfs = dwarfs;
 		this.map = map;
 		grid = new Grid();
+		this.pathfinder = pathfinder;
 	}
 
 	public void mouseClick(int mouseX, int mouseY) {
@@ -27,11 +29,13 @@ public class GameInterface {
 		} else if (dwarfs.getDwarf((int) mouseX, (int) mouseY) == 0) {
 			Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(mouseX, mouseY);
 			dwarfs.saveDwarf(dwarf);
+			System.out.println("Dwarf Created.");
 		} else {
 			selectedDwarf = dwarfs.getDwarfHash(dwarfs.getDwarfID(mouseX,
 					mouseY));
 			System.out.println("Dwarf selected.");
 		}
+		pathfinder.findPath(mouseX, mouseY);
 	}
 
 	public void highlightUnit(Graphics g) {
