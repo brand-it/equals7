@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
  * This loads all the tiles into the system. They then can be called by the Map or anything else for that mater.
  */
 
-public class Tiles extends Thread {
+public class Tiles {
 
 	// Default Size if there is no image
 
-	protected ImagesLoader imsLoader;
+	private ImagesLoader imsLoader;
 	protected BufferedImage image;
 
 	public Tiles(ImagesLoader imgLd) {

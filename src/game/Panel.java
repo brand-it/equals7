@@ -9,13 +9,12 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.*;
 import com.sun.j3d.utils.timer.J3DTimer;
 
-@SuppressWarnings("deprecation")
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7712717603765541381L;
 
 	private static final String IMS_INFO = "imsInfo.txt";
 
@@ -61,11 +60,13 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		requestFocus(); // the JPanel now has focus, so receives key events
 
 		addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				processKey(e);
 			}
 		});
 		addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				processMouse(e);
 			}
@@ -124,6 +125,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		// }
 	} // end of processKey()
 
+	@Override
 	public void addNotify()
 	// wait for the JPanel to be added to the JFrame before starting
 	{

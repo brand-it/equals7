@@ -539,7 +539,7 @@ public class ImagesLoader {
 		System.out.println("Adding to " + name + "...");
 		System.out.print(" ");
 		for (int i = 0; i < fnms.size(); i++) { // load the files
-			fnm = (String) fnms.get(i);
+			fnm = fnms.get(i);
 			nm = getPrefix(fnm);
 			if ((bi = loadImage(fnm)) != null) {
 				loadCount++;
@@ -575,7 +575,7 @@ public class ImagesLoader {
 	 * under that name, return the first one in the list.
 	 */
 	{
-		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
+		ArrayList<?> imsList = imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -592,7 +592,7 @@ public class ImagesLoader {
 	 * than the list's size, then calculate its value modulo the size.
 	 */
 	{
-		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
+		ArrayList<?> imsList = imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -621,7 +621,7 @@ public class ImagesLoader {
 	 * <fnmPrefix>.
 	 */
 	{
-		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
+		ArrayList<?> imsList = imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -644,7 +644,7 @@ public class ImagesLoader {
 	 * position in the list, or -1.
 	 */
 	{
-		ArrayList<?> groupNames = (ArrayList<?>) gNamesMap.get(name);
+		ArrayList<?> groupNames = gNamesMap.get(name);
 		if (groupNames == null) {
 			System.out.println("No group names for " + name);
 			return -1;
@@ -664,7 +664,7 @@ public class ImagesLoader {
 	public ArrayList<?> getImages(String name)
 	// return all the BufferedImages for the given name
 	{
-		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
+		ArrayList<?> imsList = imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return null;
@@ -677,7 +677,7 @@ public class ImagesLoader {
 	public boolean isLoaded(String name)
 	// is <name> a key in the imagesMap hashMap?
 	{
-		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
+		ArrayList<?> imsList = imagesMap.get(name);
 		if (imsList == null)
 			return false;
 		return true;
@@ -686,7 +686,7 @@ public class ImagesLoader {
 	public int numImages(String name)
 	// how many images are stored under <name>?
 	{
-		ArrayList<?> imsList = (ArrayList<?>) imagesMap.get(name);
+		ArrayList<?> imsList = imagesMap.get(name);
 		if (imsList == null) {
 			System.out.println("No image(s) stored under " + name);
 			return 0;
@@ -801,7 +801,7 @@ public class ImagesLoader {
 			return null;
 		}
 
-		int imWidth = (int) stripIm.getWidth() / number;
+		int imWidth = stripIm.getWidth() / number;
 		int height = stripIm.getHeight();
 		int transparency = stripIm.getColorModel().getTransparency();
 

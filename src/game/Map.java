@@ -64,7 +64,6 @@ public class Map extends Tiles {
 	public Map(ImagesLoader imgLd) {
 		super(imgLd);
 		generateMap();
-		grid = new Grid();
 	}
 
 	private void generateMap() {
@@ -75,7 +74,7 @@ public class Map extends Tiles {
 		System.out.println("Generating Map");
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-//				elements[y][x] = generator.nextInt(65);
+				// elements[y][x] = generator.nextInt(65);
 				elements[y][x] = 64;
 				orientation();
 				count++;
@@ -139,6 +138,17 @@ public class Map extends Tiles {
 		}
 		return y;
 	}
+	
+	protected boolean validMove(int x, int y){
+		if (x > WIDTH || x < 0){
+			return false;
+		}else if (y < HEIGHT || y > HEIGHT){
+			return false;
+		}else{
+			return true;
+		}
+		
+	}
 
 	private void orientation() {
 		int total;
@@ -185,6 +195,15 @@ public class Map extends Tiles {
 			}
 		}
 
+	}
+
+	public int getWidthInTiles() {
+		// Returns the Height of a tile
+		return WIDTH;
+	}
+
+	public int getHeightInTiles() {
+		return HEIGHT;
 	}
 } // end of ShowImage class
 

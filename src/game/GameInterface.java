@@ -1,9 +1,11 @@
 package game;
 
+
 import game.Dwarfs.Dwarf;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 
 public class GameInterface {
 	int locYRollover = 0;
@@ -23,10 +25,10 @@ public class GameInterface {
 	}
 
 	public void mouseClick(int mouseX, int mouseY) {
-		int currentElement = map.returnElement((int) mouseX, (int) mouseY);
+		int currentElement = map.returnElement(mouseX, mouseY);
 		if (map.isWall(currentElement)) {
 			map.changeElement(mouseX, mouseY, map.floor());
-		} else if (dwarfs.getDwarf((int) mouseX, (int) mouseY) == 0) {
+		} else if (dwarfs.getDwarf(mouseX, mouseY) == 0) {
 			Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(mouseX, mouseY);
 			dwarfs.saveDwarf(dwarf);
 			System.out.println("Dwarf Created.");
