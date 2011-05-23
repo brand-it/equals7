@@ -9,10 +9,10 @@ public class Pathfinder {
 
 	private Grid grid;
 	private Map map;
-	private int locationX;
-	private int locationY;
-	private static final int STEPS = 5;
-	private int updates = 0;
+	private int startLocationX;
+	private int startLocationY;
+	private int destinationX;
+	private int destinationY;
 	private Node[][] nodes;
 	/** The set of nodes that have been searched through */
 	private ArrayList closed = new ArrayList();
@@ -22,91 +22,155 @@ public class Pathfinder {
 	public Pathfinder(Map map) {
 		ImagesLoader img = new ImagesLoader();
 		grid = new Grid();
-		locationX = 0;
-		locationY = 0;
-		
+		this.map = map;
+		startLocationX = 0;
+		startLocationY = 0;
+
 		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
-		for (int x=0;x<map.getWidthInTiles();x++) {
-			for (int y=0;y<map.getHeightInTiles();y++) {
-				nodes[x][y] = new Node(x,y);
+		for (int x = 0; x < map.getWidthInTiles(); x++) {
+			for (int y = 0; y < map.getHeightInTiles(); y++) {
+				nodes[x][y] = new Node(x, y);
 			}
 		}
 	}
-	
-	public int manhattanCalculation(int x, int y){
-		int manDistanceX = Math.abs(x - locationX);
-		int manDistanceY = Math.abs(y - locationY);
-		
-		return manDistanceX + manDistanceY;
-		
-	}
 
-	public void findPath(int mouseX, int mouseY) {
+	public Path findPath(int x, int y, int mouseX, int mouseY) {
+
+		destinationX = grid.getTileX(mouseX);
+		destinationY = grid.getTileY(mouseY);
 		
-		int[] lookAbout = null;
-		
-		int endTileX = grid.getTileX(mouseX);
-		int endTileY = grid.getTileY(mouseY);
-		int currentX = locationX;
-		int currentY = locationY;
-		
+		startLocationX = x;
+		startLocationY = y;
+
 		closed.clear();
 		open.clear();
-		
-		int manhattan = manhattanCalculation(currentX, currentY);
-		
-		int eucDistanceX = Math.abs(currentX - endTileX);
-		int eucDistanceY = Math.abs(currentY - endTileY);
 
-		float euclidian = (float) Math.sqrt((Math.pow(eucDistanceX, 2) + Math.pow(eucDistanceY, 2)));
-		double fValue = manhattan + euclidian;
-		
-		closed.add(nodes[currentX][currentY]);
-		
+		int moves = 0;
+
+		fValueNeighbours(nodes[startLocationX][startLocationY]);
+		open.remove(nodes[startLocationX][startLocationY]);
+		closed.add(nodes[startLocationX][startLocationY]);
+
 		// need to make while loop based on. current x and y == your end tiles x
-		while(open.size() != 0){
-			// Basically We don't loop threw the array top to bottom we just keep pulling the one on top.
+		int maxDepth = 0;
+		while ((open.size() != 0)) {
+			moves += 1;
+			// Basically We don't loop threw the array top to bottom we just
+			// keep pulling the one on top.
 			Node current = getFirstInOpen();
-			if (current == nodes[currentX][currentY]) {
+			if (current == nodes[destinationX][destinationY]) {
 				break;
 			}
-						int manDistanceX = Math.abs(x - locationX);
-						int manDistanceY = Math.abs(y - locationY);
-						
-						eucDistanceX = Math.abs(x - endTileX);
-						eucDistanceY = Math.abs(y - endTileY);
-						
-						manhattan = manDistanceX + manDistanceY;
-						euclidian = (float) Math.sqrt((Math.pow(eucDistanceX, 2) + Math.pow(eucDistanceY, 2)));
-						fValue = manhattan + euclidian;
-						
-						// Ok we are just going to add the nodes around self
-					      addNode (N, N.x+1, N.y);
-					      addNode (N, N.x-1, N.y);
-					      addNode (N, N.x, N.y+1);
-					      addNode (N, N.x, N.y-1);
-					      open.add
-						open.add(nodes[x][y]);
+
+			closed.add(current);
+			open.remove(current);
+			System.out.println(current.x + ", " + current.y);
+			fValueNeighbours(current);
+			maxDepth++;
+
+		}
+		
+		if (nodes[destinationX][destinationY].parent == null) {
+			return null;
+		}
+		
+		Path path = new Path();
+		Node target = nodes[destinationX][destinationY];
+		while (target != nodes[startLocationX][startLocationY]) {
+			path.prependStep(target.x, target.y);
+			target = target.parent;
+		}
+		path.prependStep(startLocationX,startLocationY);
+		
+		// thats it, we have our path 
+		return path;
+		
+	}
+
+	protected boolean inClosedList(Node node) {
+		return closed.contains(node);
+	}
+
+	public void fValueNeighbours(Node current) {
+		Node node;
+		int up = current.y + 1;
+		int down = current.y - 1;
+		int right = current.x + 1;
+		int left = current.x - 1;
+		if (Map.HEIGHT >= up) {
+			node = nodes[current.x][up];
+			if (!isBlocked(current.x, up) && !inClosedList(node)) {
+				node.cost = fValue(node);
+				node.setParent(current);
+				open.add(node);
 			}
-		}	
+		}
+		if (down >= 0) {
+			node = nodes[current.x][down];
+			if (!isBlocked(current.x, down) && !inClosedList(node)) {
+				node.cost = fValue(node);
+				node.setParent(current);
+				open.add(node);
+				
+			}
 
-	public void move() {
-		if (updates == STEPS) {
-			updates = 0;
+		}
 
-		} else {
-			updates++;
+		if (Map.WIDTH >= right) {
+			node = nodes[right][current.y];
+			if (!isBlocked(right, current.y) && !inClosedList(node)) {
+				node.cost = fValue(node);
+				node.setParent(current);
+				open.add(node);
+				
+			}
+
+		}
+
+		if (left >= 0) {
+			node = nodes[left][current.y];
+			if (!isBlocked(left, current.y) && !inClosedList(node)) {
+				node.cost = fValue(node);
+				node.setParent(current);
+				open.add(node);
+			}
 		}
 	}
-	
+
+	public boolean isBlocked(int x, int y) {
+		return map.isWall(map.returnElement(x, y));
+	}
+
+	public float euclidianCalculation(int tx, int ty, int x, int y) {
+		// Euclidian Calculation. Slower but much more accurate.
+
+		int eucDistanceX = Math.abs(x - tx);
+		int eucDistanceY = Math.abs(y - ty);
+
+		return (float) Math
+				.sqrt(((eucDistanceX * eucDistanceX) + (eucDistanceY * eucDistanceY)));
+
+	}
+
+	public float fValue(Node current) {
+		// int manhattan = manhattanCalculation(node.x, node.y);
+		float euclidian = euclidianCalculation(destinationX, destinationY,
+				current.x, current.y);
+		return euclidian;
+	}
+
+	public void addNode(int x, int y) {
+		open.add(nodes[x][y]);
+	}
+
 	protected Node getFirstInOpen() {
 		return (Node) open.first();
 	}
 
 	public void draw(Graphics g) {
-		g.setColor(Color.green);
-		int x = grid.locationX(locationX);
-		int y = grid.locationY(locationY);
+		g.setColor(Color.red);
+		int x = grid.locationX(startLocationX);
+		int y = grid.locationY(startLocationY);
 		g.drawRect(x, y, Grid.TILE_SIZE, Grid.TILE_SIZE);
 		g.fillRect(x, y, Grid.TILE_SIZE, Grid.TILE_SIZE);
 	}
@@ -172,8 +236,7 @@ public class Pathfinder {
 			return list.contains(o);
 		}
 	}
-	
-	
+
 	/**
 	 * A single node in the search graph
 	 */
@@ -183,47 +246,50 @@ public class Pathfinder {
 		/** The y coordinate of the node */
 		private int y;
 		/** The path cost for this node */
-		private float cost;
+		private double cost;
 		/** The parent of this node, how we reached it in the search */
 		private Node parent;
 		/** The heuristic cost of this node */
 		private float heuristic;
 		/** The search depth of this node */
 		private int depth;
-		
+
 		/**
 		 * Create a new node
 		 * 
-		 * @param x The x coordinate of the node
-		 * @param y The y coordinate of the node
+		 * @param x
+		 *            The x coordinate of the node
+		 * @param y
+		 *            The y coordinate of the node
 		 */
 		public Node(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
-		
+
 		/**
 		 * Set the parent of this node
 		 * 
-		 * @param parent The parent node which lead us to this node
+		 * @param parent
+		 *            The parent node which lead us to this node
 		 * @return The depth we have no reached in searching
 		 */
 		public int setParent(Node parent) {
 			depth = parent.depth + 1;
 			this.parent = parent;
-			
+
 			return depth;
 		}
-		
+
 		/**
 		 * @see Comparable#compareTo(Object)
 		 */
 		public int compareTo(Object other) {
 			Node o = (Node) other;
-			
-			float f = heuristic + cost;
-			float of = o.heuristic + o.cost;
-			
+
+			double f = heuristic + cost;
+			double of = o.heuristic + o.cost;
+
 			if (f < of) {
 				return -1;
 			} else if (f > of) {

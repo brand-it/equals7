@@ -1,5 +1,7 @@
 package game;
 
+import game.Dwarfs.Dwarf;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -79,6 +81,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		map = new Map(imsLoader);
 		dwarfs = new Dwarfs(imsLoader);
+		Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(23, 23);
+		dwarfs.saveDwarf(dwarf);
+		dwarf = dwarfs.new Dwarf(46, 46);
+		dwarfs.saveDwarf(dwarf);
 		pathfinder = new Pathfinder(map);
 		gameInterface = new GameInterface(map, dwarfs, pathfinder);
 
@@ -150,7 +156,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
 			gameInterface.changeBoxLocation(mouseX, mouseY);
-			pathfinder.move();
+			dwarfs.move();
 		}
 	} // end of gameUpdate()
 
@@ -234,9 +240,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			createDBImage(PWIDTH, PHEIGHT);
 		}
 		map.draw(dbg);
+		pathfinder.draw(dbg);
 		dwarfs.draw(dbg);
 		gameInterface.draw(dbg);
-		pathfinder.draw(dbg);
+		
 	}
 
 	private void paintScreen()

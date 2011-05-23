@@ -1,8 +1,5 @@
 package game;
 
-
-import game.Dwarfs.Dwarf;
-
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -13,7 +10,7 @@ public class GameInterface {
 
 	private Dwarfs dwarfs;
 	private Map map;
-	private Dwarf selectedDwarf;
+	private Dwarfs.Dwarf selectedDwarf;
 	private Grid grid;
 	private Pathfinder pathfinder;
 
@@ -25,19 +22,20 @@ public class GameInterface {
 	}
 
 	public void mouseClick(int mouseX, int mouseY) {
-		int currentElement = map.returnElement(mouseX, mouseY);
+		int currentElement = map.returnElement(grid.getTileX(mouseX), grid.getTileX(mouseY));
 		if (map.isWall(currentElement)) {
 			map.changeElement(mouseX, mouseY, map.floor());
-		} else if (dwarfs.getDwarf(mouseX, mouseY) == 0) {
-			Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(mouseX, mouseY);
-			dwarfs.saveDwarf(dwarf);
-			System.out.println("Dwarf Created.");
-		} else {
-			selectedDwarf = dwarfs.getDwarfHash(dwarfs.getDwarfID(mouseX,
-					mouseY));
-			System.out.println("Dwarf selected.");
+		} else if (dwarfs.isDwarf(mouseX, mouseY)) {
+			selectedDwarf = dwarfs.getDwarfByMouse(mouseX,
+					mouseY);
+			System.out.println(selectedDwarf);
+
+		} else if (!dwarfs.isDwarf(mouseX, mouseY)){
+			System.out.print("Finding Path");
+			selectedDwarf.path(pathfinder.findPath(selectedDwarf.locX, selectedDwarf.locY, mouseX, mouseY));
+			
 		}
-		pathfinder.findPath(mouseX, mouseY);
+		
 	}
 
 	public void highlightUnit(Graphics g) {

@@ -7,8 +7,9 @@ public class Grid {
 
 	}
 
-	public int locationX(int x)// converts from tile x and y to pixel x and y.
-								// Used for drawing.
+	public int locationX(int x)
+	// converts from tile x and y to pixel x and y.
+	// Used for drawing.
 	{
 		int locX = x * TILE_SIZE;
 		return locX;

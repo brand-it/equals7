@@ -2,39 +2,32 @@ package game;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
-
+import java.util.ArrayList;
+@SuppressWarnings("rawtypes")
 public class Dwarfs {
+	
+	protected int updates = 0;
+	protected static int STEPS = 15;
+	
 	protected BufferedImage image;
 	protected Grid grid;
 	protected ImagesLoader imsLoader;
 	protected int selectedDwarf = 0;
-	private int totalDwarfs = 0;
-	protected int unitsType[][] = new int[Map.HEIGHT][Map.WIDTH];
-	protected int unitsID[][] = new int[Map.HEIGHT][Map.WIDTH];
+	protected int[][] dwarfsIDs = new int[Map.HEIGHT][Map.WIDTH];
 
-	HashMap<Integer, Dwarf> dwarfHash;
+	private ArrayList dwarfsObjects = new ArrayList();
 
 	public Dwarfs(ImagesLoader imsL) {
 		grid = new Grid();
 		imsLoader = imsL;
-		dwarfHash = new HashMap<Integer, Dwarf>();
 		setImages("dwarf");
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void saveDwarf(Dwarf dwarf) {
-		int dwarfID = totalDwarfs;
-		dwarfHash.put(dwarfID, dwarf);
-		unitsID[dwarf.locY][dwarf.locX] = dwarfID;
-		totalDwarfs++;
-	}
-
-	protected Dwarf getDwarfHash(int dwarfID) {
-		if (dwarfID <= totalDwarfs) {
-			return dwarfHash.get(dwarfID);
-		} else {
-			return null;
-		}
+		
+		dwarfsObjects.add(dwarf);
+		dwarfsIDs[dwarf.locX][dwarf.locY] = dwarfsObjects.size() - 1;
 	}
 
 	protected void setImages(String name)
@@ -48,40 +41,101 @@ public class Dwarfs {
 	} // end of setImage()
 
 	public void draw(Graphics g) {
-		if (totalDwarfs > 0) {
-			for (int d = 0; d < totalDwarfs; d++) {
-				g.drawImage(image, grid.locationX(getDwarfHash(d).locX),
-						grid.locationY(getDwarfHash(d).locY), null);
+		if (dwarfsObjects.size() > 0) {
+			for (int d = 0; d < dwarfsObjects.size(); d++) {
+				g.drawImage(image, grid.locationX(getDwarfByIndex(d).locX),
+						grid.locationY(getDwarfByIndex(d).locY), null);
 			}
 		}
 	}
-
-	protected int getDwarf(int mouseX, int mouseY) {
-		return unitsType[grid.getTileY(mouseY)][grid.getTileX(mouseX)];
+	
+	protected Dwarf getDwarfByIndex(int index){
+		 return (Dwarf) dwarfsObjects.get(index);
+		
 	}
-
-	protected int getDwarfID(int mouseX, int mouseY) {
-		int getDwarf = getDwarf(mouseX, mouseY);
-		if (getDwarf != 0) {
-			return unitsID[grid.getTileY(mouseY)][grid.getTileX(mouseX)];
+	
+	protected Dwarf getDwarfByMouse(int mouseX, int mouseY){
+		int index = dwarfsIDs[grid.getTileX(mouseX)][grid.getTileY(mouseY)];
+		
+		Dwarf dwarf = (Dwarf) dwarfsObjects.get(index);
+		if (dwarf.locX == grid.getTileX(mouseX) && dwarf.locY == grid.getTileY(mouseY)){
+			return dwarf;
+		} else {
+			return null;
 		}
-		return 0;
 
+	}
+	
+	protected boolean isDwarf(int mouseX, int mouseY){
+		Dwarf dwarf = getDwarfByMouse(mouseX, mouseY);
+		if (dwarf != null){
+			System.out.println("This is a Dwarf");
+			return true;
+		}else{
+			System.out.println("This is not a Dwarf");
+			return false;
+		}
+	}
+	
+	public void move() {
+		for (int i = 0; i < dwarfsObjects.size(); i++){
+			Dwarfs.Dwarf dwarf = getDwarfByIndex(i);
+			dwarf.move();
+		}
 	}
 
 	public class Dwarf {
 		protected int locX;
 		protected int locY;
+		private Path path;
+		private int indexPath = 0;
+		
+		public void path(Path path){
+			 this.path = path;
+			 indexPath = 0;
+		}
 
 		public Dwarf(int mouseX, int mouseY) {
 			locX = grid.getTileX(mouseX);
 			locY = grid.getTileY(mouseY);
-			unitsType[locY][locX] = 1;
+		}
+		
+		private void moveDwarf(){
+			System.out.println("Your index: " + indexPath);
+			System.out.println("Path Length: " + path.getLength());
+			if (path.getLength() > indexPath){
+				System.out.println(path.getX(indexPath));
+				int dwarfID = dwarfsIDs[locX][locY];
+				dwarfsIDs[locX][locY] = 0;
+				locX = path.getX(indexPath);
+				locY = path.getY(indexPath);
+				dwarfsIDs[locX][locY] = dwarfID;
+			} else {
+				path = null;
+				System.out.println("Path is set to null");
+				indexPath = 0;
+				
+			}
 
 		}
+		
+		private void nextIndex(){
+			indexPath++;
+		}
 
-		public void moveUp() {
-			locY -= 1;
+		public void move() {
+			
+			if (path != null){
+				if (updates == STEPS) {
+					System.out.println("Hey move");
+					moveDwarf();
+					nextIndex();
+					updates = 0;
+				} else {
+					updates++;
+				}
+
+			}
 		}
 	}
 }
