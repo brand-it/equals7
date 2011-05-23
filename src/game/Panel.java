@@ -102,7 +102,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		int mouseY = e.getY();
 
 		gameInterface.mouseClick(mouseX, mouseY);
-
+		if (e.getButton() == 3) {
+			gameInterface.rightClick(mouseX, mouseY);
+			
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {

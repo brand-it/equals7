@@ -3,7 +3,6 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 
-
 public class GameInterface {
 	int locYRollover = 0;
 	int locXRollover = 0;
@@ -22,20 +21,25 @@ public class GameInterface {
 	}
 
 	public void mouseClick(int mouseX, int mouseY) {
-		int currentElement = map.returnElement(grid.getTileX(mouseX), grid.getTileX(mouseY));
+		int currentElement = map.returnElement(grid.getTileX(mouseX),
+				grid.getTileX(mouseY));
 		if (map.isWall(currentElement)) {
 			map.changeElement(mouseX, mouseY, map.floor());
 		} else if (dwarfs.isDwarf(mouseX, mouseY)) {
-			selectedDwarf = dwarfs.getDwarfByMouse(mouseX,
-					mouseY);
+			selectedDwarf = dwarfs.getDwarfByMouse(mouseX, mouseY);
 			System.out.println(selectedDwarf);
 
-		} else if (!dwarfs.isDwarf(mouseX, mouseY)){
-			System.out.print("Finding Path");
-			selectedDwarf.path(pathfinder.findPath(selectedDwarf.locX, selectedDwarf.locY, mouseX, mouseY));
-			
 		}
-		
+
+	}
+
+	public void rightClick(int mouseX, int mouseY) {
+		if (!dwarfs.isDwarf(mouseX, mouseY) && selectedDwarf != null) {
+			System.out.print("Finding Path");
+			selectedDwarf.path(pathfinder.findPath(selectedDwarf.locX,
+					selectedDwarf.locY, mouseX, mouseY));
+
+		}
 	}
 
 	public void highlightUnit(Graphics g) {

@@ -64,7 +64,6 @@ public class Pathfinder {
 
 			closed.add(current);
 			open.remove(current);
-			System.out.println(current.x + ", " + current.y);
 			fValueNeighbours(current);
 			maxDepth++;
 

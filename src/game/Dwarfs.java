@@ -6,7 +6,6 @@ import java.util.ArrayList;
 @SuppressWarnings("rawtypes")
 public class Dwarfs {
 	
-	protected int updates = 0;
 	protected static int STEPS = 15;
 	
 	protected BufferedImage image;
@@ -79,12 +78,13 @@ public class Dwarfs {
 	
 	public void move() {
 		for (int i = 0; i < dwarfsObjects.size(); i++){
-			Dwarfs.Dwarf dwarf = getDwarfByIndex(i);
+			Dwarf dwarf = getDwarfByIndex(i);
 			dwarf.move();
 		}
 	}
 
 	public class Dwarf {
+		protected int updates = 0;
 		protected int locX;
 		protected int locY;
 		private Path path;
@@ -101,10 +101,7 @@ public class Dwarfs {
 		}
 		
 		private void moveDwarf(){
-			System.out.println("Your index: " + indexPath);
-			System.out.println("Path Length: " + path.getLength());
 			if (path.getLength() > indexPath){
-				System.out.println(path.getX(indexPath));
 				int dwarfID = dwarfsIDs[locX][locY];
 				dwarfsIDs[locX][locY] = 0;
 				locX = path.getX(indexPath);
@@ -112,7 +109,6 @@ public class Dwarfs {
 				dwarfsIDs[locX][locY] = dwarfID;
 			} else {
 				path = null;
-				System.out.println("Path is set to null");
 				indexPath = 0;
 				
 			}
@@ -127,7 +123,6 @@ public class Dwarfs {
 			
 			if (path != null){
 				if (updates == STEPS) {
-					System.out.println("Hey move");
 					moveDwarf();
 					nextIndex();
 					updates = 0;
