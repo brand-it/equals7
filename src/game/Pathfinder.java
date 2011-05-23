@@ -50,10 +50,7 @@ public class Pathfinder {
 		closed.add(nodes[startLocationX][startLocationY]);
 
 		// need to make while loop based on. current x and y == your end tiles x
-		int numberOfLoops = 0;
 		while (open.size() != 0) {
-			numberOfLoops++;
-			System.out.println(numberOfLoops);
 			// Basically We don't loop threw the array top to bottom we just
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
@@ -104,7 +101,6 @@ public class Pathfinder {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
-				System.out.println("Added Node Up");
 			}
 		}
 		if (down >= 0) {
@@ -114,7 +110,6 @@ public class Pathfinder {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
-				System.out.println("Added Node Down");
 
 			}
 
@@ -127,7 +122,6 @@ public class Pathfinder {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
-				System.out.println("Added Node Right");
 
 			}
 
@@ -140,7 +134,6 @@ public class Pathfinder {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
-				System.out.println("Added Node Left");
 			}
 		}
 	}

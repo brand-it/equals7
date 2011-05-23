@@ -258,7 +258,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			createDBImage(PWIDTH, PHEIGHT);
 		}
 		map.draw(dbg);
-		pathfinder.draw(dbg);
 		dwarfs.draw(dbg);
 		gameInterface.draw(dbg);
 
