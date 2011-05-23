@@ -179,7 +179,7 @@ public class Pathfinder {
 				current.x, current.y);
 		int manhattan = manhattanCalculation(startLocationX, startLocationY,
 				current.x, current.y);
-		return euclidian;
+		return manhattan + euclidian;
 	}
 
 	public void addNode(int x, int y) {
