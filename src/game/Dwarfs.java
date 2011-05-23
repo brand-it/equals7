@@ -6,7 +6,7 @@ import java.util.ArrayList;
 @SuppressWarnings("rawtypes")
 public class Dwarfs {
 	
-	protected static int STEPS = 15;
+	protected static int STEPS = 7;
 	
 	protected BufferedImage image;
 	protected Grid grid;

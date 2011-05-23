@@ -51,7 +51,7 @@ public class Pathfinder {
 
 		// need to make while loop based on. current x and y == your end tiles x
 		int numberOfLoops = 0;
-		while ((open.size() != 0) && numberOfLoops < 500) {
+		while (open.size() != 0) {
 			numberOfLoops++;
 			System.out.println(numberOfLoops);
 			// Basically We don't loop threw the array top to bottom we just
@@ -60,11 +60,8 @@ public class Pathfinder {
 			if (current == nodes[destinationX][destinationY]) {
 				break;
 			}
-			current.total += 1;
-			if (current.total <= 1){
 				open.remove(current);
 				closed.add(current);
-			}
 
 
 			fValueNeighbours(current);
@@ -103,6 +100,7 @@ public class Pathfinder {
 		if (Map.HEIGHT >= up) {
 			node = nodes[current.x][up];
 			if (!isBlocked(current.x, up) && !inClosedList(node) && !inOpenList(node)) {
+				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
@@ -112,6 +110,7 @@ public class Pathfinder {
 		if (down >= 0) {
 			node = nodes[current.x][down];
 			if (!isBlocked(current.x, down) && !inClosedList(node) && !inOpenList(node)) {
+				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
@@ -124,6 +123,7 @@ public class Pathfinder {
 		if (Map.WIDTH >= right) {
 			node = nodes[right][current.y];
 			if (!isBlocked(right, current.y) && !inClosedList(node) && !inOpenList(node)) {
+				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
@@ -136,6 +136,7 @@ public class Pathfinder {
 		if (left >= 0) {
 			node = nodes[left][current.y];
 			if (!isBlocked(left, current.y) && !inClosedList(node) && !inOpenList(node)) {
+				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
@@ -179,7 +180,7 @@ public class Pathfinder {
 				current.x, current.y);
 		int manhattan = manhattanCalculation(startLocationX, startLocationY,
 				current.x, current.y);
-		return manhattan + euclidian;
+		return  (float) (current.distance + euclidian);
 	}
 
 	public void addNode(int x, int y) {
@@ -197,7 +198,7 @@ public class Pathfinder {
 				for (int x = 0; x < Map.WIDTH; x++) {
 					Node node = nodes[x][y];
 					if (node.cost > 0) {
-						int thing = (int) node.total;
+						int thing = (int) node.cost;
 						g.drawString(Integer.toString(thing), grid.locationX(x),
 								grid.locationY(y) + 15);
 
@@ -292,7 +293,7 @@ public class Pathfinder {
 		private float heuristic;
 		/** The search depth of this node */
 		private int depth;
-		private int total = 0;
+		private double distance = 0;
 
 		/**
 		 * Create a new node
@@ -305,6 +306,10 @@ public class Pathfinder {
 		public Node(int x, int y) {
 			this.x = x;
 			this.y = y;
+		}
+		
+		public void increaseDistance(Node node) {
+			this.distance = node.distance + 0.6;
 		}
 
 		/**
