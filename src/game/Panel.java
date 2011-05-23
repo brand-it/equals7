@@ -1,5 +1,6 @@
 package game;
 
+
 import game.Dwarfs.Dwarf;
 
 import java.awt.*;
@@ -9,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.*;
+
+
 import com.sun.j3d.utils.timer.J3DTimer;
 
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
@@ -222,7 +225,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				skips++;
 			}
 		}
-
+		map.save();
 		System.exit(0);
 	}
 

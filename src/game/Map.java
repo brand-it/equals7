@@ -1,6 +1,12 @@
 package game;
 
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -17,23 +23,38 @@ public class Map extends Tiles {
 	}
 
 	private void generateMap() {
-		int count = 0;
-		int totalTiles = HEIGHT * WIDTH;
-		Random generator = new Random();
-		DecimalFormat percent = new DecimalFormat("0.0#%");
-		System.out.println("Generating Map");
-		for (int y = 0; y < HEIGHT; y++) {
-			for (int x = 0; x < WIDTH; x++) {
-				 elements[y][x] = generator.nextInt(65);
-//				elements[y][x] = 64;
-				orientation();
-				count++;
-
+	
+		try {
+			
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("./bin/saves/map.dat"));
+			for (int y = 0; y < HEIGHT; y++) {
+				for (int x = 0; x < WIDTH; x++) {
+					elements[y][x] = inputStream.readInt();
+				}
 			}
-			System.out.println("Percentage: "
-					+ percent.format((float) count / (float) totalTiles));
+			
+		} catch (FileNotFoundException e) {
+			int count = 0;
+			int totalTiles = HEIGHT * WIDTH;
+			Random generator = new Random();
+			DecimalFormat percent = new DecimalFormat("0.0#%");
+			System.out.println("Generating Map");
+			for (int y = 0; y < HEIGHT; y++) {
+				for (int x = 0; x < WIDTH; x++) {
+					 elements[y][x] = generator.nextInt(65);
+					orientation();
+					count++;
+
+				}
+				System.out.println("Percentage: "
+						+ percent.format((float) count / (float) totalTiles));
+			}
+			System.out.println("Map Generated");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println("Map Generated");
+
 	}
 
 	public int returnElement(int x, int y) {
@@ -154,6 +175,29 @@ public class Map extends Tiles {
 
 	public int getHeightInTiles() {
 		return HEIGHT;
+	}
+	
+	public void save(){
+		ObjectOutputStream outputStream;
+		try {
+			outputStream = new ObjectOutputStream(new FileOutputStream("./bin/saves/map.dat"));
+			for (int y = 0; y < HEIGHT; y++) {
+				for (int x = 0; x < WIDTH; x++) {
+
+					outputStream.writeInt(elements[y][x]);
+	
+				}
+
+			}
+			outputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+
 	}
 } // end of ShowImage class
 
