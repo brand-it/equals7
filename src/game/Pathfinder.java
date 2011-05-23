@@ -26,64 +26,63 @@ public class Pathfinder {
 		startLocationX = 0;
 		startLocationY = 0;
 
-		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
-		for (int x = 0; x < map.getWidthInTiles(); x++) {
-			for (int y = 0; y < map.getHeightInTiles(); y++) {
-				nodes[x][y] = new Node(x, y);
-			}
-		}
 	}
 
 	public Path findPath(int x, int y, int mouseX, int mouseY) {
 
+		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
+		for (int nx = 0; nx < map.getWidthInTiles(); nx++) {
+			for (int ny = 0; ny < map.getHeightInTiles(); ny++) {
+				nodes[nx][ny] = new Node(nx, ny);
+			}
+		}
 		destinationX = grid.getTileX(mouseX);
 		destinationY = grid.getTileY(mouseY);
-		
+
 		startLocationX = x;
 		startLocationY = y;
 
 		closed.clear();
 		open.clear();
 
-		int moves = 0;
-
 		fValueNeighbours(nodes[startLocationX][startLocationY]);
 		open.remove(nodes[startLocationX][startLocationY]);
 		closed.add(nodes[startLocationX][startLocationY]);
 
 		// need to make while loop based on. current x and y == your end tiles x
-		int maxDepth = 0;
-		while ((open.size() != 0)) {
-			moves += 1;
+		int numberOfLoops = 0;
+		while ((open.size() != 0) ) {
+			numberOfLoops++;
+			System.out.println(numberOfLoops);
 			// Basically We don't loop threw the array top to bottom we just
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {
 				break;
 			}
-
-			closed.add(current);
+			current.total += 1;
 			open.remove(current);
+			closed.add(current);
+
 			fValueNeighbours(current);
-			maxDepth++;
 
 		}
-		
+
 		if (nodes[destinationX][destinationY].parent == null) {
 			return null;
 		}
-		
+
 		Path path = new Path();
 		Node target = nodes[destinationX][destinationY];
 		while (target != nodes[startLocationX][startLocationY]) {
 			path.prependStep(target.x, target.y);
 			target = target.parent;
 		}
-		path.prependStep(startLocationX,startLocationY);
-		
-		// thats it, we have our path 
+		path.prependStep(startLocationX, startLocationY);
+
+		// thats it, we have our path
 		return path;
-		
+
 	}
 
 	protected boolean inClosedList(Node node) {
@@ -91,11 +90,13 @@ public class Pathfinder {
 	}
 
 	public void fValueNeighbours(Node current) {
-		Node node;
+		Node node = null;
 		int up = current.y + 1;
 		int down = current.y - 1;
 		int right = current.x + 1;
 		int left = current.x - 1;
+		
+		
 		if (Map.HEIGHT >= up) {
 			node = nodes[current.x][up];
 			if (!isBlocked(current.x, up) && !inClosedList(node)) {
@@ -110,7 +111,7 @@ public class Pathfinder {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
-				
+
 			}
 
 		}
@@ -121,7 +122,7 @@ public class Pathfinder {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
-				
+
 			}
 
 		}
@@ -150,7 +151,7 @@ public class Pathfinder {
 				.sqrt(((eucDistanceX * eucDistanceX) + (eucDistanceY * eucDistanceY)));
 
 	}
-	
+
 	public int manhattanCalculation(int sx, int sy, int x, int y) {
 		// Manhattan Calculation. Slower but much more accurate.
 
@@ -165,8 +166,9 @@ public class Pathfinder {
 		// int manhattan = manhattanCalculation(node.x, node.y);
 		float euclidian = euclidianCalculation(destinationX, destinationY,
 				current.x, current.y);
-		int manhattan = manhattanCalculation(startLocationX, startLocationY, current.x, current.y);
-		return euclidian + manhattan;
+		int manhattan = manhattanCalculation(startLocationX, startLocationY,
+				current.x, current.y);
+		return euclidian;
 	}
 
 	public void addNode(int x, int y) {
@@ -178,11 +180,22 @@ public class Pathfinder {
 	}
 
 	public void draw(Graphics g) {
-		g.setColor(Color.red);
-		int x = grid.locationX(startLocationX);
-		int y = grid.locationY(startLocationY);
-		g.drawRect(x, y, Grid.TILE_SIZE, Grid.TILE_SIZE);
-		g.fillRect(x, y, Grid.TILE_SIZE, Grid.TILE_SIZE);
+		g.setColor(Color.green);
+		if (nodes != null) {
+			for (int y = 0; y < Map.HEIGHT; y++) {
+				for (int x = 0; x < Map.WIDTH; x++) {
+					Node node = nodes[x][y];
+					if (node.cost > 0) {
+						int thing = (int) node.total;
+						g.drawString(Integer.toString(thing), grid.locationX(x),
+								grid.locationY(y) + 15);
+
+					}
+
+				}
+			}
+
+		}
 	}
 
 	private class SortedList {
@@ -198,6 +211,10 @@ public class Pathfinder {
 			return list.get(0);
 		}
 
+		public Object get(int index) {
+			return list.get(index);
+		}
+
 		/**
 		 * Empty the list
 		 */
@@ -211,6 +228,7 @@ public class Pathfinder {
 		 * @param o
 		 *            The element to add
 		 */
+		@SuppressWarnings("unchecked")
 		public void add(Object o) {
 			list.add(o);
 			Collections.sort(list);
@@ -263,6 +281,7 @@ public class Pathfinder {
 		private float heuristic;
 		/** The search depth of this node */
 		private int depth;
+		private int total = 0;
 
 		/**
 		 * Create a new node
@@ -287,7 +306,6 @@ public class Pathfinder {
 		public int setParent(Node parent) {
 			depth = parent.depth + 1;
 			this.parent = parent;
-
 			return depth;
 		}
 

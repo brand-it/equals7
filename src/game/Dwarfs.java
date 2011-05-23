@@ -93,6 +93,7 @@ public class Dwarfs {
 		public void path(Path path){
 			 this.path = path;
 			 indexPath = 0;
+			 System.out.println("moving dwarf");
 		}
 
 		public Dwarf(int mouseX, int mouseY) {
