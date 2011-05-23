@@ -12,6 +12,7 @@ public class GameInterface {
 	private Dwarfs.Dwarf selectedDwarf;
 	private Grid grid;
 	private Pathfinder pathfinder;
+	private int element;
 
 	public GameInterface(Map map, Dwarfs dwarfs, Pathfinder pathfinder) {
 		this.dwarfs = dwarfs;
@@ -20,15 +21,15 @@ public class GameInterface {
 		this.pathfinder = pathfinder;
 	}
 
-	public void mouseClick(int mouseX, int mouseY) {
+	public void leftClick(int mouseX, int mouseY) {
 		int currentElement = map.returnElement(grid.getTileX(mouseX),
 				grid.getTileX(mouseY));
-		if (map.isWall(currentElement)) {
-			map.changeElement(mouseX, mouseY, map.floor());
-		} else if (dwarfs.isDwarf(mouseX, mouseY)) {
+		if (dwarfs.isDwarf(mouseX, mouseY)) {
 			selectedDwarf = dwarfs.getDwarfByMouse(mouseX, mouseY);
 			System.out.println(selectedDwarf);
 
+		} else {
+			map.changeElement(mouseX, mouseY, element);
 		}
 
 	}
@@ -55,6 +56,10 @@ public class GameInterface {
 		Grid grid = new Grid();
 		locXRollover = grid.mouseBoxTileX((int) mouseX);
 		locYRollover = grid.mouseBoxTileY((int) mouseY);
+	}
+	
+	public void changeElement(int number) {
+		element = number;
 	}
 
 	public void drawBox(Graphics g) {

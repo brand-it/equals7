@@ -101,10 +101,12 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 
-		gameInterface.mouseClick(mouseX, mouseY);
+		if (e.getButton() == 1) {
+			gameInterface.leftClick(mouseX, mouseY);
+		}
 		if (e.getButton() == 3) {
 			gameInterface.rightClick(mouseX, mouseY);
-			
+
 		}
 	}
 
@@ -123,9 +125,15 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		// allow a convenient exit from the full screen configuration
 		if ((keyCode == KeyEvent.VK_ESCAPE) || (keyCode == KeyEvent.VK_Q)
 				|| (keyCode == KeyEvent.VK_END)
-				|| ((keyCode == KeyEvent.VK_C) && e.isControlDown()))
+				|| ((keyCode == KeyEvent.VK_C) && e.isControlDown())) {
 			running = false;
-
+		}
+		if (keyCode == KeyEvent.VK_1) {
+			gameInterface.changeElement(map.stone());
+		}
+		if (keyCode == KeyEvent.VK_2) {
+			gameInterface.changeElement(map.floor());
+		}
 		// game-play keys
 		// if (!isPaused && !gameOver) {
 		// if (keyCode == KeyEvent.VK_LEFT)
@@ -246,7 +254,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		pathfinder.draw(dbg);
 		dwarfs.draw(dbg);
 		gameInterface.draw(dbg);
-		
+
 	}
 
 	private void paintScreen()

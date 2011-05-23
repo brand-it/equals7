@@ -150,12 +150,23 @@ public class Pathfinder {
 				.sqrt(((eucDistanceX * eucDistanceX) + (eucDistanceY * eucDistanceY)));
 
 	}
+	
+	public int manhattanCalculation(int sx, int sy, int x, int y) {
+		// Manhattan Calculation. Slower but much more accurate.
+
+		int manDistanceX = Math.abs(x - sx);
+		int manDistanceY = Math.abs(y - sy);
+
+		return (manDistanceX + manDistanceY);
+
+	}
 
 	public float fValue(Node current) {
 		// int manhattan = manhattanCalculation(node.x, node.y);
 		float euclidian = euclidianCalculation(destinationX, destinationY,
 				current.x, current.y);
-		return euclidian;
+		int manhattan = manhattanCalculation(startLocationX, startLocationY, current.x, current.y);
+		return euclidian + manhattan;
 	}
 
 	public void addNode(int x, int y) {
