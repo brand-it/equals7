@@ -1,6 +1,7 @@
 package game;
 
 
+
 import game.Dwarfs.Dwarf;
 
 import java.awt.*;
@@ -13,6 +14,7 @@ import javax.swing.*;
 
 
 import com.sun.j3d.utils.timer.J3DTimer;
+
 
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 

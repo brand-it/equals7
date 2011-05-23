@@ -51,7 +51,7 @@ public class Pathfinder {
 
 		// need to make while loop based on. current x and y == your end tiles x
 		int numberOfLoops = 0;
-		while ((open.size() != 0) ) {
+		while ((open.size() != 0) && numberOfLoops < 500) {
 			numberOfLoops++;
 			System.out.println(numberOfLoops);
 			// Basically We don't loop threw the array top to bottom we just
@@ -61,8 +61,11 @@ public class Pathfinder {
 				break;
 			}
 			current.total += 1;
-			open.remove(current);
-			closed.add(current);
+			if (current.total <= 1){
+				open.remove(current);
+				closed.add(current);
+			}
+
 
 			fValueNeighbours(current);
 
@@ -91,26 +94,28 @@ public class Pathfinder {
 
 	public void fValueNeighbours(Node current) {
 		Node node = null;
-		int up = current.y + 1;
-		int down = current.y - 1;
+		int up = current.y - 1;
+		int down = current.y + 1;
 		int right = current.x + 1;
 		int left = current.x - 1;
 		
 		
 		if (Map.HEIGHT >= up) {
 			node = nodes[current.x][up];
-			if (!isBlocked(current.x, up) && !inClosedList(node)) {
+			if (!isBlocked(current.x, up) && !inClosedList(node) && !inOpenList(node)) {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
+				System.out.println("Added Node Up");
 			}
 		}
 		if (down >= 0) {
 			node = nodes[current.x][down];
-			if (!isBlocked(current.x, down) && !inClosedList(node)) {
+			if (!isBlocked(current.x, down) && !inClosedList(node) && !inOpenList(node)) {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
+				System.out.println("Added Node Down");
 
 			}
 
@@ -118,10 +123,11 @@ public class Pathfinder {
 
 		if (Map.WIDTH >= right) {
 			node = nodes[right][current.y];
-			if (!isBlocked(right, current.y) && !inClosedList(node)) {
+			if (!isBlocked(right, current.y) && !inClosedList(node) && !inOpenList(node)) {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
+				System.out.println("Added Node Right");
 
 			}
 
@@ -129,12 +135,17 @@ public class Pathfinder {
 
 		if (left >= 0) {
 			node = nodes[left][current.y];
-			if (!isBlocked(left, current.y) && !inClosedList(node)) {
+			if (!isBlocked(left, current.y) && !inClosedList(node) && !inOpenList(node)) {
 				node.cost = fValue(node);
 				node.setParent(current);
 				open.add(node);
+				System.out.println("Added Node Left");
 			}
 		}
+	}
+	
+	protected boolean inOpenList(Node node) {
+		return open.contains(node);
 	}
 
 	public boolean isBlocked(int x, int y) {
