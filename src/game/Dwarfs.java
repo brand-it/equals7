@@ -13,7 +13,7 @@ public class Dwarfs {
 	protected Grid grid;
 	protected ImagesLoader imsLoader;
 	protected int selectedDwarf = 0;
-	protected int[][] dwarfsIDs = new int[Map.HEIGHT][Map.WIDTH];
+	protected int[][] dwarfsIDs = new int[Map.WIDTH][Map.HEIGHT];
 
 	private ArrayList dwarfsObjects = new ArrayList();
 

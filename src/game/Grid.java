@@ -1,7 +1,7 @@
 package game;
 
 public class Grid {
-	protected static final int TILE_SIZE = 23;
+	protected static final int TILE_SIZE = 25;
 
 	public Grid() {
 
