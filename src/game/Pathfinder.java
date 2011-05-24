@@ -94,7 +94,7 @@ public class Pathfinder {
 		int left = current.x - 1;
 		
 		
-		if (Map.HEIGHT >= up) {
+		if (up >= 0) {
 			node = nodes[current.x][up];
 			if (!isBlocked(current.x, up) && !inClosedList(node) && !inOpenList(node)) {
 				node.increaseDistance(current);
@@ -103,7 +103,7 @@ public class Pathfinder {
 				open.add(node);
 			}
 		}
-		if (down >= 0) {
+		if (Map.HEIGHT >= down) {
 			node = nodes[current.x][down];
 			if (!isBlocked(current.x, down) && !inClosedList(node) && !inOpenList(node)) {
 				node.increaseDistance(current);

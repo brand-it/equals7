@@ -11,8 +11,8 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Map extends Tiles {
-	protected static final int HEIGHT = 60;
-	protected static final int WIDTH = 60;
+	protected static final int HEIGHT = 30;
+	protected static final int WIDTH = 50;
 	private int[][] elements = new int[HEIGHT][WIDTH];
 	private Grid grid;
 
