@@ -46,8 +46,8 @@ public class GameInterface {
 	public void highlightUnit(Graphics g) {
 		g.setColor(Color.red);
 		if (selectedDwarf != null) {
-			g.drawRect(grid.locationX(selectedDwarf.locX),
-					grid.locationY(selectedDwarf.locY), Grid.TILE_SIZE,
+			g.drawRect(selectedDwarf.smoothXLoc(),
+					selectedDwarf.smoothYLoc(), Grid.TILE_SIZE,
 					Grid.TILE_SIZE);
 		}
 	}

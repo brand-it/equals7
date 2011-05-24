@@ -88,9 +88,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		map = new Map(imsLoader);
 		dwarfs = new Dwarfs(imsLoader);
-		Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(23, 23);
+		Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(460, 46);
 		dwarfs.saveDwarf(dwarf);
-		dwarf = dwarfs.new Dwarf(46, 46);
+		dwarf = dwarfs.new Dwarf(460, 69);
 		dwarfs.saveDwarf(dwarf);
 		pathfinder = new Pathfinder(map);
 		gameInterface = new GameInterface(map, dwarfs, pathfinder);
