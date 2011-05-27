@@ -1,10 +1,5 @@
 package game;
 
-
-
-
-import game.Dwarfs.Dwarf;
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -13,8 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.*;
 
-
-import com.sun.j3d.utils.timer.J3DTimer;
 
 
 
@@ -184,8 +177,12 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		long overSleepTime = 0L;
 		int noDelays = 0;
 		long excess = 0L;
+		
+		System.out.print(System.nanoTime());
 
-		gameStartTime = J3DTimer.getValue();
+		gameStartTime = System.nanoTime();
+		
+		
 		beforeTime = gameStartTime;
 
 		running = true;
@@ -195,7 +192,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			gameRender();
 			paintScreen();
 
-			afterTime = J3DTimer.getValue();
+			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
 			sleepTime = (period - timeDiff) - overSleepTime;
 
@@ -204,7 +201,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 					Thread.sleep(sleepTime / 1000000L); // nano -> ms
 				} catch (InterruptedException ex) {
 				}
-				overSleepTime = (J3DTimer.getValue() - afterTime) - sleepTime;
+				overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
 			} else { // sleepTime <= 0; the frame took longer than the period
 				excess -= sleepTime; // store excess time value
 				overSleepTime = 0L;
@@ -215,7 +212,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				}
 			}
 
-			beforeTime = J3DTimer.getValue();
+			beforeTime = System.nanoTime();
 
 			/*
 			 * If frame animation is taking too long, update the game state
