@@ -70,10 +70,8 @@ public class Dwarfs {
 	protected boolean isDwarf(int mouseX, int mouseY) {
 		Dwarf dwarf = getDwarfByMouse(mouseX, mouseY);
 		if (dwarf != null) {
-			System.out.println("This is a Dwarf");
 			return true;
 		} else {
-			System.out.println("This is not a Dwarf");
 			return false;
 		}
 	}
@@ -110,8 +108,6 @@ public class Dwarfs {
 				dwarfsIDs[locX][locY] = 0;
 				locX = path.getX(indexPath);
 				locY = path.getY(indexPath);
-				System.out.println("locX: " + locX);
-				System.out.println("locY: " + locY);
 
 				dwarfsIDs[locX][locY] = dwarfID;
 			} else {
@@ -131,7 +127,6 @@ public class Dwarfs {
 			if (path != null) {
 				if (path.getLength() > (indexPath + 1)) {
 					result++;
-					System.out.println("next vs current: " + result + ", " + indexPath);
 				}
 			}
 			return result;
@@ -196,7 +191,6 @@ public class Dwarfs {
 					
 				} else if (nextY < locY) {
 					result = (int) (grid.locationY(locY) - (percent * Grid.TILE_SIZE));
-					System.out.println("Going Down");
 				}
 			}
 			return result;
