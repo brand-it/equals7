@@ -5,6 +5,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -21,9 +22,20 @@ public class GameRunner extends JFrame implements WindowListener,
 	private static int DEFAULT_FPS = 40;
 
 	public GameRunner(long period) {
+
+		File f = new File("../saves");
+		try {
+			if (f.mkdir())
+				System.out.println("Directory Created");
+			else
+				System.out.println("Directory is not created");
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+
 		setLocation(200, 200);
 
-		this.setTitle("Game Dwarf");
+		this.setTitle("Dwarf");
 
 		Container c = getContentPane(); // default BorderLayout used
 		p = new Panel(this, period);

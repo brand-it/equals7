@@ -177,8 +177,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		long overSleepTime = 0L;
 		int noDelays = 0;
 		long excess = 0L;
-		
-		System.out.print(System.nanoTime());
 
 		gameStartTime = System.nanoTime();
 		

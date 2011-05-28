@@ -1,32 +1,39 @@
 package game;
 
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Random;
+
 
 public class Map extends Tiles {
 	protected static final int HEIGHT = 30;
 	protected static final int WIDTH = 50;
 	private int[][] elements = new int[HEIGHT][WIDTH];
 	private Grid grid;
+	private String saveDir;
 
 	public Map(ImagesLoader imgLd) {
 		super(imgLd);
+		saveDir = "../saves/map.dat";
 		generateMap();
 		grid = new Grid();
+		
+		
 	}
 
 	private void generateMap() {
 	
 		try {
 			
-			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("./bin/saves/map.dat"));
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
 					elements[y][x] = inputStream.readInt();
@@ -49,7 +56,9 @@ public class Map extends Tiles {
 				System.out.println("Percentage: "
 						+ percent.format((float) count / (float) totalTiles));
 			}
+			
 			System.out.println("Map Generated");
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -180,7 +189,7 @@ public class Map extends Tiles {
 	public void save(){
 		ObjectOutputStream outputStream;
 		try {
-			outputStream = new ObjectOutputStream(new FileOutputStream("./bin/saves/map.dat"));
+			outputStream = new ObjectOutputStream(new FileOutputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
 
@@ -190,6 +199,7 @@ public class Map extends Tiles {
 
 			}
 			outputStream.close();
+			System.out.println("Map Saved");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

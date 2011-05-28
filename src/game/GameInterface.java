@@ -10,20 +10,16 @@ public class GameInterface {
 	private Dwarfs dwarfs;
 	private Map map;
 	private Dwarfs.Dwarf selectedDwarf;
-	private Grid grid;
 	private Pathfinder pathfinder;
 	private int element;
 
 	public GameInterface(Map map, Dwarfs dwarfs, Pathfinder pathfinder) {
 		this.dwarfs = dwarfs;
 		this.map = map;
-		grid = new Grid();
 		this.pathfinder = pathfinder;
 	}
 
 	public void leftClick(int mouseX, int mouseY) {
-		int currentElement = map.returnElement(grid.getTileX(mouseX),
-				grid.getTileX(mouseY));
 		if (dwarfs.isDwarf(mouseX, mouseY)) {
 			selectedDwarf = dwarfs.getDwarfByMouse(mouseX, mouseY);
 			System.out.println(selectedDwarf);
