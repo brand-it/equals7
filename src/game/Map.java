@@ -13,8 +13,8 @@ import java.util.Random;
 
 
 public class Map extends Tiles {
-	protected static final int HEIGHT = 30;
-	protected static final int WIDTH = 50;
+	protected static final int HEIGHT = 100;
+	protected static final int WIDTH = 100;
 	private int[][] elements = new int[WIDTH][HEIGHT];
 	private Grid grid;
 	private String saveDir;
@@ -45,17 +45,16 @@ public class Map extends Tiles {
 			Random generator = new Random();
 			DecimalFormat percent = new DecimalFormat("0.0#%");
 			System.out.println("Generating Map");
-			for (int y = 0; y < HEIGHT; y++) {
-				for (int x = 0; x < WIDTH; x++) {
-					 elements[x][y] = generator.nextInt(65);
-					orientation();
-					count++;
-
-				}
-				System.out.println("Percentage: "
-						+ percent.format((float) count / (float) totalTiles));
-			}
-			
+//			for (int y = 0; y < HEIGHT; y++) {
+//				for (int x = 0; x < WIDTH; x++) {
+//					 elements[x][y] = generator.nextInt(65);
+//					orientation();
+//					count++;
+//				}
+//				System.out.println("Percentage: "
+//						+ percent.format((float) count / (float) totalTiles));
+//			}
+//			
 			System.out.println("Map Generated");
 			
 		} catch (IOException e) {
@@ -163,11 +162,12 @@ public class Map extends Tiles {
 	
 	public void createBufferMap(){
 		if (elementUpdate){
+			System.out.print("Buffering");
 			mapImage = new BufferedImage(WIDTH * Grid.TILE_SIZE, HEIGHT * Grid.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D stripGC;
 			stripGC = mapImage.createGraphics();
 			drawTiles(stripGC);
-		}else {
+			stripGC.dispose();
 			elementUpdate = false;
 		}
 
