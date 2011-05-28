@@ -1,14 +1,13 @@
 package game;
 
 import java.awt.*;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -16,9 +15,10 @@ import java.util.Random;
 public class Map extends Tiles {
 	protected static final int HEIGHT = 30;
 	protected static final int WIDTH = 50;
-	private int[][] elements = new int[HEIGHT][WIDTH];
+	private int[][] elements = new int[WIDTH][HEIGHT];
 	private Grid grid;
 	private String saveDir;
+	private Boolean elementUpdate = false;
 
 	public Map(ImagesLoader imgLd) {
 		super(imgLd);
@@ -30,13 +30,12 @@ public class Map extends Tiles {
 	}
 
 	private void generateMap() {
-	
+		elementUpdate = true;
 		try {
-			
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					elements[y][x] = inputStream.readInt();
+					elements[x][y] = inputStream.readInt();
 				}
 			}
 			
@@ -48,7 +47,7 @@ public class Map extends Tiles {
 			System.out.println("Generating Map");
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					 elements[y][x] = generator.nextInt(65);
+					 elements[x][y] = generator.nextInt(65);
 					orientation();
 					count++;
 
@@ -67,26 +66,27 @@ public class Map extends Tiles {
 	}
 
 	public int returnElement(int x, int y) {
-		return elements[y][x];
+		return elements[x][y];
 	}
 
 	private void setElementBase(int y, int x) {
-		if (elements[y][x] < iron()) {
-			elements[y][x] = stone();
-		} else if (elements[y][x] < gold()) {
-			elements[y][x] = iron();
-		} else if (elements[y][x] < titanium()) {
-			elements[y][x] = gold();
-		} else if (elements[y][x] < floor()) {
-			elements[y][x] = titanium();
+		if (elements[x][y] < iron()) {
+			elements[x][y] = stone();
+		} else if (elements[x][y] < gold()) {
+			elements[x][y] = iron();
+		} else if (elements[x][y] < titanium()) {
+			elements[x][y] = gold();
+		} else if (elements[x][y] < floor()) {
+			elements[x][y] = titanium();
 		} else {
-			elements[y][x] = floor();
+			elements[x][y] = floor();
 		}
 	}
 
 	protected void changeElement(int x, int y, int element) {
-		elements[grid.getTileY(y)][grid.getTileX(x)] = element;
+		elements[grid.getTileY(x)][grid.getTileX(y)] = element;
 		orientation();
+		elementUpdate = true;
 	}
 
 	// You have subtract 1 count starts at 0
@@ -140,35 +140,52 @@ public class Map extends Tiles {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 				total = 0;
-				if (isWall(elements[y][x])) {
-					if (isWall(elements[moveUp(y)][x])) {
+				if (isWall(elements[x][y])) {
+					if (isWall(elements[x][moveUp(y)])) {
 						total += top;
 					}
-					if (isWall(elements[moveDown(y)][x])) {
+					if (isWall(elements[x][moveDown(y)])) {
 						total += bottom;
 					}
-					if (isWall(elements[y][moveLeft(x)])) {
+					if (isWall(elements[moveLeft(x)][y])) {
 						total += left;
 					}
-					if (isWall(elements[y][moveRight(x)])) {
+					if (isWall(elements[moveRight(x)][y])) {
 						total += right;
 					}
 				}
 				setElementBase(y, x);
 
-				elements[y][x] += total;
+				elements[x][y] += total;
 			}
 		}
 	}
+	
+	public void createBufferMap(){
+		if (elementUpdate){
+			mapImage = new BufferedImage(WIDTH * Grid.TILE_SIZE, HEIGHT * Grid.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D stripGC;
+			stripGC = mapImage.createGraphics();
+			drawTiles(stripGC);
+		}else {
+			elementUpdate = false;
+		}
 
-	public void draw(Graphics g) {
+	}
+	
+	public void draw(Graphics g){
+		createBufferMap();
+		g.drawImage(mapImage, 0, 0, null);
+	}
+
+	public void drawTiles(Graphics g) {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 
-				if (isFloor(elements[y][x])) {
+				if (isFloor(elements[x][y])) {
 					setFloor();
-				} else if (isWall(elements[y][x])) {
-					setWall(elements[y][x]);
+				} else if (isWall(elements[x][y])) {
+					setWall(elements[x][y]);
 				}
 
 				g.drawImage(image, grid.locationX(x), grid.locationY(y), null);
@@ -192,11 +209,8 @@ public class Map extends Tiles {
 			outputStream = new ObjectOutputStream(new FileOutputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-
-					outputStream.writeInt(elements[y][x]);
-	
+					outputStream.writeInt(elements[x][y]);
 				}
-
 			}
 			outputStream.close();
 			System.out.println("Map Saved");

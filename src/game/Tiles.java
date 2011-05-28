@@ -12,6 +12,7 @@ public class Tiles {
 
 	private ImagesLoader imsLoader;
 	protected BufferedImage image;
+	protected BufferedImage mapImage;
 
 	public Tiles(ImagesLoader imgLd) {
 		imsLoader = imgLd;
