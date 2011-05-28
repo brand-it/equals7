@@ -49,9 +49,9 @@ public class Pathfinder {
 		open.remove(nodes[startLocationX][startLocationY]);
 		closed.add(nodes[startLocationX][startLocationY]);
 
-		// need to make while loop based on. current x and y == your end tiles x
-		while (open.size() != 0) {
-			// Basically We don't loop threw the array top to bottom we just
+		int maxloops = 0;// need to make while loop based on. current x and y == your end tiles x
+		while (open.size() != 0 && maxloops != 500) {
+			maxloops++; // Basically We don't loop threw the array top to bottom we just
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {

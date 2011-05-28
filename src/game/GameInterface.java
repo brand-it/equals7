@@ -32,7 +32,6 @@ public class GameInterface {
 
 	public void rightClick(int mouseX, int mouseY) {
 		if (!dwarfs.isDwarf(mouseX, mouseY) && selectedDwarf != null) {
-			System.out.print("Finding Path");
 			selectedDwarf.path(pathfinder.findPath(selectedDwarf.locX,
 					selectedDwarf.locY, mouseX, mouseY));
 
