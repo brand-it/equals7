@@ -1,11 +1,14 @@
 package game;
 
 import java.awt.Container;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -19,16 +22,15 @@ public class GameRunner extends JFrame implements WindowListener,
 
 	private Panel p;
 
-	private static int DEFAULT_FPS = 40;
+	private static int DEFAULT_FPS = 60;
 
 	public GameRunner(long period) {
-
-		File f = new File("../saves");
+		File f = new File("./saves");
 		try {
 			if (f.mkdir())
-				System.out.println("Directory Created");
+				System.out.println("Directory Created" + " " + f);
 			else
-				System.out.println("Directory is not created");
+				System.out.println("Directory is not created" + " " + f);
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
@@ -47,7 +49,17 @@ public class GameRunner extends JFrame implements WindowListener,
 		pack();
 		setResizable(true);
 		setVisible(true);
+		setIcon("images/dwarfico.ico");
+		
+
 	} // end of BugRunner() constructor
+	
+	public void setIcon(String imageName){
+
+		Image im = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource(imageName));
+		setIconImage(im);
+		
+	}
 
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
@@ -63,7 +75,6 @@ public class GameRunner extends JFrame implements WindowListener,
 	}
 
 	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
