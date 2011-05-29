@@ -8,9 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.*;
 
-
-
-
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	/**
@@ -47,8 +44,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	private Pathfinder pathfinder;
 	private Map map;
-	private GameInterface gameInterface;
+	private Input input;
 	private Image dbImage = null;
+	private Grid grid;
 
 	private Dwarfs dwarfs;
 
@@ -76,17 +74,17 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		});
 
 		addMouseMotionListener(this);
-
+		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
-
-		map = new Map(imsLoader);
-		dwarfs = new Dwarfs(imsLoader);
+		grid = new Grid();
+		map = new Map(imsLoader, grid);
+		dwarfs = new Dwarfs(imsLoader, grid);
 		Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(460, 46);
 		dwarfs.saveDwarf(dwarf);
 		dwarf = dwarfs.new Dwarf(460, 69);
 		dwarfs.saveDwarf(dwarf);
-		pathfinder = new Pathfinder(map);
-		gameInterface = new GameInterface(map, dwarfs, pathfinder);
+		pathfinder = new Pathfinder(map, grid);
+		input = new Input(map, dwarfs, pathfinder, grid);
 
 	}
 
@@ -102,10 +100,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		int mouseY = e.getY();
 
 		if (e.getButton() == 1) {
-			gameInterface.leftClick(mouseX, mouseY);
+			input.leftClick(mouseX, mouseY);
 		}
 		if (e.getButton() == 3) {
-			gameInterface.rightClick(mouseX, mouseY);
+			input.rightClick(mouseX, mouseY);
 
 		}
 	}
@@ -129,10 +127,22 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			running = false;
 		}
 		if (keyCode == KeyEvent.VK_1) {
-			gameInterface.changeElement(map.stone());
+			input.changeElement(map.stone());
 		}
 		if (keyCode == KeyEvent.VK_2) {
-			gameInterface.changeElement(map.floor());
+			input.changeElement(map.floor());
+		}
+		if (keyCode == 37) {
+			input.arrowLeft();
+		}
+		if (keyCode == 38) {
+			input.arrowUp();
+		}
+		if (keyCode == 39) {
+			input.arrowRight();
+		}
+		if (keyCode == 40) {
+			input.arrowDown();
 		}
 		// game-play keys
 		// if (!isPaused && !gameOver) {
@@ -166,7 +176,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	// Basically if you you want things to move and stuff you call this...
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
-			gameInterface.changeBoxLocation(mouseX, mouseY);
+			input.changeBoxLocation(mouseX, mouseY);
 			dwarfs.move();
 		}
 	} // end of gameUpdate()
@@ -179,8 +189,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		long excess = 0L;
 
 		gameStartTime = System.nanoTime();
-		
-		
+
 		beforeTime = gameStartTime;
 
 		running = true;
@@ -254,7 +263,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		}
 		map.draw(dbg);
 		dwarfs.draw(dbg);
-		gameInterface.draw(dbg);
+		input.draw(dbg);
 
 	}
 

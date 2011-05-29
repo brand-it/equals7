@@ -11,34 +11,33 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-
 public class Map extends Tiles {
-	protected static final int HEIGHT = 50;
-	protected static final int WIDTH = 50;
+	protected static final int HEIGHT = 100;
+	protected static final int WIDTH = 100;
 	private int[][] elements = new int[WIDTH][HEIGHT];
 	private Grid grid;
 	private String saveDir;
 	private Boolean elementUpdate = false;
 
-	public Map(ImagesLoader imgLd) {
+	public Map(ImagesLoader imgLd, Grid grid) {
 		super(imgLd);
 		saveDir = "./saves/map.dat";
 		generateMap();
-		grid = new Grid();
-		
-		
+		this.grid = grid;
+
 	}
 
 	private void generateMap() {
 		elementUpdate = true;
 		try {
-			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(saveDir));
+			ObjectInputStream inputStream = new ObjectInputStream(
+					new FileInputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
 					elements[x][y] = inputStream.readInt();
 				}
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			int count = 0;
 			int totalTiles = HEIGHT * WIDTH;
@@ -47,16 +46,19 @@ public class Map extends Tiles {
 			System.out.println("Generating Map");
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					 elements[x][y] = generator.nextInt(65);
+					elements[x][y] = generator.nextInt(65);
 					orientation();
 					count++;
+					System.out
+							.println("Percentage: "
+									+ percent.format((float) count
+											/ (float) totalTiles));
 				}
-				System.out.println("Percentage: "
-						+ percent.format((float) count / (float) totalTiles));
+
 			}
-//			
+
 			System.out.println("Map Generated");
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +85,7 @@ public class Map extends Tiles {
 	}
 
 	protected void changeElement(int x, int y, int element) {
-		elements[grid.getTileY(x)][grid.getTileX(y)] = element;
+		elements[grid.getTileXByView(x)][grid.getTileYByView(y)] = element;
 		orientation();
 		elementUpdate = true;
 	}
@@ -117,16 +119,16 @@ public class Map extends Tiles {
 		}
 		return y;
 	}
-	
-	protected boolean validMove(int x, int y){
-		if (x > WIDTH || x < 0){
+
+	protected boolean validMove(int x, int y) {
+		if (x > WIDTH || x < 0) {
 			return false;
-		}else if (y < HEIGHT || y > HEIGHT){
+		} else if (y < HEIGHT || y > HEIGHT) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
-		
+
 	}
 
 	private void orientation() {
@@ -159,25 +161,12 @@ public class Map extends Tiles {
 			}
 		}
 	}
-	
-	public void createBufferMap(){
-		if (elementUpdate){
-			mapImage = new BufferedImage(WIDTH * Grid.TILE_SIZE, HEIGHT * Grid.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
-			Graphics2D stripGC;
-			stripGC = mapImage.createGraphics();
-			drawTiles(stripGC);
-			stripGC.dispose();
-			elementUpdate = false;
-		}
 
-	}
-	
-	public void draw(Graphics g){
-		createBufferMap();
-		g.drawImage(mapImage, 0, 0, null);
-	}
+	public void draw(Graphics g) {
+		int gridY;
+		int gridX;
 
-	public void drawTiles(Graphics g) {
+		// The y start and x start for this calc need to be re worked
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 
@@ -186,8 +175,15 @@ public class Map extends Tiles {
 				} else if (isWall(elements[x][y])) {
 					setWall(elements[x][y]);
 				}
+				gridY = grid.locationY(y);
+				gridX = grid.locationX(x);
 
-				g.drawImage(image, grid.locationX(x), grid.locationY(y), null);
+				gridX = gridX + grid.viewLocX;
+				gridY = gridY + grid.viewLocY;
+
+				g.drawImage(image, gridX, gridY, gridX + Grid.TILE_SIZE, gridY
+						+ Grid.TILE_SIZE, 0, 0, Grid.TILE_SIZE, Grid.TILE_SIZE,
+						null);
 			}
 		}
 	}
@@ -200,8 +196,8 @@ public class Map extends Tiles {
 	public int getHeightInTiles() {
 		return HEIGHT;
 	}
-	
-	public void save(){
+
+	public void save() {
 		ObjectOutputStream outputStream;
 		try {
 			outputStream = new ObjectOutputStream(new FileOutputStream(saveDir));
@@ -217,8 +213,6 @@ public class Map extends Tiles {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
 
 	}
 } // end of ShowImage class

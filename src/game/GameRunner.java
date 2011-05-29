@@ -8,7 +8,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JFrame;
 
@@ -49,16 +49,16 @@ public class GameRunner extends JFrame implements WindowListener,
 		pack();
 		setResizable(true);
 		setVisible(true);
-		setIcon("images/dwarfico.ico");
-		
+		setIcon("images/dwarfico.png");
 
 	} // end of BugRunner() constructor
-	
-	public void setIcon(String imageName){
 
-		Image im = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource(imageName));
+	public void setIcon(String imageName) {
+		URL url = this.getClass().getClassLoader().getResource(imageName);
+
+		Image im = Toolkit.getDefaultToolkit().getImage(url);
 		setIconImage(im);
-		
+
 	}
 
 	public void windowOpened(WindowEvent e) {

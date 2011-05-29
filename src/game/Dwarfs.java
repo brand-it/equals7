@@ -17,8 +17,8 @@ public class Dwarfs {
 
 	private ArrayList dwarfsObjects = new ArrayList();
 
-	public Dwarfs(ImagesLoader imsL) {
-		grid = new Grid();
+	public Dwarfs(ImagesLoader imsL, Grid grid) {
+		this.grid = grid;
 		imsLoader = imsL;
 		setImages("dwarf");
 	}
@@ -55,11 +55,12 @@ public class Dwarfs {
 	}
 
 	protected Dwarf getDwarfByMouse(int mouseX, int mouseY) {
-		int index = dwarfsIDs[grid.getTileX(mouseX)][grid.getTileY(mouseY)];
+		int index = dwarfsIDs[grid.getTileXByView(mouseX)][grid
+				.getTileYByView(mouseY)];
 
 		Dwarf dwarf = (Dwarf) dwarfsObjects.get(index);
-		if (dwarf.locX == grid.getTileX(mouseX)
-				&& dwarf.locY == grid.getTileY(mouseY)) {
+		if (dwarf.locX == grid.getTileXByView(mouseX)
+				&& dwarf.locY == grid.getTileYByView(mouseY)) {
 			return dwarf;
 		} else {
 			return null;
@@ -135,22 +136,22 @@ public class Dwarfs {
 		public int getPathX(int index) {
 			return path.getX(index);
 		}
-		
-		public void setPathX(int index){
+
+		public void setPathX(int index) {
 			nextX = path.getX(index);
 		}
-		
-		public void setPathY(int index){
+
+		public void setPathY(int index) {
 			nextY = path.getY(index);
 		}
 
 		public int getPathY(int index) {
 			return path.getY(index);
 		}
-		
-		public boolean validIndex(int index){
+
+		public boolean validIndex(int index) {
 			if (path != null) {
-				if (path.getLength() > index){
+				if (path.getLength() > index) {
 					return true;
 				}
 			}
@@ -158,39 +159,39 @@ public class Dwarfs {
 		}
 
 		public int smoothXLoc() {
-			int result = grid.locationX(locX);
+			int result = grid.locationXByView(locX);
 			double percent = ((float) updates / (float) STEPS);
-			
+
 			int nextIndex = getNextIndex();
-			if (validIndex(nextIndex)){
-				
+			if (validIndex(nextIndex)) {
+
 				setPathX(nextIndex);
-				
+
 				if (nextX > locX) {
 					result = (int) ((percent * Grid.TILE_SIZE) + grid
-							.locationX(locX));
+							.locationXByView(locX));
 				} else if (nextX < locX) {
-					result = (int) (grid.locationX(locX) - (percent * Grid.TILE_SIZE));
+					result = (int) (grid.locationXByView(locX) - (percent * Grid.TILE_SIZE));
 				}
 			}
 			return result;
 		}
 
 		public int smoothYLoc() {
-			int result = grid.locationY(locY);
+			int result = grid.LocationYByView(locY);
 			double percent = ((float) updates / (float) STEPS);
-			
+
 			int nextIndex = getNextIndex();
-			if (validIndex(nextIndex)){
-				
+			if (validIndex(nextIndex)) {
+
 				setPathY(nextIndex);
-				
+
 				if (nextY > locY) {
 					result = (int) ((percent * Grid.TILE_SIZE) + grid
-							.locationY(locY));
-					
+							.LocationYByView(locY));
+
 				} else if (nextY < locY) {
-					result = (int) (grid.locationY(locY) - (percent * Grid.TILE_SIZE));
+					result = (int) (grid.LocationYByView(locY) - (percent * Grid.TILE_SIZE));
 				}
 			}
 			return result;

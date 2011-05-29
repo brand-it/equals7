@@ -7,52 +7,34 @@ public class GameInterface {
 	int locYRollover = 0;
 	int locXRollover = 0;
 
-	private Dwarfs dwarfs;
-	private Map map;
-	private Dwarfs.Dwarf selectedDwarf;
-	private Pathfinder pathfinder;
-	private int element;
+	protected Dwarfs dwarfs;
+	protected Map map;
+	protected Dwarfs.Dwarf selectedDwarf;
+	protected Pathfinder pathfinder;
+	protected int element;
+	protected Grid grid;
 
-	public GameInterface(Map map, Dwarfs dwarfs, Pathfinder pathfinder) {
+	public GameInterface(Map map, Dwarfs dwarfs, Pathfinder pathfinder,
+			Grid grid) {
 		this.dwarfs = dwarfs;
 		this.map = map;
 		this.pathfinder = pathfinder;
-	}
-
-	public void leftClick(int mouseX, int mouseY) {
-		if (dwarfs.isDwarf(mouseX, mouseY)) {
-			selectedDwarf = dwarfs.getDwarfByMouse(mouseX, mouseY);
-			System.out.println(selectedDwarf);
-
-		} else {
-			map.changeElement(mouseX, mouseY, element);
-		}
-
-	}
-
-	public void rightClick(int mouseX, int mouseY) {
-		if (!dwarfs.isDwarf(mouseX, mouseY) && selectedDwarf != null) {
-			selectedDwarf.path(pathfinder.findPath(selectedDwarf.locX,
-					selectedDwarf.locY, mouseX, mouseY));
-
-		}
+		this.grid = grid;
 	}
 
 	public void highlightUnit(Graphics g) {
 		g.setColor(Color.red);
 		if (selectedDwarf != null) {
-			g.drawRect(selectedDwarf.smoothXLoc(),
-					selectedDwarf.smoothYLoc(), Grid.TILE_SIZE,
-					Grid.TILE_SIZE);
+			g.drawRect(selectedDwarf.smoothXLoc(), selectedDwarf.smoothYLoc(),
+					Grid.TILE_SIZE, Grid.TILE_SIZE);
 		}
 	}
 
 	public void changeBoxLocation(double mouseX, double mouseY) {
-		Grid grid = new Grid();
-		locXRollover = grid.mouseBoxTileX((int) mouseX);
-		locYRollover = grid.mouseBoxTileY((int) mouseY);
+		locXRollover = grid.mouseBoxTileXByView((int) mouseX);
+		locYRollover = grid.mouseBoxTileYByView((int) mouseY);
 	}
-	
+
 	public void changeElement(int number) {
 		element = number;
 	}

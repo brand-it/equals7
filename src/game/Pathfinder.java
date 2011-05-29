@@ -19,9 +19,9 @@ public class Pathfinder {
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
 
-	public Pathfinder(Map map) {
+	public Pathfinder(Map map, Grid grid) {
 		ImagesLoader img = new ImagesLoader();
-		grid = new Grid();
+		this.grid = grid;
 		this.map = map;
 		startLocationX = 0;
 		startLocationY = 0;
@@ -36,8 +36,8 @@ public class Pathfinder {
 				nodes[nx][ny] = new Node(nx, ny);
 			}
 		}
-		destinationX = grid.getTileX(mouseX);
-		destinationY = grid.getTileY(mouseY);
+		destinationX = grid.getTileXByView(mouseX);
+		destinationY = grid.getTileYByView(mouseY);
 
 		startLocationX = x;
 		startLocationY = y;
@@ -49,17 +49,18 @@ public class Pathfinder {
 		open.remove(nodes[startLocationX][startLocationY]);
 		closed.add(nodes[startLocationX][startLocationY]);
 
-		int maxloops = 0;// need to make while loop based on. current x and y == your end tiles x
-		while (open.size() != 0 && maxloops != 500) {
-			maxloops++; // Basically We don't loop threw the array top to bottom we just
+		int maxloops = 0;// need to make while loop based on. current x and y ==
+							// your end tiles x
+		while (open.size() != 0) {
+			maxloops++; // Basically We don't loop threw the array top to bottom
+						// we just
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {
 				break;
 			}
-				open.remove(current);
-				closed.add(current);
-
+			open.remove(current);
+			closed.add(current);
 
 			fValueNeighbours(current);
 
@@ -92,11 +93,11 @@ public class Pathfinder {
 		int down = current.y + 1;
 		int right = current.x + 1;
 		int left = current.x - 1;
-		
-		
+
 		if (up >= 0) {
 			node = nodes[current.x][up];
-			if (!isBlocked(current.x, up) && !inClosedList(node) && !inOpenList(node)) {
+			if (!isBlocked(current.x, up) && !inClosedList(node)
+					&& !inOpenList(node)) {
 				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
@@ -105,7 +106,8 @@ public class Pathfinder {
 		}
 		if (Map.HEIGHT >= down) {
 			node = nodes[current.x][down];
-			if (!isBlocked(current.x, down) && !inClosedList(node) && !inOpenList(node)) {
+			if (!isBlocked(current.x, down) && !inClosedList(node)
+					&& !inOpenList(node)) {
 				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
@@ -117,7 +119,8 @@ public class Pathfinder {
 
 		if (Map.WIDTH >= right) {
 			node = nodes[right][current.y];
-			if (!isBlocked(right, current.y) && !inClosedList(node) && !inOpenList(node)) {
+			if (!isBlocked(right, current.y) && !inClosedList(node)
+					&& !inOpenList(node)) {
 				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
@@ -129,7 +132,8 @@ public class Pathfinder {
 
 		if (left >= 0) {
 			node = nodes[left][current.y];
-			if (!isBlocked(left, current.y) && !inClosedList(node) && !inOpenList(node)) {
+			if (!isBlocked(left, current.y) && !inClosedList(node)
+					&& !inOpenList(node)) {
 				node.increaseDistance(current);
 				node.cost = fValue(node);
 				node.setParent(current);
@@ -137,7 +141,7 @@ public class Pathfinder {
 			}
 		}
 	}
-	
+
 	protected boolean inOpenList(Node node) {
 		return open.contains(node);
 	}
@@ -173,7 +177,7 @@ public class Pathfinder {
 				current.x, current.y);
 		int manhattan = manhattanCalculation(startLocationX, startLocationY,
 				current.x, current.y);
-		return  (float) (current.distance + euclidian);
+		return (float) (current.distance + euclidian);
 	}
 
 	public void addNode(int x, int y) {
@@ -192,8 +196,9 @@ public class Pathfinder {
 					Node node = nodes[x][y];
 					if (node.cost > 0) {
 						int thing = (int) node.cost;
-						g.drawString(Integer.toString(thing), grid.locationX(x),
-								grid.locationY(y) + 15);
+						g.drawString(Integer.toString(thing),
+								grid.locationXByView(x),
+								grid.LocationYByView(y) + 15);
 
 					}
 
@@ -300,7 +305,7 @@ public class Pathfinder {
 			this.x = x;
 			this.y = y;
 		}
-		
+
 		public void increaseDistance(Node node) {
 			this.distance = node.distance + 0.6;
 		}
