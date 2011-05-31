@@ -43,7 +43,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private Graphics dbg;
 
 	private Pathfinder pathfinder;
-	private Map map;
+	private MapRender map;
 	private Input input;
 	private Image dbImage = null;
 	private Grid grid;
@@ -77,7 +77,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
 		grid = new Grid();
-		map = new Map(imsLoader, grid);
+		map = new MapRender(imsLoader, grid);
 		dwarfs = new Dwarfs(imsLoader, grid);
 		Dwarfs.Dwarf dwarf = dwarfs.new Dwarf(460, 46);
 		dwarfs.saveDwarf(dwarf);
@@ -241,6 +241,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	public void resizeCanves(int width, int height) {
 		createDBImage(width, height);
+		map.resize(width, height);
 	}
 
 	private void createDBImage(int width, int height)

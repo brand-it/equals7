@@ -178,7 +178,7 @@ public class Dwarfs {
 		}
 
 		public int smoothYLoc() {
-			int result = grid.LocationYByView(locY);
+			int result = grid.locationYByView(locY);
 			double percent = ((float) updates / (float) STEPS);
 
 			int nextIndex = getNextIndex();
@@ -188,10 +188,10 @@ public class Dwarfs {
 
 				if (nextY > locY) {
 					result = (int) ((percent * Grid.TILE_SIZE) + grid
-							.LocationYByView(locY));
+							.locationYByView(locY));
 
 				} else if (nextY < locY) {
-					result = (int) (grid.LocationYByView(locY) - (percent * Grid.TILE_SIZE));
+					result = (int) (grid.locationYByView(locY) - (percent * Grid.TILE_SIZE));
 				}
 			}
 			return result;

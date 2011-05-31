@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,12 +10,12 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Map extends Tiles {
-	protected static final int HEIGHT = 100;
-	protected static final int WIDTH = 100;
-	private int[][] elements = new int[WIDTH][HEIGHT];
-	private Grid grid;
+	
+	protected static final int HEIGHT = 500;
+	protected static final int WIDTH = 500;
+	protected int[][] elements = new int[WIDTH][HEIGHT];
+	protected Grid grid;
 	private String saveDir;
-	private Boolean elementUpdate = false;
 
 	public Map(ImagesLoader imgLd, Grid grid) {
 		super(imgLd);
@@ -28,7 +26,6 @@ public class Map extends Tiles {
 	}
 
 	private void generateMap() {
-		elementUpdate = true;
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(
 					new FileInputStream(saveDir));
@@ -60,7 +57,6 @@ public class Map extends Tiles {
 			System.out.println("Map Generated");
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -87,7 +83,6 @@ public class Map extends Tiles {
 	protected void changeElement(int x, int y, int element) {
 		elements[grid.getTileXByView(x)][grid.getTileYByView(y)] = element;
 		orientation();
-		elementUpdate = true;
 	}
 
 	// You have subtract 1 count starts at 0
@@ -162,31 +157,6 @@ public class Map extends Tiles {
 		}
 	}
 
-	public void draw(Graphics g) {
-		int gridY;
-		int gridX;
-
-		// The y start and x start for this calc need to be re worked
-		for (int y = 0; y < HEIGHT; y++) {
-			for (int x = 0; x < WIDTH; x++) {
-
-				if (isFloor(elements[x][y])) {
-					setFloor();
-				} else if (isWall(elements[x][y])) {
-					setWall(elements[x][y]);
-				}
-				gridY = grid.locationY(y);
-				gridX = grid.locationX(x);
-
-				gridX = gridX + grid.viewLocX;
-				gridY = gridY + grid.viewLocY;
-
-				g.drawImage(image, gridX, gridY, gridX + Grid.TILE_SIZE, gridY
-						+ Grid.TILE_SIZE, 0, 0, Grid.TILE_SIZE, Grid.TILE_SIZE,
-						null);
-			}
-		}
-	}
 
 	public int getWidthInTiles() {
 		// Returns the Height of a tile

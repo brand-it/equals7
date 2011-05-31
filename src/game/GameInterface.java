@@ -8,16 +8,16 @@ public class GameInterface {
 	int locXRollover = 0;
 
 	protected Dwarfs dwarfs;
-	protected Map map;
+	protected MapRender mapRender;
 	protected Dwarfs.Dwarf selectedDwarf;
 	protected Pathfinder pathfinder;
 	protected int element;
 	protected Grid grid;
 
-	public GameInterface(Map map, Dwarfs dwarfs, Pathfinder pathfinder,
+	public GameInterface(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder,
 			Grid grid) {
 		this.dwarfs = dwarfs;
-		this.map = map;
+		this.mapRender = mapRender;
 		this.pathfinder = pathfinder;
 		this.grid = grid;
 	}

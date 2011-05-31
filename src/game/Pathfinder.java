@@ -198,7 +198,7 @@ public class Pathfinder {
 						int thing = (int) node.cost;
 						g.drawString(Integer.toString(thing),
 								grid.locationXByView(x),
-								grid.LocationYByView(y) + 15);
+								grid.locationYByView(y));
 
 					}
 

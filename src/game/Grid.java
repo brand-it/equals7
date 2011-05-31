@@ -31,7 +31,7 @@ public class Grid {
 		return locY;
 	}
 
-	public int LocationYByView(int y) {
+	public int locationYByView(int y) {
 
 		int locY = locationY(y);
 		return locY + viewLocY;
@@ -86,6 +86,14 @@ public class Grid {
 		int locY = mouseBoxTileY(mouseY + shiftY);
 		return -shiftY + locY;
 	}
+	
+	public int viewLocXByTile(){
+		return Math.abs(viewLocX / TILE_SIZE);
+	}
+	
+	public int viewLocYByTile(){
+		return Math.abs(viewLocY / TILE_SIZE);
+	}
 
 	public int mouseBoxTileXByView(int mouseX) {
 
@@ -95,5 +103,13 @@ public class Grid {
 		int locX = mouseBoxTileX(mouseX + shiftX);
 
 		return -shiftX + locX;
+	}
+
+	public void setViewYByTile(int i) {
+		viewLocY = (i / TILE_SIZE);
+	}
+	
+	public void setViewXByTile(int i) {
+		viewLocX = (i / TILE_SIZE);
 	}
 }
