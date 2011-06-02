@@ -23,8 +23,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
 	private static final int MAX_FRAME_SKIPS = 5;
-
+	private int topX, topY;
 	public int mouseX, mouseY;
+	private Robot robot;
 
 	private long period; // the amount of time between animate. In nanosec
 
@@ -91,23 +92,54 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		int x = e.getX() - 92;
+		int y = e.getY() - 70;
+	
+		if (!isPaused){
+			mouseX += x;
+			mouseY += y;
+			
+			System.out.println(mouseX);
+			System.out.println(mouseY);
+			try {
+				robot = new Robot();
+				robot.mouseMove(topX + 100, topY + 100);
+			} catch (AWTException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
 	}
 
 	private void processMouse(MouseEvent e)
 	// If some one clicks the mouse
 	{
-		int mouseX = e.getX();
-		int mouseY = e.getY();
+		if (!isPaused){
 
-		if (e.getButton() == 1) {
-			input.leftClick(mouseX, mouseY);
-		}
-		if (e.getButton() == 3) {
-			input.rightClick(mouseX, mouseY);
+			if (e.getButton() == 1) {
+				input.leftClick(mouseX, mouseY);
+			}
+			if (e.getButton() == 3) {
+				input.rightClick(mouseX, mouseY);
 
+			}
+		} else {
+			if (e.getButton() == 1) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+				
+				try {
+					robot = new Robot();
+					robot.mouseMove(topX + 100, topY + 100);
+				} catch (AWTException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				isPaused = false;
+			}
 		}
+
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -127,6 +159,13 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				|| (keyCode == KeyEvent.VK_END)
 				|| ((keyCode == KeyEvent.VK_C) && e.isControlDown())) {
 			running = false;
+		}else if(keyCode == KeyEvent.VK_P){
+			if (isPaused == false){
+				isPaused = true;
+			}else{
+				isPaused = false;
+			}
+			
 		}
 		if (keyCode == KeyEvent.VK_1) {
 			input.changeElement(map.stone());
@@ -288,5 +327,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			System.out.println("Graphics context error: " + e);
 		}
 	} // end of paintScreen()
+
+	public void updateLoction(Point location) {
+		topX = location.x;
+		topY = location.y;
+	}
 
 }
