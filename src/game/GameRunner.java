@@ -47,14 +47,15 @@ public class GameRunner extends JFrame implements WindowListener,
 		Container c = getContentPane(); // default BorderLayout used
 		this.addComponentListener(this);
 		p = new Panel(this, period);
-		p.updateLoction(getLocation());
+		
 		c.add(p, "Center");
-		setLocation(100, 100);
 		p.addComponentListener(this);
 		addWindowListener(this);
-		pack();
 		setResizable(true);
 		setVisible(true);
+		setSize(900, 700);
+		p.updateLoction(getLocation());
+		
 	}
 
 	private void createDirs() {
@@ -75,16 +76,12 @@ public class GameRunner extends JFrame implements WindowListener,
 	public void replaceMouse(String imageName){
 		try {
 			Robot robot = new Robot();
-			robot.mouseMove(getLocation().x + 100, getLocation().y + 100);
+			robot.mouseMove(p.pCenterX + getLocation().x, p.pCenterX + getLocation().x);
 		} catch (AWTException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-			    cursorImg, new Point(0, 0), "blank cursor");
-		
-		setCursor(blankCursor);
+		p.hideMouse();
 	}
 
 	public void setIcon(String imageName) {
@@ -127,10 +124,10 @@ public class GameRunner extends JFrame implements WindowListener,
 
 	public void componentResized(ComponentEvent e) {
 		p.resizeCanves(getWidth(), getHeight());
+		p.updateLoction(getLocation());
 	}
 
 	public void componentMoved(ComponentEvent e) {
-		System.out.println("moved");
 		p.updateLoction(getLocation());
 		
 	}

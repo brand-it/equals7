@@ -43,9 +43,15 @@ public class GameInterface {
 		g.setColor(Color.blue);
 		g.drawRect(locXRollover, locYRollover, Grid.TILE_SIZE, Grid.TILE_SIZE);
 	}
+	
+	public void drawMouse(Graphics g, int mouseX, int mouseY){
+		g.setColor(Color.green);
+		g.fillRect(mouseX, mouseY, Grid.TILE_SIZE, Grid.TILE_SIZE);
+	}
 
-	public void draw(Graphics g) {
+	public void draw(Graphics g, int mouseX, int mouseY) {
 		drawBox(g);
 		highlightUnit(g);
+		drawMouse(g, mouseX, mouseY);
 	}
 }

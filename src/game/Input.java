@@ -1,11 +1,13 @@
 package game;
 
 public class Input extends GameInterface {
-	private static final int NUDGE = 50;
+	private static final int NUDGE = 5;
+	
+	protected Panel panel;
 
-	public Input(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder, Grid grid) {
+	public Input(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder, Grid grid, Panel panel) {
 		super(mapRender, dwarfs, pathfinder, grid);
-		// TODO Auto-generated constructor stub
+		this.panel = panel;
 	}
 
 	public Dwarfs.Dwarf selectDwarf(Dwarfs dwarfs, int mouseX, int mouseY) {
@@ -15,6 +17,21 @@ public class Input extends GameInterface {
 
 	public void changeElement(Map map, int mouseX, int mouseY, int element) {
 		map.changeElement(mouseX, mouseY, element);
+	}
+	
+	public void moveMap(int mouseX, int mouseY){
+		if (mouseX < 100){
+			nudgeLeft();
+		}
+		if (mouseY < 100){
+			nudgeUp();
+		}
+		if (mouseX > panel.pWidth - 100){
+			nudgeRight();
+		}
+		if (mouseY > panel.pHeight - 100){
+			nudgeDown();
+		}
 	}
 
 	public void leftClick(int mouseX, int mouseY) {
@@ -35,28 +52,28 @@ public class Input extends GameInterface {
 		}
 	}
 
-	public void arrowLeft() {
+	public void nudgeLeft() {
 		if (grid.viewLocXByTile() > 0) {
 			grid.viewLocX += NUDGE;
 		}
 
 	}
 
-	public void arrowRight() {
+	public void nudgeRight() {
 		if (grid.viewLocXByTile() < (Map.WIDTH - mapRender.drawWidth) - 1) {
 			grid.viewLocX -= NUDGE;
 		}
 
 	}
 
-	public void arrowUp() {
+	public void nudgeUp() {
 		if (grid.viewLocYByTile() > 0) {
 			grid.viewLocY += NUDGE;
 		}
 
 	}
 
-	public void arrowDown() {
+	public void nudgeDown() {
 		// You have to have it at one because the draw height can on non prime numbers it can get higher then Map.HEIGHT
 		if (grid.viewLocYByTile() < (Map.HEIGHT - mapRender.drawHeight) - 1) {
 			grid.viewLocY -= NUDGE;

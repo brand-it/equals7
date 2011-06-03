@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.*;
 
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
@@ -17,14 +19,18 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	private static final String IMS_INFO = "imsInfo.txt";
 
-	private static final int PWIDTH = 900; // size of panel
-	private static final int PHEIGHT = 700;
+	protected int pWidth = 900; // size of panel
+	protected int pHeight = 200;
 
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
 	private static final int MAX_FRAME_SKIPS = 5;
 	private int topX, topY;
-	public int mouseX, mouseY;
+	private int mouseX, mouseY;
+	protected int pCenterX = pWidth / 2;
+	protected int pCenterY = pHeight / 2;
+	private int xOffSet = 0;
+	private int yOffSet = 0;
 	private Robot robot;
 
 	private long period; // the amount of time between animate. In nanosec
@@ -33,41 +39,34 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	//
 	private volatile boolean gameOver = false;
 	private volatile boolean isPaused = false;
-
 	private Thread animator;
-
-	private volatile boolean running = false; // used to stop the animation
-												// thread
-
+	private volatile boolean running = false; // used to stop the animation thread
 	private long gameStartTime; // when the game started
-
 	private Graphics dbg;
-
+	
+	// May end up putting this in sort of a global class that all can access
 	private Pathfinder pathfinder;
 	private MapRender map;
 	private Input input;
 	private Image dbImage = null;
 	private Grid grid;
-
 	private Dwarfs dwarfs;
 
 	public Panel(GameRunner gr, long period) {
 		this.period = period;
 
 		setDoubleBuffered(false);
-		setPreferredSize(new Dimension(PWIDTH, PHEIGHT));
+		setPreferredSize(new Dimension(pWidth, pWidth));
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		requestFocus(); // the JPanel now has focus, so receives key events
 
 		addKeyListener(new KeyAdapter() {
-			@Override
 			public void keyPressed(KeyEvent e) {
 				processKey(e);
 			}
 		});
 		addMouseListener(new MouseAdapter() {
-			@Override
 			public void mouseReleased(MouseEvent e) {
 				processMouse(e);
 			}
@@ -87,25 +86,64 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		map.changeElement(460, 46, 64);
 		dwarfs.saveDwarf(dwarf);
 		pathfinder = new Pathfinder(map, grid);
-		input = new Input(map, dwarfs, pathfinder, grid);
+		input = new Input(map, dwarfs, pathfinder, grid, this);
 
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		int x = e.getX() - 92;
-		int y = e.getY() - 70;
+
+		int x = e.getX() - pCenterX;
+		int y = e.getY() - pCenterY;
+		
 	
 		if (!isPaused){
-			mouseX += x;
-			mouseY += y;
+			if (mouseX < 0){
+				mouseX = 0;
+			}else if (mouseX > pWidth){
+				mouseX = pWidth;
+			}else if (mouseY < 0){
+				mouseY = 0;
+			}else if (mouseY > pHeight){
+				mouseY = pHeight;
+			}else{
+				mouseX += x;
+				mouseY += y;
+			}
+				
+
+//			System.out.println("===========================");
+//			System.out.println(x);
+//			System.out.println(y);
+//			
+//			System.out.println("============ Height and width ===========");
+//			System.out.println(pHeight);
+//			System.out.println(pWidth);
+//			System.out.println("======== Mouse X ===============");
+//			System.out.println(mouseX);
+//			System.out.println(mouseY);
+//			System.out.println("======== e.get ==================");
+//			System.out.println("e.getY, e.getX " + e.getY() + ", " + e.getX());
+//			System.out.println("========== Panel Center X =========");
+//			System.out.println(pCenterX);
+//			System.out.println(pCenterY);
 			
-			System.out.println(mouseX);
-			System.out.println(mouseY);
+			// Find the center of the Panel
+			int mouseCenterX = pCenterX + topX;
+			int mouseCenterY = pCenterY + topY;
+			
+//			System.out.println("======= Top ===========");
+//			System.out.println(topX);
+//			System.out.println(topY);
+			
+			
+//			System.out.println("======= Mouse Center ===========");
+//			System.out.println(mouseCenterX);
+//			System.out.println(mouseCenterY);
+			
 			try {
 				robot = new Robot();
-				robot.mouseMove(topX + 100, topY + 100);
+				robot.mouseMove(mouseCenterX, mouseCenterY);
 			} catch (AWTException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -124,26 +162,25 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				input.rightClick(mouseX, mouseY);
 
 			}
-		} else {
-			if (e.getButton() == 1) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-				
-				try {
-					robot = new Robot();
-					robot.mouseMove(topX + 100, topY + 100);
-				} catch (AWTException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				isPaused = false;
-			}
 		}
 
 	}
 
 	public void mouseDragged(MouseEvent e) {
 
+	}
+	
+	protected void showMouse(){
+		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+	
+	protected void hideMouse(){
+		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+			    cursorImg, new Point(0, 0), "blank cursor");
+		
+		setCursor(blankCursor);
+		
 	}
 
 	// All the keyboard input is handle here
@@ -162,8 +199,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		}else if(keyCode == KeyEvent.VK_P){
 			if (isPaused == false){
 				isPaused = true;
+				showMouse();
 			}else{
 				isPaused = false;
+				hideMouse();
 			}
 			
 		}
@@ -174,23 +213,17 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			input.changeElement(map.floor());
 		}
 		if (keyCode == 37) {
-			input.arrowLeft();
+			input.nudgeLeft();
 		}
 		if (keyCode == 38) {
-			input.arrowUp();
+			input.nudgeUp();
 		}
 		if (keyCode == 39) {
-			input.arrowRight();
+			input.nudgeRight();
 		}
 		if (keyCode == 40) {
-			input.arrowDown();
+			input.nudgeDown();
 		}
-		// game-play keys
-		// if (!isPaused && !gameOver) {
-		// if (keyCode == KeyEvent.VK_LEFT)
-		// else if (keyCode == KeyEvent.VK_RIGHT)
-		// else if (keyCode == KeyEvent.VK_DOWN)
-		// }
 	} // end of processKey()
 
 	@Override
@@ -219,6 +252,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		if (!isPaused && !gameOver) {
 			input.changeBoxLocation(mouseX, mouseY);
 			dwarfs.move();
+			input.moveMap(mouseX, mouseY);
 		}
 	} // end of gameUpdate()
 
@@ -280,11 +314,15 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	public void resizeCanves(int width, int height) {
 		createDBImage(width, height);
+		pHeight = height;
+		pWidth = width;
+		pCenterX = pWidth / 2;
+		pCenterY = pHeight / 2;
 		map.resize(width, height);
 	}
 
 	private void createDBImage(int width, int height)
-	// When you create a db Image it will update all or Make all you varables
+	// When you create a db Image it will update all or Make all you variables
 	// for the game to run.
 	{
 		dbImage = createImage(width, height);
@@ -301,11 +339,12 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private void gameRender() {
 
 		if (dbImage == null) {
-			createDBImage(PWIDTH, PHEIGHT);
+			System.out.println("dbImage is null Building");
+			createDBImage(pWidth, pHeight);
 		}
 		map.draw(dbg);
 		dwarfs.draw(dbg);
-		input.draw(dbg);
+		input.draw(dbg, mouseX, mouseY);
 
 	}
 
@@ -329,8 +368,13 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	} // end of paintScreen()
 
 	public void updateLoction(Point location) {
-		topX = location.x;
-		topY = location.y;
+		int offSet = 0;	
+		
+		offSet = pWidth - getSize().width;
+		topX = location.x + offSet;
+
+		offSet = pHeight - getSize().height;
+		topY = location.y + offSet;
 	}
 
 }

@@ -13,7 +13,7 @@ public class MapRender extends Map{
 	}
 	
 	public void resize(int width, int height){
-		// Add one to make sure it adds a block on the odd numbers
+		// Render one extra block on the edges so there are no black empty spots
 		drawWidth = (width / Grid.TILE_SIZE) + 1;
 		drawHeight = (height / Grid.TILE_SIZE) + 1;
 	}
@@ -25,7 +25,7 @@ public class MapRender extends Map{
 	}
 	
 	public void draw(Graphics g) {
-		// This is truly the fastes way to render the map.
+		// This is truly the fastest way to render the map.
 		int gridY;
 		int gridX;
 		
