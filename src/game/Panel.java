@@ -25,12 +25,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
 	private static final int MAX_FRAME_SKIPS = 5;
-	private int topX, topY;
 	private int mouseX, mouseY;
 	protected int pCenterX = pWidth / 2;
 	protected int pCenterY = pHeight / 2;
-	private int xOffSet = 0;
-	private int yOffSet = 0;
 	private Robot robot;
 
 	private long period; // the amount of time between animate. In nanosec
@@ -128,12 +125,8 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 //			System.out.println(pCenterY);
 			
 			// Find the center of the Panel
-			int mouseCenterX = pCenterX + topX;
-			int mouseCenterY = pCenterY + topY;
-			
-//			System.out.println("======= Top ===========");
-//			System.out.println(topX);
-//			System.out.println(topY);
+			int mouseCenterX = pCenterX + getLocationOnScreen().x;
+			int mouseCenterY = pCenterY + getLocationOnScreen().y;
 			
 			
 //			System.out.println("======= Mouse Center ===========");
@@ -366,15 +359,5 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			System.out.println("Graphics context error: " + e);
 		}
 	} // end of paintScreen()
-
-	public void updateLoction(Point location) {
-		int offSet = 0;	
-		
-		offSet = pWidth - getSize().width;
-		topX = location.x + offSet;
-
-		offSet = pHeight - getSize().height;
-		topY = location.y + offSet;
-	}
 
 }

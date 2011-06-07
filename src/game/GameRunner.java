@@ -54,7 +54,6 @@ public class GameRunner extends JFrame implements WindowListener,
 		setResizable(true);
 		setVisible(true);
 		setSize(900, 700);
-		p.updateLoction(getLocation());
 		
 	}
 
@@ -124,11 +123,9 @@ public class GameRunner extends JFrame implements WindowListener,
 
 	public void componentResized(ComponentEvent e) {
 		p.resizeCanves(getWidth(), getHeight());
-		p.updateLoction(getLocation());
 	}
 
 	public void componentMoved(ComponentEvent e) {
-		p.updateLoction(getLocation());
 		
 	}
 
