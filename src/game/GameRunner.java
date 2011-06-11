@@ -2,16 +2,13 @@ package game;
 
 import java.awt.AWTException;
 import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
@@ -36,13 +33,11 @@ public class GameRunner extends JFrame implements WindowListener,
 		createPanel(period);
 		replaceMouse("images/dwarfico.png");
 		setIcon("images/dwarfico.png");
-
-		
 	}
 	
 	private void createPanel(long period){
 		// Setting information for the size title and Listeners that need in order to interact with the game
-		setTitle("Dwarf");
+		setTitle("equals7");
 
 		Container c = getContentPane(); // default BorderLayout used
 		this.addComponentListener(this);
@@ -54,6 +49,7 @@ public class GameRunner extends JFrame implements WindowListener,
 		setResizable(true);
 		setVisible(true);
 		setSize(900, 700);
+		p.setCenter();
 		
 	}
 
