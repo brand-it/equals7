@@ -1,5 +1,6 @@
 package game;
 
+
 import java.awt.Graphics;
 
 public class MapRender extends Map{

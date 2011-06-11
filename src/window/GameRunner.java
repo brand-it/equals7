@@ -1,4 +1,5 @@
-package game;
+package window;
+
 
 import java.awt.AWTException;
 import java.awt.Container;
@@ -42,14 +43,12 @@ public class GameRunner extends JFrame implements WindowListener,
 		Container c = getContentPane(); // default BorderLayout used
 		this.addComponentListener(this);
 		p = new Panel(this, period);
-		
+		setSize(900, 700);
 		c.add(p, "Center");
 		p.addComponentListener(this);
 		addWindowListener(this);
 		setResizable(true);
 		setVisible(true);
-		setSize(900, 700);
-		p.setCenter();
 		
 	}
 

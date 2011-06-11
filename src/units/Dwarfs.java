@@ -1,8 +1,12 @@
-package game;
+package units;
+
+import game.*;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import units.Dwarfs.Dwarf;
 
 @SuppressWarnings("rawtypes")
 public class Dwarfs {
@@ -14,18 +18,15 @@ public class Dwarfs {
 	protected ImagesLoader imsLoader;
 	protected int selectedDwarf = 0;
 	protected int[][] dwarfsIDs = new int[Map.WIDTH][Map.HEIGHT];
-
-	private ArrayList dwarfsObjects = new ArrayList();
+	private ArrayList<Dwarf> dwarfsObjects = new ArrayList<Dwarf>();
 
 	public Dwarfs(ImagesLoader imsL, Grid grid) {
 		this.grid = grid;
 		imsLoader = imsL;
 		setImages("dwarf");
 	}
-
-	@SuppressWarnings("unchecked")
-	protected void saveDwarf(Dwarf dwarf) {
-
+	
+	public void saveDwarf(Dwarf dwarf) {
 		dwarfsObjects.add(dwarf);
 		dwarfsIDs[dwarf.locX][dwarf.locY] = dwarfsObjects.size() - 1;
 	}
@@ -54,7 +55,7 @@ public class Dwarfs {
 
 	}
 
-	protected Dwarf getDwarfByMouse(int mouseX, int mouseY) {
+	public Dwarf getDwarfByMouse(int mouseX, int mouseY) {
 		int index = dwarfsIDs[grid.getTileXByView(mouseX)][grid
 				.getTileYByView(mouseY)];
 
@@ -68,7 +69,7 @@ public class Dwarfs {
 
 	}
 
-	protected boolean isDwarf(int mouseX, int mouseY) {
+	public boolean isDwarf(int mouseX, int mouseY) {
 		Dwarf dwarf = getDwarfByMouse(mouseX, mouseY);
 		if (dwarf != null) {
 			return true;
@@ -86,8 +87,8 @@ public class Dwarfs {
 
 	public class Dwarf {
 		protected int updates = 0;
-		protected int locX;
-		protected int locY;
+		public int locX;
+		public int locY;
 		private Path path;
 		private int indexPath = 0;
 		private int nextX;

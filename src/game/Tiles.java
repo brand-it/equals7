@@ -1,5 +1,6 @@
 package game;
 
+
 import java.awt.image.BufferedImage;
 
 /*
@@ -16,7 +17,6 @@ public class Tiles {
 
 	public Tiles(ImagesLoader imgLd) {
 		imsLoader = imgLd;
-
 		setImages("imageMap", 0);// the sprite's default image is 'name'
 
 	} // end of init( )
@@ -93,7 +93,7 @@ public class Tiles {
 		}
 	}
 
-	protected boolean isWall(int element) {
+	public boolean isWall(int element) {
 		if (element < 64) {
 			return true;
 		} else {

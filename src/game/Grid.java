@@ -1,7 +1,7 @@
 package game;
 
 public class Grid {
-	protected static final int TILE_SIZE = 25;
+	public static final int TILE_SIZE = 25;
 
 	// viewLocX and viewLocY will be the defalut draw information for the hole
 	// game.

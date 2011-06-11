@@ -1,11 +1,18 @@
-package game;
+package gui;
 
-public class Input extends GameInterface {
+import game.Grid;
+import game.Map;
+import game.MapRender;
+import units.Dwarfs;
+import units.Pathfinder;
+import window.Panel;
+
+public class Actions extends InputActions {
 	private static final int NUDGE = 5;
 	
 	protected Panel panel;
 
-	public Input(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder, Grid grid, Panel panel) {
+	public Actions(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder, Grid grid, Panel panel) {
 		super(mapRender, dwarfs, pathfinder, grid);
 		this.panel = panel;
 	}

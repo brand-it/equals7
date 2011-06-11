@@ -1,4 +1,9 @@
-package game;
+package units;
+
+import game.Grid;
+import game.ImagesLoader;
+import game.Map;
+
 
 import java.awt.Color;
 import java.awt.Graphics;

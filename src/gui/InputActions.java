@@ -1,9 +1,16 @@
-package game;
+package gui;
+
+import game.Grid;
+import game.MapRender;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class GameInterface {
+import units.Dwarfs;
+import units.Pathfinder;
+
+
+public class InputActions {
 	int locYRollover = 0;
 	int locXRollover = 0;
 
@@ -14,7 +21,7 @@ public class GameInterface {
 	protected int element;
 	protected Grid grid;
 
-	public GameInterface(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder,
+	public InputActions(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder,
 			Grid grid) {
 		this.dwarfs = dwarfs;
 		this.mapRender = mapRender;

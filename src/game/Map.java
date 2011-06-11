@@ -1,5 +1,6 @@
 package game;
 
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,8 +12,8 @@ import java.util.Random;
 
 public class Map extends Tiles {
 	
-	protected static final int HEIGHT = 500;
-	protected static final int WIDTH = 500;
+	public static final int HEIGHT = 500;
+	public static final int WIDTH = 500;
 	protected int[][] elements = new int[WIDTH][HEIGHT];
 	protected Grid grid;
 	private String saveDir;
@@ -80,7 +81,7 @@ public class Map extends Tiles {
 		}
 	}
 
-	protected void changeElement(int x, int y, int element) {
+	public void changeElement(int x, int y, int element) {
 		elements[grid.getTileXByView(x)][grid.getTileYByView(y)] = element;
 		orientation();
 	}

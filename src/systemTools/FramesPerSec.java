@@ -1,4 +1,4 @@
-package game;
+package systemTools;
 
 public class FramesPerSec {
 
