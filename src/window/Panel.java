@@ -15,8 +15,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-import units.Dwarfs;
-import units.Pathfinder;
 
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
@@ -40,8 +38,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	private long period; // the amount of time between animate. In nanosec
 
-	// private GameRunner gameTop; //Don't total know what this is for.
-	//
 	private volatile boolean gameOver = false;
 	private volatile boolean isPaused = false;
 	private Thread animator;
@@ -51,12 +47,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private Graphics dbg;
 
 	// May end up putting this in sort of a global class that all can access
-	private Pathfinder pathfinder;
 	private MapRender map;
 	private Actions actions;
 	private Image dbImage = null;
 	private Grid grid;
-	private Dwarfs dwarfs;
 	private Menu menu;
 
 	// Find the center of the Panel
@@ -90,11 +84,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
 		grid = new Grid();
 		map = new MapRender(imsLoader, grid);
-		pathfinder = new Pathfinder(map, grid);
-		dwarfs = new Dwarfs(imsLoader, grid);
-		actions = new Actions(map, dwarfs, pathfinder, grid, this);
-		menu = new Menu();
-		menu.setDrawLocations(0, pHeight - 100);
+		actions = new Actions(map, grid, this);
+		menu = new Menu(grid);
+		menu.setDrawLocations(0, pHeight, pWidth, pHeight);
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -140,7 +132,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			}
 			if (e.getButton() == 3) {
 				actions.rightClick(mouseX, mouseY);
-
 			}
 		}
 
@@ -159,7 +150,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				BufferedImage.TYPE_INT_ARGB);
 		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
 				cursorImg, new Point(0, 0), "blank cursor");
-
 		setCursor(blankCursor);
 
 	}
@@ -233,7 +223,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
 			actions.changeBoxLocation(mouseX, mouseY);
-			dwarfs.move();
 			actions.moveMap(mouseX, mouseY);
 		}
 	} // end of gameUpdate()
@@ -295,13 +284,12 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	}
 	public void resizeCanves(int width, int height) {
 		 createDBImage(width, height);
-		 pHeight = height;
-		 pWidth = width;
+		 pHeight = getHeight();
+		 pWidth = getWidth();
 		 pCenterX = pWidth / 2;
 		 pCenterY = pHeight / 2;
 		 map.resize(width, height);
-		 // What the fuck am I doing? AHHAHAHAHHAHAHAHAHAHAH KILLLLLLL
-		 menu.setDrawLocations(0, pHeight - 135);
+		 menu.setDrawLocations(0,  pHeight, pWidth, pHeight);
 		 setCenter();
 	}
 
@@ -329,10 +317,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		if (dbImage == null) {
 			System.out.println("dbImage is null Building");
-			createDBImage(pWidth, pHeight);
+			createDBImage(200, 200);
+
 		}
 		map.draw(dbg);
-		dwarfs.draw(dbg);
 		actions.draw(dbg, mouseX, mouseY);
 		menu.draw(dbg);
 	}

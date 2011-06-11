@@ -1,40 +1,29 @@
 package gui;
 
 import game.Grid;
-import game.MapRender;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-import units.Dwarfs;
-import units.Pathfinder;
 
 
 public class InputActions {
 	int locYRollover = 0;
 	int locXRollover = 0;
 
-	protected Dwarfs dwarfs;
-	protected MapRender mapRender;
-	protected Dwarfs.Dwarf selectedDwarf;
-	protected Pathfinder pathfinder;
 	protected int element;
 	protected Grid grid;
 
-	public InputActions(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder,
-			Grid grid) {
-		this.dwarfs = dwarfs;
-		this.mapRender = mapRender;
-		this.pathfinder = pathfinder;
+	public InputActions(Grid grid) {
 		this.grid = grid;
 	}
 
 	public void highlightUnit(Graphics g) {
-		g.setColor(Color.red);
-		if (selectedDwarf != null) {
-			g.drawRect(selectedDwarf.smoothXLoc(), selectedDwarf.smoothYLoc(),
-					Grid.TILE_SIZE, Grid.TILE_SIZE);
-		}
+	}
+	
+	public void leftClick(int mouseX, int mouseY) {
+	}
+
+	public void rightClick(int mouseX, int mouseY) {
 	}
 
 	public void changeBoxLocation(double mouseX, double mouseY) {

@@ -3,23 +3,18 @@ package gui;
 import game.Grid;
 import game.Map;
 import game.MapRender;
-import units.Dwarfs;
-import units.Pathfinder;
 import window.Panel;
 
 public class Actions extends InputActions {
-	private static final int NUDGE = 5;
 	
+	private static final int NUDGE = 5;
+	protected MapRender mapRender;
 	protected Panel panel;
 
-	public Actions(MapRender mapRender, Dwarfs dwarfs, Pathfinder pathfinder, Grid grid, Panel panel) {
-		super(mapRender, dwarfs, pathfinder, grid);
+	public Actions(MapRender mapRender, Grid grid, Panel panel) {
+		super(grid);
 		this.panel = panel;
-	}
-
-	public Dwarfs.Dwarf selectDwarf(Dwarfs dwarfs, int mouseX, int mouseY) {
-		return dwarfs.getDwarfByMouse(mouseX, mouseY);
-
+		this.mapRender = mapRender;
 	}
 
 	public void changeElement(Map map, int mouseX, int mouseY, int element) {
@@ -38,24 +33,6 @@ public class Actions extends InputActions {
 		}
 		if (mouseY > panel.pHeight - 100){
 			nudgeDown();
-		}
-	}
-
-	public void leftClick(int mouseX, int mouseY) {
-
-		if (dwarfs.isDwarf(mouseX, mouseY)) {
-			selectedDwarf = selectDwarf(dwarfs, mouseX, mouseY);
-		} else {
-			changeElement(mapRender, mouseX, mouseY, element);
-		}
-
-	}
-
-	public void rightClick(int mouseX, int mouseY) {
-		if (!dwarfs.isDwarf(mouseX, mouseY) && selectedDwarf != null) {
-			selectedDwarf.path(pathfinder.findPath(selectedDwarf.locX,
-					selectedDwarf.locY, mouseX, mouseY));
-
 		}
 	}
 

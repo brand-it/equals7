@@ -32,7 +32,7 @@ public class Pathfinder {
 		startLocationY = 0;
 
 	}
-
+	
 	public Path findPath(int x, int y, int mouseX, int mouseY) {
 
 		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
