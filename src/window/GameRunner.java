@@ -1,6 +1,5 @@
 package window;
 
-
 import java.awt.AWTException;
 import java.awt.Container;
 import java.awt.Image;
@@ -28,16 +27,19 @@ public class GameRunner extends JFrame implements WindowListener,
 	private static int DEFAULT_FPS = 60;
 
 	public GameRunner(long period) {
-		// This is the set up information for the game. You want to change the core it is here
-		// This is all the directories that are going to be need to play the game
+		// This is the set up information for the game. You want to change the
+		// core it is here
+		// This is all the directories that are going to be need to play the
+		// game
 		createDirs();
 		createPanel(period);
 		replaceMouse("images/dwarfico.png");
 		setIcon("images/dwarfico.png");
 	}
-	
-	private void createPanel(long period){
-		// Setting information for the size title and Listeners that need in order to interact with the game
+
+	private void createPanel(long period) {
+		// Setting information for the size title and Listeners that need in
+		// order to interact with the game
 		setTitle("equals7");
 
 		Container c = getContentPane(); // default BorderLayout used
@@ -49,12 +51,13 @@ public class GameRunner extends JFrame implements WindowListener,
 		addWindowListener(this);
 		setResizable(true);
 		setVisible(true);
-		
+
 	}
 
 	private void createDirs() {
-		// This should create the directories that are not there if they are there do nothing.
-		// Currently there is not valid content checks in here. There should be. 
+		// This should create the directories that are not there if they are
+		// there do nothing.
+		// Currently there is not valid content checks in here. There should be.
 		File f = new File("./saves");
 		try {
 			if (f.mkdir())
@@ -64,13 +67,14 @@ public class GameRunner extends JFrame implements WindowListener,
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
-		
+
 	}
-	
-	public void replaceMouse(String imageName){
+
+	public void replaceMouse(String imageName) {
 		try {
 			Robot robot = new Robot();
-			robot.mouseMove(p.pCenterX + getLocation().x, p.pCenterX + getLocation().x);
+			robot.mouseMove(p.pCenterX + getLocation().x, p.pCenterX
+					+ getLocation().x);
 		} catch (AWTException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -121,7 +125,7 @@ public class GameRunner extends JFrame implements WindowListener,
 	}
 
 	public void componentMoved(ComponentEvent e) {
-		
+
 	}
 
 	public void componentShown(ComponentEvent e) {

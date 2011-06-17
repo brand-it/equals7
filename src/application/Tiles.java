@@ -1,5 +1,4 @@
-package game;
-
+package application;
 
 import java.awt.image.BufferedImage;
 
@@ -13,7 +12,6 @@ public class Tiles {
 
 	private ImagesLoader imsLoader;
 	protected BufferedImage image;
-	protected BufferedImage mapImage;
 
 	public Tiles(ImagesLoader imgLd) {
 		imsLoader = imgLd;
@@ -99,6 +97,29 @@ public class Tiles {
 		} else {
 			return false;
 		}
+	}
+	
+	public int getElementByString(String element){
+		
+		// there are two words in the system for floor. One that says darkStoneFloor and one that is floor
+		// Floor has a different element ID floor = 64 were darkStoneFloor == 0; This difference happens when you are trying to load
+		// a image into the system. Proper handling should be taken.
+		if (element == "stone"){
+			return stone();
+		}
+		if (element == "floor"){
+			return floor();
+		}
+		if (element == "titanium"){
+			return titanium();
+		}
+		if (element == "gold"){
+			return gold();
+		}
+		if (element == "iron"){
+			return iron();
+		}
+		return 0;
 	}
 
 	protected void setImages(String name, int element)

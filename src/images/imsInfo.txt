@@ -5,5 +5,11 @@
 a imageMap.png 64 4
 o darkFloorStone.png
 
+
 // Dwarfs
 o dwarf.gif
+
+// Buttons
+o craftingIcon.png
+o resourcesIcon.png
+o unitIcon.png

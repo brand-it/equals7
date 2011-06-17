@@ -1,4 +1,4 @@
-package game;
+package application;
 
 // ImagesLoader.java
 // Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th

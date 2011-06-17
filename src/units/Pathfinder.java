@@ -1,14 +1,13 @@
 package units;
 
-import game.Grid;
-import game.ImagesLoader;
-import game.Map;
-
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import application.Grid;
+import application.ImagesLoader;
+import application.Map;
 
 public class Pathfinder {
 
@@ -32,7 +31,7 @@ public class Pathfinder {
 		startLocationY = 0;
 
 	}
-	
+
 	public Path findPath(int x, int y, int mouseX, int mouseY) {
 
 		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];

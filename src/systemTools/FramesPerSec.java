@@ -1,4 +1,4 @@
-package systemTools;
+package systemtools;
 
 public class FramesPerSec {
 

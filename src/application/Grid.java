@@ -1,4 +1,4 @@
-package game;
+package application;
 
 public class Grid {
 	public static final int TILE_SIZE = 25;
@@ -86,12 +86,12 @@ public class Grid {
 		int locY = mouseBoxTileY(mouseY + shiftY);
 		return -shiftY + locY;
 	}
-	
-	public int viewLocXByTile(){
+
+	public int viewLocXByTile() {
 		return Math.abs(viewLocX / TILE_SIZE);
 	}
-	
-	public int viewLocYByTile(){
+
+	public int viewLocYByTile() {
 		return Math.abs(viewLocY / TILE_SIZE);
 	}
 
@@ -108,7 +108,7 @@ public class Grid {
 	public void setViewYByTile(int i) {
 		viewLocY = (i / TILE_SIZE);
 	}
-	
+
 	public void setViewXByTile(int i) {
 		viewLocX = (i / TILE_SIZE);
 	}

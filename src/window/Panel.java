@@ -1,10 +1,12 @@
 package window;
 
-import game.Grid;
-import game.ImagesLoader;
-import game.MapRender;
-import gui.Actions;
-import gui.Menu;
+import gui.Buttons;
+import gui.CustomButton;
+import gui.Reaction;
+import application.Grid;
+import application.ImagesLoader;
+import application.MapRender;
+
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -15,17 +17,17 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7712717603765541381L;
-
+	// This is all the image data that may be loaded into the game
 	private static final String IMS_INFO = "imsInfo.txt";
 
-	public int pWidth = 900; // size of panel
+	public int pWidth = 900; // size of panel this variable will most certainly
+								// change as soon as the game starts
 	public int pHeight = 700;
 
 	private static final int NO_DELAYS_PER_YIELD = 16;
@@ -47,11 +49,11 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private Graphics dbg;
 
 	// May end up putting this in sort of a global class that all can access
-	private MapRender map;
-	private Actions actions;
+	private MapRender mapRender;
 	private Image dbImage = null;
 	private Grid grid;
-	private Menu menu;
+	private Reaction reaction;
+	private Buttons buttons;
 
 	// Find the center of the Panel
 	private int mouseCenterX;
@@ -78,15 +80,18 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			}
 
 		});
-
 		addMouseMotionListener(this);
+		buttons = new Buttons();
 		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
 		grid = new Grid();
-		map = new MapRender(imsLoader, grid);
-		actions = new Actions(map, grid, this);
-		menu = new Menu(grid);
-		menu.setDrawLocations(0, pHeight, pWidth, pHeight);
+		mapRender = new MapRender(imsLoader, grid);
+		reaction = new Reaction(mapRender, grid, this, imsLoader, buttons);
+		CustomButton button = new CustomButton(reaction, imsLoader, "changeStoredElementStone", "resourcesIcon", 300, 200);
+		buttons.save(button);
+		button = new CustomButton(reaction, imsLoader,  "changeStoredElementFloor", "craftingIcon", 250, 200);
+		buttons.save(button);
+
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -128,10 +133,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		if (!isPaused) {
 
 			if (e.getButton() == 1) {
-				actions.leftClick(mouseX, mouseY);
+				reaction.leftClick(mouseX, mouseY);
 			}
 			if (e.getButton() == 3) {
-				actions.rightClick(mouseX, mouseY);
+				reaction.rightClick(mouseX, mouseY);
 			}
 		}
 
@@ -178,24 +183,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			}
 
 		}
-		if (keyCode == KeyEvent.VK_1) {
-			actions.changeElement(map.stone());
-		}
-		if (keyCode == KeyEvent.VK_2) {
-			actions.changeElement(map.floor());
-		}
-		if (keyCode == 37) {
-			actions.nudgeLeft();
-		}
-		if (keyCode == 38) {
-			actions.nudgeUp();
-		}
-		if (keyCode == 39) {
-			actions.nudgeRight();
-		}
-		if (keyCode == 40) {
-			actions.nudgeDown();
-		}
+		reaction.keyPressed(keyCode);
 	} // end of processKey()
 
 	@Override
@@ -222,8 +210,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	// Basically if you you want things to move and stuff you call this...
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
-			actions.changeBoxLocation(mouseX, mouseY);
-			actions.moveMap(mouseX, mouseY);
+			reaction.changeBoxLocation(mouseX, mouseY);
+			reaction.moveMap(mouseX, mouseY);
+			buttons.hovered(mouseX, mouseY);
 		}
 	} // end of gameUpdate()
 
@@ -279,18 +268,18 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				skips++;
 			}
 		}
-		map.save();
+		mapRender.save();
 		System.exit(0);
 	}
+
 	public void resizeCanves(int width, int height) {
-		 createDBImage(width, height);
-		 pHeight = getHeight();
-		 pWidth = getWidth();
-		 pCenterX = pWidth / 2;
-		 pCenterY = pHeight / 2;
-		 map.resize(width, height);
-		 menu.setDrawLocations(0,  pHeight, pWidth, pHeight);
-		 setCenter();
+		createDBImage(width, height);
+		pHeight = getHeight();
+		pWidth = getWidth();
+		pCenterX = pWidth / 2;
+		pCenterY = pHeight / 2;
+		mapRender.resize(width, height);
+		setCenter();
 	}
 
 	protected void setCenter() {
@@ -317,12 +306,14 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		if (dbImage == null) {
 			System.out.println("dbImage is null Building");
+			// Those two numbers can be anything it just needs to create them in order to be resized a nano sec later.
 			createDBImage(200, 200);
 
 		}
-		map.draw(dbg);
-		actions.draw(dbg, mouseX, mouseY);
-		menu.draw(dbg);
+		mapRender.draw(dbg);
+		reaction.drawBox(dbg);
+		buttons.draw(dbg);
+		reaction.drawMouse(dbg, mouseX, mouseY);
 	}
 
 	private void paintScreen()

@@ -1,5 +1,4 @@
-package game;
-
+package application;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,7 +10,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Map extends Tiles {
-	
+
 	public static final int HEIGHT = 500;
 	public static final int WIDTH = 500;
 	protected int[][] elements = new int[WIDTH][HEIGHT];
@@ -157,7 +156,6 @@ public class Map extends Tiles {
 			}
 		}
 	}
-
 
 	public int getWidthInTiles() {
 		// Returns the Height of a tile
