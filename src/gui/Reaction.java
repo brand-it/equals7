@@ -1,28 +1,34 @@
 package gui;
 
-import application.Grid;
 import application.ImagesLoader;
 import application.Map;
 import application.MapRender;
+import application.View;
+import units.Unit;
+import units.Units;
 import window.Panel;
 
-public class Reaction extends Draw{
+public class Reaction extends Draw {
 
 	private static final int NUDGE = 10;
-	protected MapRender mapRender;
 	protected Panel panel;
 	protected Buttons buttons;
 	protected int storedElement;
+	private MapRender mapRender;
+	private Units units;
 	
-	public Reaction(MapRender mapRender, Grid grid, Panel panel, ImagesLoader imgs, Buttons buttons) {
-		super(grid, imgs);
+	public Reaction(Map map, MapRender mapRender, Panel panel, ImagesLoader imgsLoader, Buttons buttons, Units units) {
+		super(map, imgsLoader);
+		// This builder is big but it needs to be that way Almost every thing needs to be accessed in the GUI
 		this.panel = panel;
+		this.map = map;
 		this.mapRender = mapRender;
 		this.buttons = buttons;
+		this.units = units;
 	}
 
 	public void changeElement(int mouseX, int mouseY, int element) {
-		mapRender.changeElement(mouseX, mouseY, element);
+		map.changeElement(mouseX, mouseY, element);
 	}
 	
 	// this is going to move the map around based on were your mouse is
@@ -43,23 +49,31 @@ public class Reaction extends Draw{
 
 	public void nudgeLeft() {
 		if (grid.viewLocXByTile() > 0) {
-			grid.viewLocX += NUDGE;
+			View.viewLocX += NUDGE;
 		}
 
 	}
 
 	public void nudgeRight() {
 		if (grid.viewLocXByTile() < (Map.WIDTH - mapRender.drawWidth) - 1) {
-			grid.viewLocX -= NUDGE;
+			View.viewLocX -= NUDGE;
 		}
 
 	}
 
 	public void nudgeUp() {
 		if (grid.viewLocYByTile() > 0) {
-			grid.viewLocY += NUDGE;
+			View.viewLocY += NUDGE;
 		}
 
+	}
+	
+	public void nudgeDown() {
+		// You have to have it at one because the draw height can on non prime
+		// numbers it can get higher then Map.HEIGHT
+		if (grid.viewLocYByTile() < (Map.HEIGHT - mapRender.drawHeight) - 1) {
+			View.viewLocY -= NUDGE;
+		}
 	}
 	
 	public void keyPressed(int key){
@@ -73,34 +87,30 @@ public class Reaction extends Draw{
 	}
 	
 	public void changeStoredElementFloor(){
-		storedElement = mapRender.getElementByString("floor");
+		storedElement = map.getElementByString("floor");
 		setImages("darkFloorStone", 0);
 	}
 	
 	public void changeStoredElementStone(){
-		storedElement = mapRender.getElementByString("stone");
+		storedElement = map.getElementByString("stone");
 		setImages("imageMap", storedElement);
-	}
-
-	public void nudgeDown() {
-		// You have to have it at one because the draw height can on non prime
-		// numbers it can get higher then Map.HEIGHT
-		if (grid.viewLocYByTile() < (Map.HEIGHT - mapRender.drawHeight) - 1) {
-			grid.viewLocY -= NUDGE;
-		}
 	}
 
 	public void leftClick(int mouseX, int mouseY){
 		if (buttons.isButton(mouseX, mouseY)){
 			CustomButton button = buttons.getButtonByLocation(mouseX, mouseY);
 			button.action();
-		}else {
+		}else if (units.isUnit(mouseX, mouseY)){
+			selectedUnit = units.getUnitByLocation(mouseX, mouseY);
+		}else{
 			changeElement(mouseX, mouseY, storedElement);
 		}
 		
 	}
 
 	public void rightClick(int mouseX, int mouseY) {
+		Unit unit = new Unit(map, imgsLoader, mouseX, mouseY);
+		units.save(unit);
 	}
 
 	public void changeBoxLocation(double mouseX, double mouseY) {

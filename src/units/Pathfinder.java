@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import application.Grid;
-import application.ImagesLoader;
-import application.Map;
+import application.*;
 
 public class Pathfinder {
 
@@ -23,9 +20,9 @@ public class Pathfinder {
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
 
-	public Pathfinder(Map map, Grid grid) {
+	public Pathfinder(Map map) {
 		ImagesLoader img = new ImagesLoader();
-		this.grid = grid;
+		this.grid = new Grid();
 		this.map = map;
 		startLocationX = 0;
 		startLocationY = 0;

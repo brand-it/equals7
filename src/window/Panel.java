@@ -1,11 +1,7 @@
 package window;
 
-import gui.Buttons;
-import gui.CustomButton;
-import gui.Reaction;
-import application.Grid;
-import application.ImagesLoader;
-import application.MapRender;
+import gui.*;
+import application.*;
 
 
 import java.awt.*;
@@ -17,8 +13,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-public class Panel extends JPanel implements MouseMotionListener, Runnable {
+import units.Units;
 
+public class Panel extends JPanel implements MouseMotionListener, Runnable {
+	// Need to create a globe class that holds every so the system can access with a smaller call
 	/**
 	 * 
 	 */
@@ -51,9 +49,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	// May end up putting this in sort of a global class that all can access
 	private MapRender mapRender;
 	private Image dbImage = null;
-	private Grid grid;
 	private Reaction reaction;
 	private Buttons buttons;
+	private Map map;
+	private Units units;
 
 	// Find the center of the Panel
 	private int mouseCenterX;
@@ -84,9 +83,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		buttons = new Buttons();
 		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
-		grid = new Grid();
-		mapRender = new MapRender(imsLoader, grid);
-		reaction = new Reaction(mapRender, grid, this, imsLoader, buttons);
+		map = new Map();
+		mapRender = new MapRender(map, imsLoader);
+		units = new Units();
+		reaction = new Reaction(map, mapRender, this, imsLoader, buttons, units);
 		CustomButton button = new CustomButton(reaction, imsLoader, "changeStoredElementStone", "resourcesIcon", 300, 200);
 		buttons.save(button);
 		button = new CustomButton(reaction, imsLoader,  "changeStoredElementFloor", "craftingIcon", 250, 200);
@@ -268,7 +268,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				skips++;
 			}
 		}
-		mapRender.save();
+		map.save();
 		System.exit(0);
 	}
 
@@ -312,6 +312,8 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		}
 		mapRender.draw(dbg);
 		reaction.drawBox(dbg);
+		units.draw(dbg);
+		reaction.highlightUnit(dbg);
 		buttons.draw(dbg);
 		reaction.drawMouse(dbg, mouseX, mouseY);
 	}

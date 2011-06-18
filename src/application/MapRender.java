@@ -1,15 +1,21 @@
 package application;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
-public class MapRender extends Map {
+public class MapRender  {
 
 	public int drawWidth = 0;
 	public int drawHeight = 0;
+	private Map map;
+	private Grid grid;
+	private ImagesLoader imgsLoader;
+	private BufferedImage image;
 
-	public MapRender(ImagesLoader imgLd, Grid grid) {
-		super(imgLd, grid);
-		// TODO Auto-generated constructor stub
+	public MapRender(Map map, ImagesLoader imagesLoader) {
+		this.map = map;
+		this.imgsLoader = imagesLoader;
+		grid = new Grid();
 	}
 
 	public void resize(int width, int height) {
@@ -21,6 +27,25 @@ public class MapRender extends Map {
 	private void moveToSafeLocation() {
 		grid.setViewXByTile(0);
 		grid.setViewYByTile(0);
+	}
+	
+	protected void setImages(String name, int element)
+	// assign the name image to the sprite
+	{
+		image = imgsLoader.getImage(name, element);
+		if (image == null) { // no image of that name was found
+			System.out.println("No sprite image for " + name);
+		}
+
+	} // end of setImage()
+	
+
+	protected void setWall(int element) {
+		setImages("imageMap", element);
+	}
+
+	protected void setFloor() {
+		setImages("darkFloorStone", 0);
 	}
 
 	public void draw(Graphics g) {
@@ -34,10 +59,10 @@ public class MapRender extends Map {
 		for (int y = grid.viewLocYByTile(); y < height; y++) {
 			for (int x = grid.viewLocXByTile(); x < width; x++) {
 				try {
-					if (isFloor(elements[x][y])) {
+					if (map.isFloor(map.elements[x][y])) {
 						setFloor();
-					} else if (isWall(elements[x][y])) {
-						setWall(elements[x][y]);
+					} else if (map.isWall(map.elements[x][y])) {
+						setWall(map.elements[x][y]);
 					}
 
 					gridX = grid.locationXByView(x);

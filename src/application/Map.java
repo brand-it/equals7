@@ -10,18 +10,16 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Map extends Tiles {
-
 	public static final int HEIGHT = 500;
 	public static final int WIDTH = 500;
 	protected int[][] elements = new int[WIDTH][HEIGHT];
 	protected Grid grid;
 	private String saveDir;
 
-	public Map(ImagesLoader imgLd, Grid grid) {
-		super(imgLd);
+	public Map() {
 		saveDir = "./saves/map.dat";
 		generateMap();
-		this.grid = grid;
+		this.grid = new Grid();
 
 	}
 

@@ -2,7 +2,7 @@ package units;
 
 import java.util.ArrayList;
 
-public class Path {
+public class Path extends Mover {
 	/** The list of steps building up this path */
 	private ArrayList<Step> steps = new ArrayList<Step>();
 
