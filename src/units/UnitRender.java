@@ -12,6 +12,7 @@ public class UnitRender {
 	protected int height = 25;
 	protected int locX;
 	protected int locY;
+	public String unitClass;
 	
 	public void setImage(String name){
 		image = imgLoader.getImage(name);

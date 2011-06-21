@@ -87,10 +87,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		mapRender = new MapRender(map, imsLoader);
 		units = new Units();
 		reaction = new Reaction(map, mapRender, this, imsLoader, buttons, units);
-		CustomButton button = new CustomButton(reaction, imsLoader, "changeStoredElementStone", "resourcesIcon", 300, 200);
-		buttons.save(button);
-		button = new CustomButton(reaction, imsLoader,  "changeStoredElementFloor", "craftingIcon", 250, 200);
-		buttons.save(button);
+//		CustomButton button = new CustomButton(reaction, imsLoader, "changeStoredElementStone", "resourcesIcon", 300, 200);
+//		buttons.save(button);
+//		button = new CustomButton(reaction, imsLoader,  "changeStoredElementFloor", "craftingIcon", 250, 200);
+//		buttons.save(button);
 
 	}
 
@@ -213,6 +213,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			reaction.changeBoxLocation(mouseX, mouseY);
 			reaction.moveMap(mouseX, mouseY);
 			buttons.hovered(mouseX, mouseY);
+			units.move();
 		}
 	} // end of gameUpdate()
 

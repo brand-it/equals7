@@ -42,6 +42,12 @@ public class Units  {
 		}
 	}
 	
+	public void move(){
+		for(int i = 0; i < units.size(); i++){
+			units.get(i).move();
+		}
+	}
+	
 	// Saves the Units to a array and can be called by index
 	public void save(Unit unit){
 		units.add(unit);

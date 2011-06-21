@@ -1,11 +1,7 @@
 package gui;
 
-import application.ImagesLoader;
-import application.Map;
-import application.MapRender;
-import application.View;
-import units.Unit;
-import units.Units;
+import application.*;
+import units.*;
 import window.Panel;
 
 public class Reaction extends Draw {
@@ -16,6 +12,8 @@ public class Reaction extends Draw {
 	protected int storedElement;
 	private MapRender mapRender;
 	private Units units;
+	public Pathfinder pathFinder;
+	private int speed;
 	
 	public Reaction(Map map, MapRender mapRender, Panel panel, ImagesLoader imgsLoader, Buttons buttons, Units units) {
 		super(map, imgsLoader);
@@ -25,6 +23,8 @@ public class Reaction extends Draw {
 		this.mapRender = mapRender;
 		this.buttons = buttons;
 		this.units = units;
+		
+		pathFinder = new Pathfinder(map);
 	}
 
 	public void changeElement(int mouseX, int mouseY, int element) {
@@ -104,13 +104,22 @@ public class Reaction extends Draw {
 			selectedUnit = units.getUnitByLocation(mouseX, mouseY);
 		}else{
 			changeElement(mouseX, mouseY, storedElement);
+			selectedUnit = null;
 		}
 		
 	}
 
 	public void rightClick(int mouseX, int mouseY) {
-		Unit unit = new Unit(map, imgsLoader, mouseX, mouseY);
-		units.save(unit);
+
+		if(selectedUnit != null){
+			Path path = pathFinder.findPath(grid.getTileX(selectedUnit.getX()), grid.getTileY(selectedUnit.getY()), mouseX, mouseY);
+			selectedUnit.newPath(path);
+			System.out.println("New Path Set");
+		}else{
+			speed++;
+			Unit unit = new Unit("dwarf", map, imgsLoader, mouseX, mouseY, speed);
+			units.save(unit);
+		}
 	}
 
 	public void changeBoxLocation(double mouseX, double mouseY) {

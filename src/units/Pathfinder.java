@@ -195,14 +195,15 @@ public class Pathfinder {
 			for (int y = 0; y < Map.HEIGHT; y++) {
 				for (int x = 0; x < Map.WIDTH; x++) {
 					Node node = nodes[x][y];
-					if (node.cost > 0) {
-						int thing = (int) node.cost;
-						g.drawString(Integer.toString(thing),
-								grid.locationXByView(x),
-								grid.locationYByView(y));
+					if (node != null){
+						if (node.cost > 0) {
+							int thing = (int) node.cost;
+							g.drawString(Integer.toString(thing),
+									grid.locationXByView(x),
+									grid.locationYByView(y));
 
+						}
 					}
-
 				}
 			}
 

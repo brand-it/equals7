@@ -4,17 +4,34 @@ import application.*;
 
 public class Unit extends Mover {
 
-	// On creation set the units Location
-	public Unit(Map map, ImagesLoader imgLoader, int mouseX, int mouseY){
+	// On creation set the units Location this will be based off of mouseX and mouseY
+	// It will round off and put it square in the center of the tile for you.
+	public Unit(String unitClass, Map map, ImagesLoader imgLoader, int mouseX, int mouseY, int speed){
 		grid = new Grid();
 		this.map = map;
+		setup(imgLoader, unitClass, mouseX, mouseY);
+		// After setup we need to set the units speed and anything else relevant to the unit
+		unitSetup(speed);
+		// There is current only one unit type and it is a dwarf sad
+		setImage(unitClass);
+	}
+	
+	private void setup(ImagesLoader imgLoader, String unitClass, int mouseX, int mouseY){
 		// Unit Current Location it is set center of a tile. After that it does not mater
 		// were the unit stops. It can stop on the moon if it wants.
 		locY = grid.locationY(grid.getTileY(mouseY - View.viewLocY));
 		locX = grid.locationX(grid.getTileX(mouseX - View.viewLocX));
 		this.imgLoader = imgLoader;
-		// There is current only one unit type and it is a dwarf sad
-		setImage("dwarf");
+		this.unitClass = unitClass;
+	}
+	
+	private void unitSetup(int speed) {
+		// This data will need to be set in some sort of binary files
+		if (unitClass == "dwarf") {
+			movementSpeed = speed;
+		}
+		
+
 	}
 	
 	public Unit getUnitByLocation(int mouseX, int mouseY){
@@ -42,9 +59,7 @@ public class Unit extends Mover {
 				&& mouseY >= viewY && mouseY <= (height + viewY)){
 			return true;
 		}else{
-			System.out.println("FALSE");
 			return false;
-			
 		}
 	}
 }
