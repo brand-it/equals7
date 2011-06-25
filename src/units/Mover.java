@@ -123,21 +123,11 @@ public class Mover extends UnitRender {
 			nextStepX = nextConverstionX(step + 1);
 			nextStepY = nextConverstionY(step + 1);
 		}
-	
-		System.out.println("The next location starts here");
-		System.out.println(locX + ", " + locY);
-		System.out.println(nextStepX + ", " + nextStepY);
-		System.out.println(grid.getTileX(locX) + ", " + grid.getTileY(locY));
-		System.out.println(grid.getTileX(nextStepX) + ", " + grid.getTileY(nextStepY));
-		System.out.println("Your end locations are " + getEndX() + ", " + getEndY());
 
 		if (map.isBlocked(grid.getTileX(nextStepX), grid.getTileY(nextStepY))){
-			System.out.println("Path Blocked Finding new Path " + map.isBlocked(grid.getTileX(nextStepX), grid.getTileY(nextStepY)));
-			
 			Pathfinder pathFinder = new Pathfinder(map);
 			
 			Path newPath = pathFinder.findPath(locX, locY, getEndX(), getEndY());
-			System.out.println("Your Path is " + newPath);
 			newPath(newPath);
 
 		}else{

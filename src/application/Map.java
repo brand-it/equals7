@@ -10,8 +10,8 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Map extends Tiles {
-	public static final int HEIGHT = 500;
-	public static final int WIDTH = 500;
+	public static final int HEIGHT = 1000;
+	public static final int WIDTH = 1000;
 	protected int[][] elements = new int[WIDTH][HEIGHT];
 	protected Grid grid;
 	private String saveDir;
@@ -42,7 +42,7 @@ public class Map extends Tiles {
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
 					elements[x][y] = generator.nextInt(65);
-					orientation();
+
 					count++;
 					System.out
 							.println("Percentage: "
@@ -51,7 +51,7 @@ public class Map extends Tiles {
 				}
 
 			}
-
+			orientation();
 			System.out.println("Map Generated");
 
 		} catch (IOException e) {
