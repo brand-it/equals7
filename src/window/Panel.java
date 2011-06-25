@@ -179,7 +179,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			} else {
 				isPaused = false;
 				// hideMouse();
-				showMouse();
+				hideMouse();
 			}
 
 		}
