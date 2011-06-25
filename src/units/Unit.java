@@ -55,8 +55,8 @@ public class Unit extends Mover {
 		int viewX = locX + View.viewLocX;
 		int viewY = locY + View.viewLocY;
 		
-		if (mouseX >= viewX && mouseX <= (width + viewX)
-				&& mouseY >= viewY && mouseY <= (height + viewY)){
+		if (mouseX >= viewX && mouseX <= (Grid.TILE_SIZE + viewX)
+				&& mouseY >= viewY && mouseY <= (Grid.TILE_SIZE + viewY)){
 			return true;
 		}else{
 			return false;

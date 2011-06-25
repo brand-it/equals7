@@ -123,6 +123,13 @@ public class Map extends Tiles {
 		}
 
 	}
+	
+	public boolean isBlocked(int x, int y){
+		if (isWall(elements[x][y])){
+			return true;
+		}
+		return false;
+	}
 
 	private void orientation() {
 		int total;

@@ -21,15 +21,12 @@ public class Pathfinder {
 	private SortedList open = new SortedList();
 
 	public Pathfinder(Map map) {
-		ImagesLoader img = new ImagesLoader();
 		this.grid = new Grid();
 		this.map = map;
-		startLocationX = 0;
-		startLocationY = 0;
 
 	}
 
-	public Path findPath(int x, int y, int mouseX, int mouseY) {
+	public Path findPath(int trueX, int trueY, int mouseX, int mouseY) {
 
 		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
 		for (int nx = 0; nx < map.getWidthInTiles(); nx++) {
@@ -37,11 +34,11 @@ public class Pathfinder {
 				nodes[nx][ny] = new Node(nx, ny);
 			}
 		}
-		destinationX = grid.getTileXByView(mouseX);
-		destinationY = grid.getTileYByView(mouseY);
+		destinationX = mouseX;
+		destinationY = mouseY;
 
-		startLocationX = x;
-		startLocationY = y;
+		startLocationX = grid.getTileX(trueX);
+		startLocationY = grid.getTileY(trueY);
 
 		closed.clear();
 		open.clear();

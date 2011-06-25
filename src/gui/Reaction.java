@@ -112,7 +112,7 @@ public class Reaction extends Draw {
 	public void rightClick(int mouseX, int mouseY) {
 
 		if(selectedUnit != null){
-			Path path = pathFinder.findPath(grid.getTileX(selectedUnit.getX()), grid.getTileY(selectedUnit.getY()), mouseX, mouseY);
+			Path path = pathFinder.findPath(selectedUnit.getX(), selectedUnit.getY(), grid.getTileXByView(mouseX),grid.getTileYByView(mouseY));
 			selectedUnit.newPath(path);
 			System.out.println("New Path Set");
 		}else{

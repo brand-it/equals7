@@ -2,7 +2,7 @@ package application;
 
 public class Grid {
 
-	public static final int TILE_SIZE = 25;
+	public static final int TILE_SIZE = 50;
 	
 	// Use Location X to figure out your location acording to mouse
 	public int locationX(int x)
