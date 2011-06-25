@@ -119,7 +119,7 @@ public class Mover extends UnitRender {
 		int nextStepX = locX;
 		int nextStepY = locY;
 		// only set the new nextConverstion location if you are not at the end of your path
-		if (path.getLength() > step){
+		if ((path.getLength() - 1) > step){
 			nextStepX = nextConverstionX(step + 1);
 			nextStepY = nextConverstionY(step + 1);
 		}
