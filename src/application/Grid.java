@@ -9,8 +9,7 @@ public class Grid {
 	// converts from tile x and y to pixel x and y.
 	// Used for drawing.
 	{
-		int locX = x * TILE_SIZE;
-		return locX;
+		return x * TILE_SIZE;
 
 	}
 
@@ -21,8 +20,7 @@ public class Grid {
 	}
 	// Use Location Y to figure out your location acording to mouse
 	public int locationY(int y) {
-		int locY = y * TILE_SIZE;
-		return locY;
+		return y * TILE_SIZE;
 	}
 
 	public int locationYByView(int y) {

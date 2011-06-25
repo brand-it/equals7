@@ -24,7 +24,7 @@ public class GameRunner extends JFrame implements WindowListener,
 
 	private Panel p;
 
-	private static int DEFAULT_FPS = 60;
+	private static int DEFAULT_FPS = 80;
 
 	public GameRunner(long period) {
 		// This is the set up information for the game. You want to change the

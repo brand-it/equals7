@@ -84,14 +84,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
 		map = new Map();
+		// Dew to how complicated the map rendering system is we gave it a different class name
 		mapRender = new MapRender(map, imsLoader);
 		units = new Units();
 		reaction = new Reaction(map, mapRender, this, imsLoader, buttons, units);
-//		CustomButton button = new CustomButton(reaction, imsLoader, "changeStoredElementStone", "resourcesIcon", 300, 200);
-//		buttons.save(button);
-//		button = new CustomButton(reaction, imsLoader,  "changeStoredElementFloor", "craftingIcon", 250, 200);
-//		buttons.save(button);
-
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -234,6 +230,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			gameUpdate();
 			gameRender();
 			paintScreen();
+
 
 			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
