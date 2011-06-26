@@ -6,7 +6,7 @@ import window.Panel;
 
 public class Reaction extends Draw {
 
-	private static final int NUDGE = 10;
+	private static final int NUDGE = 25;
 	protected Panel panel;
 	protected Buttons buttons;
 	protected int storedElement;

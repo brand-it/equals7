@@ -20,8 +20,8 @@ public class MapRender  {
 
 	public void resize(int width, int height) {
 		// Render one extra block on the edges so there are no black empty spots
-		drawWidth = (width / Grid.TILE_SIZE) + 1;
-		drawHeight = (height / Grid.TILE_SIZE) + 1;
+		drawWidth = (width / Grid.TILE_SIZE) + 2;
+		drawHeight = (height / Grid.TILE_SIZE) + 2;
 	}
 
 	private void moveToSafeLocation() {
@@ -49,10 +49,9 @@ public class MapRender  {
 	}
 
 	public void draw(Graphics g) {
-		// This is truly the fastest way to render the map.
-		int gridY;
-		int gridX;
-
+		
+		System.out.println(grid.viewLocXByTile() + ", " + grid.viewLocYByTile());
+		
 		int height = drawHeight + grid.viewLocYByTile();
 		int width = drawWidth + grid.viewLocXByTile();
 
@@ -65,12 +64,10 @@ public class MapRender  {
 						setWall(map.elements[x][y]);
 					}
 
-					gridX = grid.locationXByView(x);
-					gridY = grid.locationYByView(y);
-
-					g.drawImage(image, gridX, gridY, gridX + Grid.TILE_SIZE,
-							gridY + Grid.TILE_SIZE, 0, 0, Grid.TILE_SIZE,
-							Grid.TILE_SIZE, null);
+					g.drawImage(image, grid.locationXByView(x), grid.locationYByView(y), null);
+//					g.drawImage(image, gridX, gridY, gridX + Grid.TILE_SIZE,
+//							gridY + Grid.TILE_SIZE, 0, 0, Grid.TILE_SIZE,
+//							Grid.TILE_SIZE, null);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					System.out.println("Out of Bounds Error " + e);
 					moveToSafeLocation();
