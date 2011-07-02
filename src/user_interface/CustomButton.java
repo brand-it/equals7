@@ -1,4 +1,4 @@
-package gui;
+package user_interface;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import application.ImagesLoader;
+import application_controller.ImagesLoader;
 
 public class CustomButton {
 

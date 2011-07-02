@@ -1,4 +1,4 @@
-package gui;
+package user_interface;
 
 import java.awt.Graphics;
 import java.util.ArrayList;

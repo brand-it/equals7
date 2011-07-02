@@ -1,8 +1,10 @@
-package units;
+package units_manager;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import application.*;
+
+import environment_manager.Tiles;
+import application_controller.*;
 
 public class UnitRender {
 	protected ImagesLoader imgLoader;
@@ -20,6 +22,6 @@ public class UnitRender {
 	}
 	
 	public void draw(Graphics g){
-		g.drawImage(image, locX + View.viewLocX, locY + View.viewLocY, Grid.TILE_SIZE, Grid.TILE_SIZE, null);
+		g.drawImage(image, locX, locY, Tiles.SIZE, Tiles.SIZE, null);
 	}
 }

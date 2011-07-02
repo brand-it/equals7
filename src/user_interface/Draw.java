@@ -1,20 +1,20 @@
-package gui;
+package user_interface;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 
-import units.Unit;
-import application.Grid;
-import application.ImagesLoader;
-import application.Map;
-import application.View;
+import environment_manager.Map;
+import environment_manager.Tiles;
+
+import units_manager.Unit;
+import application_controller.ImagesLoader;
+import application_controller.View;
 
 public class Draw {
 	int locYRollover = 0;
 	int locXRollover = 0;
-	protected Grid grid;
 	protected Map map;
 	protected ImagesLoader imgsLoader;
 	protected BufferedImage image;
@@ -23,7 +23,6 @@ public class Draw {
 	
 
 	public Draw(Map map, ImagesLoader imgsLoader) {
-		this.grid = new Grid();
 		this.map = map;
 		this.imgsLoader = imgsLoader;
 	}
@@ -31,18 +30,13 @@ public class Draw {
 	public void highlightUnit(Graphics g) {
 		if(selectedUnit != null){
 			g.setColor(Color.red);
-			g.drawRect(selectedUnit.getX() + View.viewLocX, selectedUnit.getY() + View.viewLocY, Grid.TILE_SIZE, Grid.TILE_SIZE);
+			g.drawRect(selectedUnit.getX() + View.viewLocX, selectedUnit.getY() + View.viewLocY, Tiles.SIZE, Tiles.SIZE);
 		}
 	}
-
-	public void drawBox(Graphics g) {
-		g.setColor(Color.blue);
-		g.drawRect(locXRollover, locYRollover, Grid.TILE_SIZE, Grid.TILE_SIZE);
-	}
-
+	
 	public void drawMouse(Graphics g, int mouseX, int mouseY) {
 		g.setColor(Color.green);
-		g.fillRect(mouseX, mouseY, Grid.TILE_SIZE, Grid.TILE_SIZE);
+		g.fillRect(mouseX, mouseY, Tiles.SIZE, Tiles.SIZE);
 	}
 	
 
@@ -55,10 +49,4 @@ public class Draw {
 		}
 
 	} // end of setImage()
-
-	public void drawAll(Graphics g, int mouseX, int mouseY) {
-		drawBox(g);
-		highlightUnit(g);
-		drawMouse(g, mouseX, mouseY);
-	}
 }

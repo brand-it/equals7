@@ -1,4 +1,4 @@
-package window;
+package runner;
 
 import java.awt.AWTException;
 import java.awt.Container;

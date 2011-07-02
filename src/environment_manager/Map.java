@@ -1,4 +1,4 @@
-package application;
+package environment_manager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,17 +9,16 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+
 public class Map extends Tiles {
 	public static final int HEIGHT = 1000;
 	public static final int WIDTH = 1000;
 	protected int[][] elements = new int[WIDTH][HEIGHT];
-	protected Grid grid;
 	private String saveDir;
 
 	public Map() {
 		saveDir = "./saves/map.dat";
 		generateMap();
-		this.grid = new Grid();
 
 	}
 
@@ -60,8 +59,9 @@ public class Map extends Tiles {
 
 	}
 
-	public int returnElement(int x, int y) {
-		return elements[x][y];
+	public int returnElement(int actualX, int actualY) {
+		
+		return elements[getTileX(actualX)][getTileY(actualY)];
 	}
 
 	private void setElementBase(int y, int x) {
@@ -78,8 +78,9 @@ public class Map extends Tiles {
 		}
 	}
 
-	public void changeElement(int x, int y, int element) {
-		elements[grid.getTileXByView(x)][grid.getTileYByView(y)] = element;
+	public void changeElement(int actualX, int actualY, int element) {
+		// This is the only system that uses Modified X and Modified Y
+		elements[getTileX(actualX)][getTileY(actualY)] = element;
 		orientation();
 	}
 

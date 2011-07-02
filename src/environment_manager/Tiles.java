@@ -1,10 +1,13 @@
-package application;
+package environment_manager;
 
 /*
  * This loads all the tiles into the system. They then can be called by the Map or anything else for that mater.
  */
 
 public class Tiles{
+	
+	public final static int SIZE = 50;
+	
 	public Tiles() {
 
 	} // end of init( )
@@ -45,6 +48,15 @@ public class Tiles{
 		} else {
 			return false;
 		}
+	}
+	
+	
+	protected int getTileX(int actualX){
+		return actualX / Tiles.SIZE;
+	}
+	
+	protected int getTileY(int actualY){
+		return actualY / Tiles.SIZE;
 	}
 	
 	public int getElementByString(String element){

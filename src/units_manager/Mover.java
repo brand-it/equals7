@@ -1,12 +1,14 @@
-package units;
+package units_manager;
 
 import java.util.ArrayList;
 
-import application.*;
+import environment_manager.Map;
+import environment_manager.Tiles;
+
+import application_controller.*;
 
 public class Mover extends UnitRender {
 
-	protected Grid grid;
 	protected ArrayList<Path> paths = new ArrayList<Path>();
 	// You store the paths in the array above and then place the one you are on
 	// in the
@@ -53,19 +55,27 @@ public class Mover extends UnitRender {
 	}
 
 	private int nextConverstionX() {
-		return grid.locationX(path.getStep(step).getX());
+		return locationX(path.getStep(step).getX());
 	}
 
 	private int nextConverstionY() {
-		return grid.locationY(path.getStep(step).getY());
+		return locationY(path.getStep(step).getY());
 	}
 	
 	private int nextConverstionX(int step) {
-		return grid.locationX(path.getStep(step).getX());
+		return locationX(path.getStep(step).getX());
 	}
 
 	private int nextConverstionY(int step) {
-		return grid.locationY(path.getStep(step).getY());
+		return locationY(path.getStep(step).getY());
+	}
+	
+	private int locationY(int y){
+		return y * Tiles.SIZE;
+	}
+	
+	private int locationX(int x){
+		return x * Tiles.SIZE;
 	}
 
 	private void moveXY() {
@@ -123,8 +133,9 @@ public class Mover extends UnitRender {
 			nextStepX = nextConverstionX(step + 1);
 			nextStepY = nextConverstionY(step + 1);
 		}
-
-		if (map.isBlocked(grid.getTileX(nextStepX), grid.getTileY(nextStepY))){
+		;
+		
+		if (map.isBlocked(nextStepX / Tiles.SIZE, nextStepY / Tiles.SIZE)){
 			Pathfinder pathFinder = new Pathfinder(map);
 			
 			Path newPath = pathFinder.findPath(locX, locY, getEndX(), getEndY());

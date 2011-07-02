@@ -1,4 +1,4 @@
-package units;
+package units_manager;
 
 import java.awt.Graphics;
 import java.util.ArrayList;

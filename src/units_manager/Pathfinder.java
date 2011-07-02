@@ -1,14 +1,16 @@
-package units;
+package units_manager;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
-import application.*;
+
+import environment_manager.Map;
+import environment_manager.Tiles;
+import application_controller.*;
 
 public class Pathfinder {
-
-	private Grid grid;
+	
 	private Map map;
 	private int startLocationX;
 	private int startLocationY;
@@ -21,7 +23,6 @@ public class Pathfinder {
 	private SortedList open = new SortedList();
 
 	public Pathfinder(Map map) {
-		this.grid = new Grid();
 		this.map = map;
 
 	}
@@ -37,8 +38,8 @@ public class Pathfinder {
 		destinationX = mouseX;
 		destinationY = mouseY;
 
-		startLocationX = grid.getTileX(trueX);
-		startLocationY = grid.getTileY(trueY);
+		startLocationX = trueX / Tiles.SIZE;
+		startLocationY = trueY / Tiles.SIZE;
 
 		closed.clear();
 		open.clear();
@@ -184,27 +185,6 @@ public class Pathfinder {
 
 	protected Node getFirstInOpen() {
 		return (Node) open.first();
-	}
-
-	public void draw(Graphics g) {
-		g.setColor(Color.green);
-		if (nodes != null) {
-			for (int y = 0; y < Map.HEIGHT; y++) {
-				for (int x = 0; x < Map.WIDTH; x++) {
-					Node node = nodes[x][y];
-					if (node != null){
-						if (node.cost > 0) {
-							int thing = (int) node.cost;
-							g.drawString(Integer.toString(thing),
-									grid.locationXByView(x),
-									grid.locationYByView(y));
-
-						}
-					}
-				}
-			}
-
-		}
 	}
 
 	private class SortedList {

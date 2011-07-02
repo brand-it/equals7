@@ -1,7 +1,6 @@
-package window;
+package runner;
 
-import gui.*;
-import application.*;
+import application_controller.*;
 
 
 import java.awt.*;
@@ -13,7 +12,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-import units.Units;
+import environment_manager.Map;
+import environment_manager.MapRender;
+
+import units_manager.Units;
+import user_interface.*;
 
 public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	// Need to create a globe class that holds every so the system can access with a smaller call
@@ -31,9 +34,14 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
 	private static final int MAX_FRAME_SKIPS = 5;
-	private int mouseX, mouseY;
+	private int mouseX = 100, mouseY = 100;
 	protected int pCenterX;
 	protected int pCenterY;
+
+	// Find the center of the Panel
+	private int mouseCenterX;
+	private int mouseCenterY;
+	
 	private Robot robot;
 
 	private long period; // the amount of time between animate. In nanosec
@@ -53,10 +61,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private Buttons buttons;
 	private Map map;
 	private Units units;
-
-	// Find the center of the Panel
-	private int mouseCenterX;
-	private int mouseCenterY;
 
 	public Panel(GameRunner gr, long period) {
 
@@ -206,7 +210,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	// Basically if you you want things to move and stuff you call this...
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
-			reaction.changeBoxLocation(mouseX, mouseY);
 			reaction.moveMap(mouseX, mouseY);
 			buttons.hovered(mouseX, mouseY);
 			units.move();
@@ -276,7 +279,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 		pWidth = getWidth();
 		pCenterX = pWidth / 2;
 		pCenterY = pHeight / 2;
-		mapRender.resize(width, height);
 		setCenter();
 	}
 
@@ -308,8 +310,8 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			createDBImage(200, 200);
 
 		}
-		mapRender.draw(dbg);
-		reaction.drawBox(dbg);
+		// For every thing draw it right here.
+		mapRender.draw(dbg, this.pWidth, this.pHeight);
 		units.draw(dbg);
 		reaction.highlightUnit(dbg);
 		buttons.draw(dbg);
