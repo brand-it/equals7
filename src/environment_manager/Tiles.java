@@ -1,5 +1,7 @@
 package environment_manager;
 
+import application_controller.View;
+
 /*
  * This loads all the tiles into the system. They then can be called by the Map or anything else for that mater.
  */
@@ -50,13 +52,33 @@ public class Tiles{
 		}
 	}
 	
-	
-	protected int getTileX(int actualX){
-		return actualX / Tiles.SIZE;
+	private int getScale(){
+		return Tiles.SIZE / View.distance;
+	}
+	// Think of these two methods as basically this the tile you are trying to change by view
+	// is not always perfectly Square you need to find the margin of error
+	// This system is very difficult to work with need to use this in the other system
+	// But don't know were yet
+	// This finds the off set of the object for X
+	private int shiftX(){
+		return Math.abs((((View.viewLocX / SIZE) * SIZE) - View.viewLocX));
+	}
+	// This finds the off set of the object for Y
+	private int shiftY(){
+		return Math.abs((((View.viewLocY / SIZE) * SIZE) - View.viewLocY));
 	}
 	
-	protected int getTileY(int actualY){
-		return actualY / Tiles.SIZE;
+	protected int getTileXByView(int actualX){
+		System.out.println("X " + shiftX());
+		actualX += View.viewLocX - shiftX();
+		actualX = actualX / getScale();
+		return actualX;
+	}
+	protected int getTileYByView(int actualY){
+		System.out.println("Y " + shiftY());
+		actualY += View.viewLocY - shiftY();
+		actualY = actualY / getScale();
+		return actualY;
 	}
 	
 	public int getElementByString(String element){

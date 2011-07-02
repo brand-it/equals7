@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
@@ -18,7 +20,7 @@ import environment_manager.MapRender;
 import units_manager.Units;
 import user_interface.*;
 
-public class Panel extends JPanel implements MouseMotionListener, Runnable {
+public class Panel extends JPanel implements MouseMotionListener, Runnable, MouseWheelListener {
 	// Need to create a globe class that holds every so the system can access with a smaller call
 	/**
 	 * 
@@ -77,6 +79,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 				processKey(e);
 			}
 		});
+		
 		addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				processMouse(e);
@@ -84,6 +87,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 
 		});
 		addMouseMotionListener(this);
+		addMouseWheelListener(this);
 		buttons = new Buttons();
 		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
@@ -130,6 +134,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 	private void processMouse(MouseEvent e)
 	// If some one clicks the mouse
 	{
+		System.out.println(e.getButton());
 		if (!isPaused) {
 
 			if (e.getButton() == 1) {
@@ -336,5 +341,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable {
 			System.out.println("Graphics context error: " + e);
 		}
 	} // end of paintScreen()
+
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		reaction.wheelMouse(e);
+		
+	}
 
 }

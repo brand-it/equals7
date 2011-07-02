@@ -61,7 +61,7 @@ public class Map extends Tiles {
 
 	public int returnElement(int actualX, int actualY) {
 		
-		return elements[getTileX(actualX)][getTileY(actualY)];
+		return elements[getTileXByView(actualX)][getTileYByView(actualY)];
 	}
 
 	private void setElementBase(int y, int x) {
@@ -80,8 +80,40 @@ public class Map extends Tiles {
 
 	public void changeElement(int actualX, int actualY, int element) {
 		// This is the only system that uses Modified X and Modified Y
-		elements[getTileX(actualX)][getTileY(actualY)] = element;
-		orientation();
+		elements[getTileXByView(actualX)][getTileYByView(actualY)] = element;
+		fastOrientation(actualX, actualY);
+	}
+	
+	private void fastOrientation(int actualX, int actualY){
+		int total = 0;
+		int top = 1;
+		int left = 2;
+		int right = 4;
+		int bottom = 8;
+		int setupY = moveLeft(getTileYByView(actualY));
+		int setupX = moveUp(getTileXByView(actualX));
+		
+		for (int y = setupY; y < (setupY + 3); y++){
+			for (int x =setupX; x < (setupX + 3); x++){
+				total = 0;
+				if (isWall(elements[x][y])) {
+					if (isWall(elements[x][moveUp(y)])) {
+						total += top;
+					}
+					if (isWall(elements[x][moveDown(y)])) {
+						total += bottom;
+					}
+					if (isWall(elements[moveLeft(x)][y])) {
+						total += left;
+					}
+					if (isWall(elements[moveRight(x)][y])) {
+						total += right;
+					}
+				}
+				setElementBase(y, x);
+				elements[x][y] += total;
+			}
+		}
 	}
 
 	// You have subtract 1 count starts at 0

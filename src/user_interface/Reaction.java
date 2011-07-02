@@ -1,5 +1,7 @@
 package user_interface;
 
+import java.awt.event.MouseWheelEvent;
+
 import environment_manager.Map;
 import environment_manager.MapRender;
 import runner.Panel;
@@ -58,15 +60,6 @@ public class Reaction extends Draw {
 		if (key == 49){
 			changeStoredElementFloor();
 		}
-		if (key == 40){
-			view.zoomOut();
-			System.out.println("ZoomOut");
-		}
-		
-		if (key == 38){
-			view.zoomIn();
-			System.out.println("ZoomIn");
-		}
 	}
 	
 	public void changeStoredElementFloor(){
@@ -106,5 +99,16 @@ public class Reaction extends Draw {
 			Unit unit = new Unit("dwarf", map, imgsLoader, mouseX, mouseY);
 			units.save(unit);
 		}
+	}
+
+	public void wheelMouse(MouseWheelEvent e) {
+		View view = new View();
+		if (e.getWheelRotation() == 1){
+			view.zoomOut();
+		}
+		if (e.getWheelRotation() == -1){
+			view.zoomIn();
+		}
+		
 	}
 }
