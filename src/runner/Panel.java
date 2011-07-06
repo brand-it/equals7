@@ -2,7 +2,6 @@ package runner;
 
 import application_controller.*;
 
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -20,8 +19,10 @@ import environment_manager.MapRender;
 import units_manager.Units;
 import user_interface.*;
 
-public class Panel extends JPanel implements MouseMotionListener, Runnable, MouseWheelListener {
-	// Need to create a globe class that holds every so the system can access with a smaller call
+public class Panel extends JPanel implements MouseMotionListener, Runnable,
+		MouseWheelListener {
+	// Need to create a globe class that holds every so the system can access
+	// with a smaller call
 	/**
 	 * 
 	 */
@@ -43,7 +44,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 	// Find the center of the Panel
 	private int mouseCenterX;
 	private int mouseCenterY;
-	
+
 	private Robot robot;
 
 	private long period; // the amount of time between animate. In nanosec
@@ -79,7 +80,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 				processKey(e);
 			}
 		});
-		
+
 		addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				processMouse(e);
@@ -92,7 +93,8 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 		// Basically every thing uses grid
 		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
 		map = new Map();
-		// Dew to how complicated the map rendering system is we gave it a different class name
+		// Dew to how complicated the map rendering system is we gave it a
+		// different class name
 		mapRender = new MapRender(map, imsLoader);
 		units = new Units();
 		reaction = new Reaction(map, mapRender, this, imsLoader, buttons, units);
@@ -134,7 +136,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 	private void processMouse(MouseEvent e)
 	// If some one clicks the mouse
 	{
-		System.out.println(e.getButton());
 		if (!isPaused) {
 
 			if (e.getButton() == 1) {
@@ -239,7 +240,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 			gameRender();
 			paintScreen();
 
-
 			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
 			sleepTime = (period - timeDiff) - overSleepTime;
@@ -311,16 +311,18 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 
 		if (dbImage == null) {
 			System.out.println("dbImage is null Building");
-			// Those two numbers can be anything it just needs to create them in order to be resized a nano sec later.
+			// Those two numbers can be anything it just needs to create them in
+			// order to be resized a nano sec later.
 			createDBImage(200, 200);
 
 		}
 		// For every thing draw it right here.
-		mapRender.draw(dbg, this.pWidth, this.pHeight);
+		mapRender.draw(dbg, pWidth, pHeight);
 		units.draw(dbg);
 		reaction.highlightUnit(dbg);
 		buttons.draw(dbg);
 		reaction.drawMouse(dbg, mouseX, mouseY);
+		reaction.drawBox(dbg, mouseX, mouseY);
 	}
 
 	private void paintScreen()
@@ -344,7 +346,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable, Mous
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		reaction.wheelMouse(e);
-		
+
 	}
 
 }

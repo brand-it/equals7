@@ -6,10 +6,10 @@ import application_controller.View;
  * This loads all the tiles into the system. They then can be called by the Map or anything else for that mater.
  */
 
-public class Tiles{
-	
+public class Tiles {
+
 	public final static int SIZE = 50;
-	
+
 	public Tiles() {
 
 	} // end of init( )
@@ -51,54 +51,38 @@ public class Tiles{
 			return false;
 		}
 	}
-	
-	private int getScale(){
-		return Tiles.SIZE / View.distance;
-	}
-	// Think of these two methods as basically this the tile you are trying to change by view
+
+	// Think of these two methods as basically this the tile you are trying to
+	// change by view
 	// is not always perfectly Square you need to find the margin of error
-	// This system is very difficult to work with need to use this in the other system
+	// This system is very difficult to work with need to use this in the other
+	// system
 	// But don't know were yet
 	// This finds the off set of the object for X
-	private int shiftX(){
-		return Math.abs((((View.viewLocX / SIZE) * SIZE) - View.viewLocX));
+	protected int getTile(int actual) {
+		return actual;
 	}
-	// This finds the off set of the object for Y
-	private int shiftY(){
-		return Math.abs((((View.viewLocY / SIZE) * SIZE) - View.viewLocY));
-	}
-	
-	protected int getTileXByView(int actualX){
-		System.out.println("X " + shiftX());
-		actualX += View.viewLocX - shiftX();
-		actualX = actualX / getScale();
-		return actualX;
-	}
-	protected int getTileYByView(int actualY){
-		System.out.println("Y " + shiftY());
-		actualY += View.viewLocY - shiftY();
-		actualY = actualY / getScale();
-		return actualY;
-	}
-	
-	public int getElementByString(String element){
-		
-		// there are two words in the system for floor. One that says darkStoneFloor and one that is floor
-		// Floor has a different element ID floor = 64 were darkStoneFloor == 0; This difference happens when you are trying to load
+
+	public int getElementByString(String element) {
+
+		// there are two words in the system for floor. One that says
+		// darkStoneFloor and one that is floor
+		// Floor has a different element ID floor = 64 were darkStoneFloor == 0;
+		// This difference happens when you are trying to load
 		// a image into the system. Proper handling should be taken.
-		if (element == "stone"){
+		if (element == "stone") {
 			return stone();
 		}
-		if (element == "floor"){
+		if (element == "floor") {
 			return floor();
 		}
-		if (element == "titanium"){
+		if (element == "titanium") {
 			return titanium();
 		}
-		if (element == "gold"){
+		if (element == "gold") {
 			return gold();
 		}
-		if (element == "iron"){
+		if (element == "iron") {
 			return iron();
 		}
 		return 0;

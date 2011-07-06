@@ -10,7 +10,7 @@ import environment_manager.Tiles;
 import application_controller.*;
 
 public class Pathfinder {
-	
+
 	private Map map;
 	private int startLocationX;
 	private int startLocationY;

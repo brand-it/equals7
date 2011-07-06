@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import environment_manager.Map;
 import environment_manager.Tiles;
 
-import application_controller.*;
-
 public class Mover extends UnitRender {
 
 	protected ArrayList<Path> paths = new ArrayList<Path>();
@@ -14,7 +12,8 @@ public class Mover extends UnitRender {
 	// in the
 	// Path Class I think it is still called class
 	private Path path = null;
-	// Have to store the next move location so it moves there then updates the path
+	// Have to store the next move location so it moves there then updates the
+	// path
 	protected Map map;
 	// Tells the system that we have got to that way point.
 	// Can be used to create a patrol path. Don't delete a wayPointIndex
@@ -22,15 +21,16 @@ public class Mover extends UnitRender {
 	// The unit movement speed is a basic division
 	// You want the unit to move faster you divided by a smaller number.
 	public int movementSpeed = 0;
-	// The delay is basic when you choose to make the unit pause a second before moving. 0 = no delay 1 means pause
+	// The delay is basic when you choose to make the unit pause a second before
+	// moving. 0 = no delay 1 means pause
 	// once and then keep moving.
 	protected int delay = 0;
 	// number of times delayed
 	private int delayed = 0;
 	// This is the index number for the path
-	// If you don't start at one it will have a delay in the system before it starts moving
+	// If you don't start at one it will have a delay in the system before it
+	// starts moving
 	private int step = 1;
-
 
 	// this tells the unit that there is an new location you need to go two
 	public void newPath(Path path) {
@@ -40,9 +40,11 @@ public class Mover extends UnitRender {
 		saveWayPoint(path);
 		this.path = path;
 	}
-	// Call this in the next step method and it will correct any errors that may happen do to strange movements speeds
+
+	// Call this in the next step method and it will correct any errors that may
+	// happen do to strange movements speeds
 	private void theFixer() {
-		if (locY != nextConverstionY() || locX != nextConverstionX()){
+		if (locY != nextConverstionY() || locX != nextConverstionX()) {
 			locY = nextConverstionY();
 			locX = nextConverstionX();
 		}
@@ -61,7 +63,7 @@ public class Mover extends UnitRender {
 	private int nextConverstionY() {
 		return locationY(path.getStep(step).getY());
 	}
-	
+
 	private int nextConverstionX(int step) {
 		return locationX(path.getStep(step).getX());
 	}
@@ -69,12 +71,12 @@ public class Mover extends UnitRender {
 	private int nextConverstionY(int step) {
 		return locationY(path.getStep(step).getY());
 	}
-	
-	private int locationY(int y){
+
+	private int locationY(int y) {
 		return y * Tiles.SIZE;
 	}
-	
-	private int locationX(int x){
+
+	private int locationX(int x) {
 		return x * Tiles.SIZE;
 	}
 
@@ -86,30 +88,33 @@ public class Mover extends UnitRender {
 			System.out.println("Move path was null trying to set");
 			path = paths.get(wayPointIndex);
 		}
-		
+
 		moveCloser();
 	}
-	
-	public void moveCloser(){
-		
+
+	public void moveCloser() {
+
 		int nextStepX = nextConverstionX();
 		int nextStepY = nextConverstionY();
-		
+
 		int distanceX = Math.abs(locX - nextStepX);
 		int distanceY = Math.abs(locY - nextStepY);
 		int speed = movementSpeed;
-		
-		if (distanceX < movementSpeed && distanceY == 0){
-			// one number is always going to be zero so you can add them to get a solution;
+
+		if (distanceX < movementSpeed && distanceY == 0) {
+			// one number is always going to be zero so you can add them to get
+			// a solution;
 			// if it some how screws up the fixer will correct any errors
-			System.out.println("Added X " + distanceX + ", " + distanceY + " AND " + movementSpeed);
+			System.out.println("Added X " + distanceX + ", " + distanceY
+					+ " AND " + movementSpeed);
 			speed = distanceX;
-		} 
+		}
 		if (distanceY < movementSpeed && distanceX == 0) {
-			System.out.println("Added Y " + distanceX + ", " + distanceY + " AND " + movementSpeed);
+			System.out.println("Added Y " + distanceX + ", " + distanceY
+					+ " AND " + movementSpeed);
 			speed = distanceY;
 		}
-		
+
 		if (locX < nextStepX) {
 			locX += speed;
 		}
@@ -123,25 +128,30 @@ public class Mover extends UnitRender {
 			locY -= speed;
 		}
 	}
-	// This will make sure that the path that you are on is still clear if the next tile you are
-	// Trying to go to is blocked it will try to find a new path and then go that directions
-	private void checkPath(){
+
+	// This will make sure that the path that you are on is still clear if the
+	// next tile you are
+	// Trying to go to is blocked it will try to find a new path and then go
+	// that directions
+	private void checkPath() {
 		int nextStepX = locX;
 		int nextStepY = locY;
-		// only set the new nextConverstion location if you are not at the end of your path
-		if ((path.getLength() - 1) > step){
+		// only set the new nextConverstion location if you are not at the end
+		// of your path
+		if ((path.getLength() - 1) > step) {
 			nextStepX = nextConverstionX(step + 1);
 			nextStepY = nextConverstionY(step + 1);
 		}
 		;
-		
-		if (map.isBlocked(nextStepX / Tiles.SIZE, nextStepY / Tiles.SIZE)){
+
+		if (map.isBlocked(nextStepX / Tiles.SIZE, nextStepY / Tiles.SIZE)) {
 			Pathfinder pathFinder = new Pathfinder(map);
-			
-			Path newPath = pathFinder.findPath(locX, locY, getEndX(), getEndY());
+
+			Path newPath = pathFinder
+					.findPath(locX, locY, getEndX(), getEndY());
 			newPath(newPath);
 
-		}else{
+		} else {
 			step++;
 			if (path.getLength() == step) {
 				step = 0;
@@ -149,41 +159,45 @@ public class Mover extends UnitRender {
 			}
 		}
 	}
-	
-	private int getEndX(){
+
+	private int getEndX() {
 		return path.getStep(path.getLength() - 1).getX();
 	}
-	
-	private int getEndY(){
+
+	private int getEndY() {
 		return path.getStep(path.getLength() - 1).getY();
 	}
 
-
 	private void nextStep() {
-		// If this fails then the fixer should be ran and the steps set to zero and the path set to null
-		// This will prevent the game from going into lock down mode on something silly like out of bounds errors
-		// This will also let the unit still be movable along with trying to fix the units position
+		// If this fails then the fixer should be ran and the steps set to zero
+		// and the path set to null
+		// This will prevent the game from going into lock down mode on
+		// something silly like out of bounds errors
+		// This will also let the unit still be movable along with trying to fix
+		// the units position
 		try {
 			int nextX = nextConverstionX();
 			int nextY = nextConverstionY();
-			
-			if (locX == nextX && locY == nextY){
-					checkPath();
-					
-					// Note to self it is possible to return a null on path finding here
-					// CheckPath method will some times return a null path if there is not a valid destination
-					// result is a Tread null pointer Exception which will make the game crash.
+
+			if (locX == nextX && locY == nextY) {
+				checkPath();
+
+				// Note to self it is possible to return a null on path finding
+				// here
+				// CheckPath method will some times return a null path if there
+				// is not a valid destination
+				// result is a Tread null pointer Exception which will make the
+				// game crash.
 			}
-		} catch (ArrayIndexOutOfBoundsException e){
+		} catch (ArrayIndexOutOfBoundsException e) {
 			theFixer();
 			step = 0;
 			path = null;
 			System.out.println(e);
 		}
-		
-
 
 	}
+
 	// not in use yet still working out the smaller problems
 	private void nextWayPoint() {
 		if (path.getLength() == step) {
@@ -191,10 +205,10 @@ public class Mover extends UnitRender {
 			path = paths.get(wayPointIndex);
 		}
 	}
-	// This handles slowing the unit down even more. 
-	private boolean isDelayed(){
 
-		if (delay != delayed ){
+	// This handles slowing the unit down even more.
+	private boolean isDelayed() {
+		if (delay != delayed) {
 			delayed++;
 			return false;
 		} else {
@@ -205,7 +219,7 @@ public class Mover extends UnitRender {
 
 	public void move() {
 		if (path != null) {
-			if (isDelayed()){
+			if (isDelayed()) {
 				moveXY();
 				nextStep();
 			}

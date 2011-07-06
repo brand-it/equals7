@@ -12,16 +12,16 @@ public class UnitRender {
 	protected int locX;
 	protected int locY;
 	public String unitClass;
-	
-	public void setImage(String name){
+
+	public void setImage(String name) {
 		image = imgLoader.getImage(name);
 		if (image == null) { // no image of that name was found
 			System.out.println("No sprite image for " + name);
 		}
 
 	}
-	
-	public void draw(Graphics g){
+
+	public void draw(Graphics g) {
 		g.drawImage(image, locX, locY, Tiles.SIZE, Tiles.SIZE, null);
 	}
 }

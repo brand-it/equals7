@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-
 public class Map extends Tiles {
 	public static final int HEIGHT = 1000;
 	public static final int WIDTH = 1000;
@@ -59,9 +58,9 @@ public class Map extends Tiles {
 
 	}
 
-	public int returnElement(int actualX, int actualY) {
-		
-		return elements[getTileXByView(actualX)][getTileYByView(actualY)];
+	public int returnElement(int modfiedX, int modfiedY) {
+
+		return elements[modfiedX][modfiedY];
 	}
 
 	private void setElementBase(int y, int x) {
@@ -78,23 +77,23 @@ public class Map extends Tiles {
 		}
 	}
 
-	public void changeElement(int actualX, int actualY, int element) {
+	public void changeElement(int modfiedX, int modfiedY, int element) {
 		// This is the only system that uses Modified X and Modified Y
-		elements[getTileXByView(actualX)][getTileYByView(actualY)] = element;
-		fastOrientation(actualX, actualY);
+		elements[modfiedX][modfiedY] = element;
+		fastOrientation(modfiedX, modfiedY);
 	}
-	
-	private void fastOrientation(int actualX, int actualY){
+
+	private void fastOrientation(int modfiedX, int modfiedY) {
 		int total = 0;
 		int top = 1;
 		int left = 2;
 		int right = 4;
 		int bottom = 8;
-		int setupY = moveLeft(getTileYByView(actualY));
-		int setupX = moveUp(getTileXByView(actualX));
-		
-		for (int y = setupY; y < (setupY + 3); y++){
-			for (int x =setupX; x < (setupX + 3); x++){
+		int setupY = moveLeft(modfiedY);
+		int setupX = moveUp(modfiedX);
+
+		for (int y = setupY; y < (setupY + 3); y++) {
+			for (int x = setupX; x < (setupX + 3); x++) {
 				total = 0;
 				if (isWall(elements[x][y])) {
 					if (isWall(elements[x][moveUp(y)])) {
@@ -156,9 +155,9 @@ public class Map extends Tiles {
 		}
 
 	}
-	
-	public boolean isBlocked(int x, int y){
-		if (isWall(elements[x][y])){
+
+	public boolean isBlocked(int x, int y) {
+		if (isWall(elements[x][y])) {
 			return true;
 		}
 		return false;

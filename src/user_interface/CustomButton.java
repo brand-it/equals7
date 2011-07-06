@@ -17,36 +17,38 @@ public class CustomButton {
 	protected Reaction reaction;
 	protected String action;
 
-	public CustomButton(Reaction reaction, ImagesLoader imgs, String action, String image,
-			int x, int y) {
+	public CustomButton(Reaction reaction, ImagesLoader imgs, String action,
+			String image, int x, int y) {
 		buttonX = x;
 		buttonY = y;
 		buttonH = 50;
 		buttonW = 50;
 		defaults(reaction, imgs, action, image);
 	}
-	
-	public CustomButton(Reaction reaction, ImagesLoader imgs, String action, String image,
-			int height, int width, int x, int y) {
+
+	public CustomButton(Reaction reaction, ImagesLoader imgs, String action,
+			String image, int height, int width, int x, int y) {
 		buttonX = x;
 		buttonY = y;
 		buttonH = height;
 		buttonW = width;
 		defaults(reaction, imgs, action, image);
 	}
-	
-	private void defaults(Reaction reaction, ImagesLoader imgs, String action, String image) {
+
+	private void defaults(Reaction reaction, ImagesLoader imgs, String action,
+			String image) {
 		imsLoader = imgs;
 		setImages(image);
 		color = Color.red;
 		this.reaction = reaction;
 		this.action = action;
 	}
-	
+
 	// this calls the method you want when you click the button
 	public void action() {
 		try {
-			Method method = reaction.getClass().getDeclaredMethod(action, new Class[] {});
+			Method method = reaction.getClass().getDeclaredMethod(action,
+					new Class[] {});
 			try {
 				method.invoke(reaction, new Object[0]);
 			} catch (IllegalArgumentException e) {

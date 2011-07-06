@@ -5,43 +5,60 @@ import environment_manager.Tiles;
 // This is a global class
 public class View {
 	// the number is all way negative.
-	public static int viewLocX = 0;
-	public static int viewLocY = 0;
-	// When you scroll in and out in the game you change the distance you are view the objects
-	public static int distance = 1;
+	public static int LOCX = 0;
+	public static int LOCY = 0;
+	// When you scroll in and out in the game you change the distance you are
+	// view the objects
+	public static int distance = 5;
 	public static int SCALEDTILE = Tiles.SIZE;
-	
-	private static int NUDGE = 10;
-	
-	
+
+	private static int NUDGE = 1;
+
+	public static int getModifiedLocX() {
+		return LOCX / getScale();
+	}
+
+	public static int getModifiedLocY() {
+		return LOCY / getScale();
+	}
+
+	public static int getScale() {
+		return Tiles.SIZE / View.distance;
+	}
+
 	public void nudgeLeft() {
-		if (viewLocX > 0){
-			viewLocX -= NUDGE;
+		if (LOCX > 0) {
+			LOCX -= nudgeCalculation();
 		}
-		
+
 	}
 
 	public void nudgeRight() {
-		viewLocX += NUDGE;
+		LOCX += nudgeCalculation();
 
 	}
 
 	public void nudgeUp() {
-		if (viewLocY > 0){
-			viewLocY -= NUDGE;
+		if (LOCY > 0) {
+			LOCY -= nudgeCalculation();
 		}
-		
+
 	}
-	
+
 	public void nudgeDown() {
-		viewLocY += NUDGE;
+		LOCY += nudgeCalculation();
 	}
-	
-	public void zoomOut(){
+
+	private int nudgeCalculation() {
+		return NUDGE;
+	}
+
+	public void zoomOut() {
 		distance++;
 	}
-	public void zoomIn(){
-		if (distance > 1){
+
+	public void zoomIn() {
+		if (distance > 1) {
 			distance--;
 		}
 
