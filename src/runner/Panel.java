@@ -1,7 +1,5 @@
 package runner;
 
-import application_controller.*;
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -12,6 +10,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
+
+import application_controller.ApplicationData;
 
 import environment_manager.Map;
 import environment_manager.MapRender;
@@ -28,7 +28,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 	 */
 	private static final long serialVersionUID = 7712717603765541381L;
 	// This is all the image data that may be loaded into the game
-	private static final String IMS_INFO = "imsInfo.txt";
+
 
 	public int pWidth = 900; // size of panel this variable will most certainly
 								// change as soon as the game starts
@@ -61,12 +61,9 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 	private MapRender mapRender;
 	private Image dbImage = null;
 	private Reaction reaction;
-	private Buttons buttons;
-	private Map map;
-	private Units units;
 
 	public Panel(GameRunner gr, long period) {
-
+		new ApplicationData();
 		this.period = period;
 
 		setDoubleBuffered(false);
@@ -89,15 +86,10 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 		});
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
-		buttons = new Buttons();
-		// Basically every thing uses grid
-		ImagesLoader imsLoader = new ImagesLoader(IMS_INFO);
-		map = new Map();
 		// Dew to how complicated the map rendering system is we gave it a
 		// different class name
-		mapRender = new MapRender(map, imsLoader);
-		units = new Units();
-		reaction = new Reaction(map, mapRender, this, imsLoader, buttons, units);
+		mapRender = new MapRender();
+		reaction = new Reaction(mapRender, this);
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -217,8 +209,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
 			reaction.moveMap(mouseX, mouseY);
-			buttons.hovered(mouseX, mouseY);
-			units.move();
+			ApplicationData.units.move();
 		}
 	} // end of gameUpdate()
 
@@ -274,7 +265,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 				skips++;
 			}
 		}
-		map.save();
+		ApplicationData.map.save();
 		System.exit(0);
 	}
 
@@ -318,11 +309,11 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 		}
 		// For every thing draw it right here.
 		mapRender.draw(dbg, pWidth, pHeight);
-		units.draw(dbg);
+		ApplicationData.units.draw(dbg);
 		reaction.highlightUnit(dbg);
-		buttons.draw(dbg);
 		reaction.drawMouse(dbg, mouseX, mouseY);
 		reaction.drawBox(dbg, mouseX, mouseY);
+		reaction.drawEndLocation(dbg);
 	}
 
 	private void paintScreen()

@@ -1,13 +1,12 @@
 package units_manager;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import application_controller.ApplicationData;
+
 import environment_manager.Map;
 import environment_manager.Tiles;
-import application_controller.*;
 
 public class Pathfinder {
 
@@ -18,6 +17,7 @@ public class Pathfinder {
 	private int destinationY;
 	private Node[][] nodes;
 	/** The set of nodes that have been searched through */
+	@SuppressWarnings("rawtypes")
 	private ArrayList closed = new ArrayList();
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
@@ -27,6 +27,7 @@ public class Pathfinder {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public Path findPath(int trueX, int trueY, int mouseX, int mouseY) {
 
 		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
@@ -146,7 +147,7 @@ public class Pathfinder {
 	}
 
 	public boolean isBlocked(int x, int y) {
-		return map.isWall(map.returnElement(x, y));
+		return ApplicationData.map.isBlocked(x, y);
 	}
 
 	public float euclidianCalculation(int tx, int ty, int x, int y) {
@@ -174,8 +175,8 @@ public class Pathfinder {
 		// int manhattan = manhattanCalculation(node.x, node.y);
 		float euclidian = euclidianCalculation(destinationX, destinationY,
 				current.x, current.y);
-		int manhattan = manhattanCalculation(startLocationX, startLocationY,
-				current.x, current.y);
+//		int manhattan = manhattanCalculation(startLocationX, startLocationY,
+//				current.x, current.y);
 		return (float) (current.distance + euclidian);
 	}
 
@@ -189,6 +190,7 @@ public class Pathfinder {
 
 	private class SortedList {
 		/** The list of elements */
+		@SuppressWarnings("rawtypes")
 		private ArrayList list = new ArrayList();
 
 		/**
@@ -200,6 +202,7 @@ public class Pathfinder {
 			return list.get(0);
 		}
 
+		@SuppressWarnings("unused")
 		public Object get(int index) {
 			return list.get(index);
 		}

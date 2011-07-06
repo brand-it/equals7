@@ -2,8 +2,11 @@
 // imsInfo.txt images
 
 // Map images
-a imageMap.png 64 4
-o darkFloorStone.png
+a StoneTiles.png 16 1
+a TitaniumTiles.png 16 1
+a GoldTiles.png 16 1
+a IronTiles.png 16 1
+o FloorTiles.png
 
 
 // Dwarfs

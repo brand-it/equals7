@@ -1,39 +1,65 @@
 package environment_manager;
 
-import application_controller.View;
-
+import java.awt.image.BufferedImage;
 /*
  * This loads all the tiles into the system. They then can be called by the Map or anything else for that mater.
  */
+
+import application_controller.ApplicationData;
 
 public class Tiles {
 
 	public final static int SIZE = 50;
 
+
 	public Tiles() {
 
 	} // end of init( )
+	
+	protected BufferedImage returnImage(String name, int element)
+	// assign the name image to the sprite
+	{
+		BufferedImage image = ApplicationData.imagesLoader.getImage(name, element);
+		if (image == null) { // no image of that name was found
+			System.out.println("No sprite image for " + name);
+		}
+		return image;
+	} // end of setImage()
+	
+	public String idToString(int id){
+		if (id == stone()){
+			return "Stone";
+		}else if (id == iron()){
+			return "Iron";
+		}else if (id == gold()){
+			return "Gold";
+		}else if (id == titanium()){
+			return "Titanium";
+		}else{
+			return "Floor";
+		}
+	}
 
 	public int stone() {
 		return 0;
 	}
 
 	public int iron() {
-		return 16;
+		return 1;
 	}
 
 	public int gold() {
-		return 32;
+		return 2;
 	}
 
 	public int titanium() {
-		return 48;
+		return 3;
 	}
 
 	public int floor()
 	// It start at the highest array tile
 	{
-		return 64;
+		return 4;
 	}
 
 	protected boolean isFloor(int element) {
@@ -45,7 +71,7 @@ public class Tiles {
 	}
 
 	public boolean isWall(int element) {
-		if (element < 64) {
+		if (element < 4) {
 			return true;
 		} else {
 			return false;

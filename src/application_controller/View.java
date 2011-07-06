@@ -12,7 +12,7 @@ public class View {
 	public static int distance = 5;
 	public static int SCALEDTILE = Tiles.SIZE;
 
-	private static int NUDGE = 1;
+	private static int NUDGE = 10;
 
 	public static int getModifiedLocX() {
 		return LOCX / getScale();
@@ -27,7 +27,7 @@ public class View {
 	}
 
 	public void nudgeLeft() {
-		if (LOCX > 0) {
+		if (LOCX >= nudgeCalculation()) {
 			LOCX -= nudgeCalculation();
 		}
 
@@ -39,7 +39,7 @@ public class View {
 	}
 
 	public void nudgeUp() {
-		if (LOCY > 0) {
+		if (LOCY >= nudgeCalculation()) {
 			LOCY -= nudgeCalculation();
 		}
 
@@ -50,7 +50,7 @@ public class View {
 	}
 
 	private int nudgeCalculation() {
-		return NUDGE;
+		return NUDGE * distance;
 	}
 
 	public void zoomOut() {

@@ -3,52 +3,40 @@ package environment_manager;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import application_controller.ImagesLoader;
+import application_controller.ApplicationData;
 import application_controller.View;
 
-public class MapRender {
+public class MapRender extends Tiles{
 	// Use this method to tell the system to recalculate the render size
-	private Map map;
-	private ImagesLoader imgsLoader;
-	private BufferedImage[] images = new BufferedImage[65];
+
 	private int sx1;
 	private int sy1;
 	private int sx2;
 	private int sy2;
-
-	public MapRender(Map map, ImagesLoader imagesLoader) {
-		this.map = map;
-		this.imgsLoader = imagesLoader;
-		setImages();
-	}
-
-	private void setImages() {
-		for (int i = 0; i <= 64; i++) {
-			if (map.isFloor(i)) {
-				images[i] = returnImage("darkFloorStone", i);
-			} else if (map.isWall(i)) {
-				images[i] = returnImage("imageMap", i);
-			}
-		}
+	protected final static int TOTALIMAGES = 16;
+	protected final static int TOTALELEMENTS = 5;
+	protected BufferedImage[][] images = new BufferedImage[TOTALELEMENTS][TOTALIMAGES];
+	
+	public MapRender(){
+		buildImages();
 	}
 
 	private void moveToSafeLocation() {
 	}
-
-	protected BufferedImage returnImage(String name, int element)
-	// assign the name image to the sprite
-	{
-		BufferedImage image = imgsLoader.getImage(name, element);
-		if (image == null) { // no image of that name was found
-			System.out.println("No sprite image for " + name);
-		}
-		return image;
-	} // end of setImage()
 		// Convert x or y variable for use later on don't need Two methods for
 		// both X and Y
 
 	private int convertActualToModified(int actual) {
 		return actual / View.getScale();
+	}
+	
+	
+	private void buildImages(){
+		for (int e = 0; e < TOTALELEMENTS; e++){
+			for (int i = 0; i < TOTALIMAGES; i++){
+				images[e][i] = returnImage(idToString(e) + "Tiles", i);
+			}
+		}
 	}
 
 	public void draw(Graphics g, int pWidth, int pHeight) {
@@ -64,7 +52,8 @@ public class MapRender {
 			for (int y = sy1; y < sy2; y++) {
 				int countX = 0;
 				for (int x = sx1; x < sx2; x++) {
-					g.drawImage(images[map.elements[x][y]], (countX * scale),
+					Tile element = ApplicationData.map.elements[x][y];
+					g.drawImage(images[element.getElement()][element.getOrentation()] , (countX * scale),
 							(countY * scale), scale, scale, null);
 					countX++;
 				}

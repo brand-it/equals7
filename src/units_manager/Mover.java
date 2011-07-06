@@ -160,11 +160,18 @@ public class Mover extends UnitRender {
 		}
 	}
 
-	private int getEndX() {
+	public boolean ifPath(){
+		if (path != null){
+			return true;
+		}
+		return false;
+	}
+	
+	public int getEndX() {
 		return path.getStep(path.getLength() - 1).getX();
 	}
 
-	private int getEndY() {
+	public int getEndY() {
 		return path.getStep(path.getLength() - 1).getY();
 	}
 
@@ -199,6 +206,7 @@ public class Mover extends UnitRender {
 	}
 
 	// not in use yet still working out the smaller problems
+	@SuppressWarnings("unused")
 	private void nextWayPoint() {
 		if (path.getLength() == step) {
 			wayPointIndex++;

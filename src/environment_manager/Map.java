@@ -9,16 +9,15 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-public class Map extends Tiles {
+public class Map extends Tiles{
 	public static final int HEIGHT = 1000;
 	public static final int WIDTH = 1000;
-	protected int[][] elements = new int[WIDTH][HEIGHT];
-	private String saveDir;
+	protected Tile[][] elements = new Tile[WIDTH][HEIGHT];
+	private String saveDir = "./saves/map.dat";
+	
 
 	public Map() {
-		saveDir = "./saves/map.dat";
 		generateMap();
-
 	}
 
 	private void generateMap() {
@@ -27,7 +26,7 @@ public class Map extends Tiles {
 					new FileInputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					elements[x][y] = inputStream.readInt();
+					elements[x][y] = new Tile(inputStream.readInt());
 				}
 			}
 
@@ -39,7 +38,7 @@ public class Map extends Tiles {
 			System.out.println("Generating Map");
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					elements[x][y] = generator.nextInt(65);
+					elements[x][y] = new Tile(generator.nextInt(5));
 
 					count++;
 					System.out
@@ -49,37 +48,23 @@ public class Map extends Tiles {
 				}
 
 			}
-			orientation();
+			
 			System.out.println("Map Generated");
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		orientation();
 	}
 
 	public int returnElement(int modfiedX, int modfiedY) {
 
-		return elements[modfiedX][modfiedY];
-	}
-
-	private void setElementBase(int y, int x) {
-		if (elements[x][y] < iron()) {
-			elements[x][y] = stone();
-		} else if (elements[x][y] < gold()) {
-			elements[x][y] = iron();
-		} else if (elements[x][y] < titanium()) {
-			elements[x][y] = gold();
-		} else if (elements[x][y] < floor()) {
-			elements[x][y] = titanium();
-		} else {
-			elements[x][y] = floor();
-		}
+		return elements[modfiedX][modfiedY].getElement();
 	}
 
 	public void changeElement(int modfiedX, int modfiedY, int element) {
 		// This is the only system that uses Modified X and Modified Y
-		elements[modfiedX][modfiedY] = element;
+		elements[modfiedX][modfiedY].element = element;
 		fastOrientation(modfiedX, modfiedY);
 	}
 
@@ -95,22 +80,21 @@ public class Map extends Tiles {
 		for (int y = setupY; y < (setupY + 3); y++) {
 			for (int x = setupX; x < (setupX + 3); x++) {
 				total = 0;
-				if (isWall(elements[x][y])) {
-					if (isWall(elements[x][moveUp(y)])) {
+				if (elements[x][y].isWall()) {
+					if (elements[x][moveUp(y)].isWall()) {
 						total += top;
 					}
-					if (isWall(elements[x][moveDown(y)])) {
+					if (elements[x][moveDown(y)].isWall()) {
 						total += bottom;
 					}
-					if (isWall(elements[moveLeft(x)][y])) {
+					if (elements[moveLeft(x)][y].isWall()) {
 						total += left;
 					}
-					if (isWall(elements[moveRight(x)][y])) {
+					if (elements[moveRight(x)][y].isWall()) {
 						total += right;
 					}
 				}
-				setElementBase(y, x);
-				elements[x][y] += total;
+				elements[x][y].orentation = total;
 			}
 		}
 	}
@@ -157,12 +141,13 @@ public class Map extends Tiles {
 	}
 
 	public boolean isBlocked(int x, int y) {
-		if (isWall(elements[x][y])) {
+		if (elements[x][y].isWall()) {
 			return true;
 		}
 		return false;
 	}
 
+	@SuppressWarnings("unused")
 	private void orientation() {
 		int total;
 		int top = 1;
@@ -173,23 +158,21 @@ public class Map extends Tiles {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 				total = 0;
-				if (isWall(elements[x][y])) {
-					if (isWall(elements[x][moveUp(y)])) {
+				if (elements[x][y].isWall()) {
+					if (elements[x][moveUp(y)].isWall()) {
 						total += top;
 					}
-					if (isWall(elements[x][moveDown(y)])) {
+					if (elements[x][moveDown(y)].isWall()) {
 						total += bottom;
 					}
-					if (isWall(elements[moveLeft(x)][y])) {
+					if (elements[moveLeft(x)][y].isWall()) {
 						total += left;
 					}
-					if (isWall(elements[moveRight(x)][y])) {
+					if (elements[moveRight(x)][y].isWall()) {
 						total += right;
 					}
 				}
-				setElementBase(y, x);
-
-				elements[x][y] += total;
+				elements[x][y].orentation = total;
 			}
 		}
 	}
@@ -209,7 +192,7 @@ public class Map extends Tiles {
 			outputStream = new ObjectOutputStream(new FileOutputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					outputStream.writeInt(elements[x][y]);
+					outputStream.writeInt(elements[x][y].element);
 				}
 			}
 			outputStream.close();

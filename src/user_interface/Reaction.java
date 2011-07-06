@@ -1,8 +1,6 @@
 package user_interface;
 
 import java.awt.event.MouseWheelEvent;
-
-import environment_manager.Map;
 import environment_manager.MapRender;
 import runner.Panel;
 import application_controller.*;
@@ -16,27 +14,33 @@ public class Reaction extends Draw {
 	private Units units;
 	public Pathfinder pathFinder;
 
-	public Reaction(Map map, MapRender mapRender, Panel panel,
-			ImagesLoader imgsLoader, Buttons buttons, Units units) {
-		super(map, imgsLoader);
+	public Reaction(MapRender mapRender, Panel panel) {
 		// This builder is big but it needs to be that way Almost every thing
 		// needs to be accessed in the GUI
 		this.panel = panel;
-		this.map = map;
-		this.buttons = buttons;
-		this.units = units;
 
-		pathFinder = new Pathfinder(map);
+		pathFinder = new Pathfinder(ApplicationData.map);
+	}
+
+	private int getModfiedMouseX(int mouseX) {
+		return ((View.getModifiedLocX() * View.getScale()) + mouseX)
+				/ View.getScale();
+	}
+
+	private int getModfiedMouseY(int mouseY) {
+		return ((View.getModifiedLocY() * View.getScale()) + mouseY)
+				/ View.getScale();
 	}
 
 	public void changeElement(int mouseX, int mouseY, int element) {
-		
-		// Do to the fact that View uses actual x and mouseX is not need to be set to zero on a adjustment
-		// and how the map is rendered you just need to zero out View X and Y
-		mouseX = ((View.getModifiedLocX() * View.getScale()) + mouseX) / View.getScale();
-		mouseY = ((View.getModifiedLocY() * View.getScale()) + mouseY) / View.getScale();
 
-		map.changeElement(mouseX, mouseY, element);
+		// Do to the fact that View uses actual x and mouseX is not need to be
+		// set to zero on a adjustment
+		// and how the map is rendered you just need to zero out View X and Y
+		mouseX = getModfiedMouseX(mouseX);
+		mouseY = getModfiedMouseY(mouseY);
+
+		ApplicationData.map.changeElement(mouseX, mouseY, element);
 	}
 
 	// this is going to move the map around based on were your mouse is
@@ -67,20 +71,17 @@ public class Reaction extends Draw {
 	}
 
 	public void changeStoredElementFloor() {
-		storedElement = map.getElementByString("floor");
+		storedElement = ApplicationData.map.getElementByString("floor");
 		setImages("darkFloorStone", 0);
 	}
 
 	public void changeStoredElementStone() {
-		storedElement = map.getElementByString("stone");
+		storedElement = ApplicationData.map.getElementByString("stone");
 		setImages("imageMap", storedElement);
 	}
 
 	public void leftClick(int mouseX, int mouseY) {
-		if (buttons.isButton(mouseX, mouseY)) {
-			CustomButton button = buttons.getButtonByLocation(mouseX, mouseY);
-			button.action();
-		} else if (units.isUnit(mouseX, mouseY)) {
+		if (ApplicationData.units.isUnit(mouseX, mouseY)) {
 			selectedUnit = units.getUnitByLocation(mouseX, mouseY);
 		} else {
 			changeElement(mouseX, mouseY, storedElement);
@@ -92,13 +93,13 @@ public class Reaction extends Draw {
 	public void rightClick(int mouseX, int mouseY) {
 
 		if (selectedUnit != null) {
-			// Path path = pathFinder.findPath(selectedUnit.getX(),
-			// selectedUnit.getY(),
-			// grid.getTileXByView(mouseX),grid.getTileYByView(mouseY));
-			// selectedUnit.newPath(path);
+			Path path = pathFinder.findPath(selectedUnit.getX(),
+					selectedUnit.getY(), getModfiedMouseX(mouseX),
+					getModfiedMouseY(mouseY));
+			selectedUnit.newPath(path);
 		} else {
-			Unit unit = new Unit("dwarf", map, imgsLoader, mouseX, mouseY);
-			units.save(unit);
+//			Unit unit = new Unit("dwarf", mouseX + View.LOCX, mouseY + View.LOCY);
+//			ApplicationData.units.save(unit);
 		}
 	}
 
