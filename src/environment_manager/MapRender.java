@@ -1,6 +1,7 @@
 package environment_manager;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import application_controller.ApplicationData;
@@ -9,19 +10,23 @@ import application_controller.View;
 public class MapRender extends Tiles{
 	// Use this method to tell the system to recalculate the render size
 
-	private int sx1;
-	private int sy1;
-	private int sx2;
-	private int sy2;
+	public static int sx1;
+	public static int sy1;
+	public static int sx2;
+	public static int sy2;
 	protected final static int TOTALIMAGES = 16;
 	protected final static int TOTALELEMENTS = 5;
 	protected BufferedImage[][] images = new BufferedImage[TOTALELEMENTS][TOTALIMAGES];
+	protected Image[][] scaledImages = new Image[TOTALELEMENTS][TOTALIMAGES];
+	private int scale;
 	
 	public MapRender(){
 		buildImages();
 	}
 
 	private void moveToSafeLocation() {
+		View.LOCX = 0;
+		View.LOCY = 0;
 	}
 		// Convert x or y variable for use later on don't need Two methods for
 		// both X and Y
@@ -38,6 +43,14 @@ public class MapRender extends Tiles{
 			}
 		}
 	}
+	private void scaleImages(){
+		int scale = View.getScale();
+		for (int e = 0; e < TOTALELEMENTS; e++){
+			for (int i = 0; i < TOTALIMAGES; i++){
+				scaledImages[e][i] = images[e][i].getScaledInstance(scale, scale, Image.SCALE_DEFAULT);
+			}
+		}
+	}
 
 	public void draw(Graphics g, int pWidth, int pHeight) {
 		try {
@@ -46,15 +59,18 @@ public class MapRender extends Tiles{
 			sx2 = (convertActualToModified(pWidth) + View.getModifiedLocX()) + 1;
 			sy2 = (convertActualToModified(pHeight) + View.getModifiedLocY()) + 1;
 			int countY = 0;
-
+			if (scale != View.getScale()){
+				scaleImages();
+				scale = View.getScale();
+			}
+			
 			// Had to round up to make the stupid thing look nice on off numbers
-			int scale = View.getScale();
 			for (int y = sy1; y < sy2; y++) {
 				int countX = 0;
 				for (int x = sx1; x < sx2; x++) {
 					Tile element = ApplicationData.map.elements[x][y];
-					g.drawImage(images[element.getElement()][element.getOrentation()] , (countX * scale),
-							(countY * scale), scale, scale, null);
+					g.drawImage(scaledImages[element.getElement()][element.getOrentation()] , (countX * scale),
+							(countY * scale), null);
 					countX++;
 				}
 				countY++;

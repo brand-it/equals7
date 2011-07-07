@@ -1,5 +1,7 @@
 package application_controller;
 
+import environment_manager.Map;
+import environment_manager.MapRender;
 import environment_manager.Tiles;
 
 // This is a global class
@@ -34,7 +36,12 @@ public class View {
 	}
 
 	public void nudgeRight() {
-		LOCX += nudgeCalculation();
+		if (MapRender.sx2 + nudgeCalculation() < Map.WIDTH){
+			LOCX += nudgeCalculation();
+		}else{
+			LOCX += Map.WIDTH - MapRender.sx2;
+		}
+
 
 	}
 
@@ -46,7 +53,12 @@ public class View {
 	}
 
 	public void nudgeDown() {
-		LOCY += nudgeCalculation();
+		if (MapRender.sy2 + nudgeCalculation() < Map.HEIGHT){
+			LOCY += nudgeCalculation();
+		}else{
+			LOCY += Map.HEIGHT - MapRender.sy2;
+		}
+		
 	}
 
 	private int nudgeCalculation() {
@@ -54,7 +66,10 @@ public class View {
 	}
 
 	public void zoomOut() {
-		distance++;
+		if (distance < 15){
+			distance++;
+		}
+
 	}
 
 	public void zoomIn() {
