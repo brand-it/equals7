@@ -11,15 +11,12 @@ public class Reaction extends Draw {
 	protected Panel panel;
 	protected Buttons buttons;
 	protected int storedElement;
-	private Units units;
-	public Pathfinder pathFinder;
 
 	public Reaction(MapRender mapRender, Panel panel) {
 		// This builder is big but it needs to be that way Almost every thing
 		// needs to be accessed in the GUI
 		this.panel = panel;
 
-		pathFinder = new Pathfinder(ApplicationData.map);
 	}
 
 	private int getModfiedMouseX(int mouseX) {
@@ -72,34 +69,40 @@ public class Reaction extends Draw {
 
 	public void changeStoredElementFloor() {
 		storedElement = ApplicationData.map.getElementByString("floor");
-		setImages("darkFloorStone", 0);
 	}
 
 	public void changeStoredElementStone() {
 		storedElement = ApplicationData.map.getElementByString("stone");
-		setImages("imageMap", storedElement);
 	}
 
 	public void leftClick(int mouseX, int mouseY) {
-		if (ApplicationData.units.isUnit(mouseX, mouseY)) {
-			selectedUnit = units.getUnitByLocation(mouseX, mouseY);
-		} else {
+
+		int modifiedX = getModfiedMouseX(mouseX);
+		int modifiedY = getModfiedMouseY(mouseY);
+
+		if (ApplicationData.units.isUnit(modifiedX, modifiedY)) {
+			selectedUnit = ApplicationData.units.getUnitByLocation(modifiedX,
+					modifiedY);
+		} else if (selectedUnit != null) {
+			selectedUnit.dig(modifiedX, modifiedY);
 			changeElement(mouseX, mouseY, storedElement);
-			selectedUnit = null;
 		}
 
 	}
 
 	public void rightClick(int mouseX, int mouseY) {
 
+		int modifiedX = getModfiedMouseX(mouseX);
+		int modifiedY = getModfiedMouseY(mouseY);
+
 		if (selectedUnit != null) {
+			Pathfinder pathFinder = new Pathfinder();
 			Path path = pathFinder.findPath(selectedUnit.getX(),
-					selectedUnit.getY(), getModfiedMouseX(mouseX),
-					getModfiedMouseY(mouseY));
+					selectedUnit.getY(), modifiedX, modifiedY);
 			selectedUnit.newPath(path);
 		} else {
-//			Unit unit = new Unit("dwarf", mouseX + View.LOCX, mouseY + View.LOCY);
-//			ApplicationData.units.save(unit);
+			Unit unit = new Unit("dwarf", modifiedX, modifiedY);
+			ApplicationData.units.save(unit);
 		}
 	}
 

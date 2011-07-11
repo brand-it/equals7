@@ -9,12 +9,11 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-public class Map extends Tiles{
+public class Map extends Tiles {
 	public static final int HEIGHT = 1000;
 	public static final int WIDTH = 1000;
 	protected Tile[][] elements = new Tile[WIDTH][HEIGHT];
 	private String saveDir = "./saves/map.dat";
-	
 
 	public Map() {
 		generateMap();
@@ -48,7 +47,7 @@ public class Map extends Tiles{
 				}
 
 			}
-			
+
 			System.out.println("Map Generated");
 
 		} catch (IOException e) {
@@ -68,14 +67,14 @@ public class Map extends Tiles{
 		fastOrientation(modfiedX, modfiedY);
 	}
 
-	private void fastOrientation(int modfiedX, int modfiedY) {
+	private void fastOrientation(int modifiedX, int modifiedY) {
 		int total = 0;
 		int top = 1;
 		int left = 2;
 		int right = 4;
 		int bottom = 8;
-		int setupY = moveLeft(modfiedY);
-		int setupX = moveUp(modfiedX);
+		int setupY = moveLeft(modifiedY);
+		int setupX = moveUp(modifiedX);
 
 		for (int y = setupY; y < (setupY + 3); y++) {
 			for (int x = setupX; x < (setupX + 3); x++) {
@@ -99,30 +98,44 @@ public class Map extends Tiles{
 		}
 	}
 
-	// You have subtract 1 count starts at 0
-	private int moveRight(int x) {
+	/**
+	 * Move the map up down left and right but don't go out of bounds of the map
+	 * area
+	 */
+	public int moveRight(int x) {
 		if (x < WIDTH - 1) {
 			return x + 1;
 		}
 		return x;
 	}
 
-	private int moveLeft(int x) {
+	/**
+	 * Move the map up down left and right but don't go out of bounds of the map
+	 * area
+	 */
+	public int moveLeft(int x) {
 		if (x > 0) {
 			return x - 1;
 		}
 		return x;
 	}
 
-	private int moveUp(int y) {
+	/**
+	 * Move the map up down left and right but don't go out of bounds of the map
+	 * area
+	 */
+	public int moveUp(int y) {
 		if (y > 0) {
 			return y - 1;
 		}
 		return y;
 	}
 
-	// You have to subtract 1 count starts at 0
-	private int moveDown(int y) {
+	/**
+	 * Move the map up down left and right but don't go out of bounds of the map
+	 * area
+	 */
+	public int moveDown(int y) {
 		if (y < HEIGHT - 1) {
 			return y + 1;
 		}
@@ -147,7 +160,6 @@ public class Map extends Tiles{
 		return false;
 	}
 
-	@SuppressWarnings("unused")
 	private void orientation() {
 		int total;
 		int top = 1;

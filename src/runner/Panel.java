@@ -12,11 +12,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import application_controller.ApplicationData;
-
-import environment_manager.Map;
 import environment_manager.MapRender;
-
-import units_manager.Units;
 import user_interface.*;
 
 public class Panel extends JPanel implements MouseMotionListener, Runnable,
@@ -28,7 +24,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 	 */
 	private static final long serialVersionUID = 7712717603765541381L;
 	// This is all the image data that may be loaded into the game
-
 
 	public int pWidth = 900; // size of panel this variable will most certainly
 								// change as soon as the game starts

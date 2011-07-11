@@ -11,31 +11,31 @@ public class Tiles {
 
 	public final static int SIZE = 50;
 
-
 	public Tiles() {
 
 	} // end of init( )
-	
+
 	protected BufferedImage returnImage(String name, int element)
 	// assign the name image to the sprite
 	{
-		BufferedImage image = ApplicationData.imagesLoader.getImage(name, element);
+		BufferedImage image = ApplicationData.imagesLoader.getImage(name,
+				element);
 		if (image == null) { // no image of that name was found
 			System.out.println("No sprite image for " + name);
 		}
 		return image;
 	} // end of setImage()
-	
-	public String idToString(int id){
-		if (id == stone()){
+
+	public String idToString(int id) {
+		if (id == stone()) {
 			return "Stone";
-		}else if (id == iron()){
+		} else if (id == iron()) {
 			return "Iron";
-		}else if (id == gold()){
+		} else if (id == gold()) {
 			return "Gold";
-		}else if (id == titanium()){
+		} else if (id == titanium()) {
 			return "Titanium";
-		}else{
+		} else {
 			return "Floor";
 		}
 	}

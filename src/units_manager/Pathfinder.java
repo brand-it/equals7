@@ -3,44 +3,38 @@ package units_manager;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import environment_manager.Map;
+
 import application_controller.ApplicationData;
 
-import environment_manager.Map;
-import environment_manager.Tiles;
-
 public class Pathfinder {
-
-	private Map map;
+	private Map map = ApplicationData.map;
 	private int startLocationX;
 	private int startLocationY;
 	private int destinationX;
 	private int destinationY;
-	private Node[][] nodes;
+	private Node[][] nodes = new Node[map.getWidthInTiles()][map
+			.getHeightInTiles()];
 	/** The set of nodes that have been searched through */
 	@SuppressWarnings("rawtypes")
 	private ArrayList closed = new ArrayList();
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
 
-	public Pathfinder(Map map) {
-		this.map = map;
-
-	}
-
 	@SuppressWarnings("unchecked")
-	public Path findPath(int trueX, int trueY, int mouseX, int mouseY) {
+	public Path findPath(int startModifiedX, int startModifiedY, int modifiedX,
+			int modifiedY) {
 
-		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
-		for (int nx = 0; nx < map.getWidthInTiles(); nx++) {
-			for (int ny = 0; ny < map.getHeightInTiles(); ny++) {
-				nodes[nx][ny] = new Node(nx, ny);
-			}
-		}
-		destinationX = mouseX;
-		destinationY = mouseY;
+		destinationX = modifiedX;
+		destinationY = modifiedY;
 
-		startLocationX = trueX / Tiles.SIZE;
-		startLocationY = trueY / Tiles.SIZE;
+		startLocationX = startModifiedX;
+		startLocationY = startModifiedY;
+		// You need to add these nodes to the system if you want it to work
+		// right.
+		nodes[startLocationX][startLocationY] = new Node(startLocationX,
+				startLocationY);
+		nodes[destinationX][destinationY] = new Node(destinationX, destinationY);
 
 		closed.clear();
 		open.clear();
@@ -57,6 +51,8 @@ public class Pathfinder {
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {
+				System.out.println("The system took a total of " + maxloops
+						+ " loops.");
 				break;
 			}
 			open.remove(current);
@@ -87,59 +83,63 @@ public class Pathfinder {
 		return closed.contains(node);
 	}
 
+	public void addNextNodes() {
+	}
+
 	public void fValueNeighbours(Node current) {
+
 		Node node = null;
-		int up = current.y - 1;
-		int down = current.y + 1;
-		int right = current.x + 1;
-		int left = current.x - 1;
+		int up = map.moveUp(current.y);
+		int down = map.moveDown(current.y);
+		int right = map.moveRight(current.x);
+		int left = map.moveLeft(current.x);
 
-		if (up >= 0) {
-			node = nodes[current.x][up];
-			if (!isBlocked(current.x, up) && !inClosedList(node)
-					&& !inOpenList(node)) {
-				node.increaseDistance(current);
-				node.cost = fValue(node);
-				node.setParent(current);
-				open.add(node);
-			}
-		}
-		if (Map.HEIGHT >= down) {
-			node = nodes[current.x][down];
-			if (!isBlocked(current.x, down) && !inClosedList(node)
-					&& !inOpenList(node)) {
-				node.increaseDistance(current);
-				node.cost = fValue(node);
-				node.setParent(current);
-				open.add(node);
-
-			}
-
+		node = getNode(current.x, up);
+		if (!isBlocked(current.x, up) && !inClosedList(node)
+				&& !inOpenList(node)) {
+			node.increaseDistance(current);
+			node.cost = fValue(node);
+			node.setParent(current);
+			open.add(node);
 		}
 
-		if (Map.WIDTH >= right) {
-			node = nodes[right][current.y];
-			if (!isBlocked(right, current.y) && !inClosedList(node)
-					&& !inOpenList(node)) {
-				node.increaseDistance(current);
-				node.cost = fValue(node);
-				node.setParent(current);
-				open.add(node);
+		node = getNode(current.x, down);
+		if (!isBlocked(current.x, down) && !inClosedList(node)
+				&& !inOpenList(node)) {
+			node.increaseDistance(current);
+			node.cost = fValue(node);
+			node.setParent(current);
+			open.add(node);
 
-			}
+		}
+		node = getNode(right, current.y);
+		if (!isBlocked(right, current.y) && !inClosedList(node)
+				&& !inOpenList(node)) {
+			node.increaseDistance(current);
+			node.cost = fValue(node);
+			node.setParent(current);
+			open.add(node);
 
 		}
 
-		if (left >= 0) {
-			node = nodes[left][current.y];
-			if (!isBlocked(left, current.y) && !inClosedList(node)
-					&& !inOpenList(node)) {
-				node.increaseDistance(current);
-				node.cost = fValue(node);
-				node.setParent(current);
-				open.add(node);
-			}
+		node = getNode(left, current.y);
+		if (!isBlocked(left, current.y) && !inClosedList(node)
+				&& !inOpenList(node)) {
+			node.increaseDistance(current);
+			node.cost = fValue(node);
+			node.setParent(current);
+			open.add(node);
 		}
+	}
+
+	protected Node getNode(int x, int y) {
+		Node node;
+		if (nodes[x][y] == null) {
+			node = nodes[x][y] = new Node(x, y);
+		} else {
+			node = nodes[x][y];
+		}
+		return node;
 	}
 
 	protected boolean inOpenList(Node node) {
@@ -175,8 +175,8 @@ public class Pathfinder {
 		// int manhattan = manhattanCalculation(node.x, node.y);
 		float euclidian = euclidianCalculation(destinationX, destinationY,
 				current.x, current.y);
-//		int manhattan = manhattanCalculation(startLocationX, startLocationY,
-//				current.x, current.y);
+		// int manhattan = manhattanCalculation(startLocationX, startLocationY,
+		// current.x, current.y);
 		return (float) (current.distance + euclidian);
 	}
 

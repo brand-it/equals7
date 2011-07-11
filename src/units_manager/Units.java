@@ -23,11 +23,11 @@ public class Units {
 
 	// This will return null if there is no dwarf at the location you selected
 	// DUH
-	public Unit getUnitByLocation(int mouseX, int mouseY) {
+	public Unit getUnitByLocation(int modifedX, int modifedY) {
 		Unit unit;
 		for (int u = 0; u < units.size(); u++) {
 			// only leave loop if there is unit
-			unit = getUnitByIndex(u).getUnitByLocation(mouseX, mouseY);
+			unit = getUnitByIndex(u).getUnitByLocation(modifedX, modifedY);
 			// Brake loop if a unit is returned
 			if (unit != null) {
 				return unit;

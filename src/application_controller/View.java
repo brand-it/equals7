@@ -16,6 +16,14 @@ public class View {
 
 	private static int NUDGE = 10;
 
+	public static int getRoundedX() {
+		return (LOCX / getScale()) * getScale();
+	}
+
+	public static int getRoundedY() {
+		return (LOCY / getScale()) * getScale();
+	}
+
 	public static int getModifiedLocX() {
 		return LOCX / getScale();
 	}
@@ -36,12 +44,11 @@ public class View {
 	}
 
 	public void nudgeRight() {
-		if (MapRender.sx2 + nudgeCalculation() < Map.WIDTH){
+		if (MapRender.sx2 + nudgeCalculation() < Map.WIDTH) {
 			LOCX += nudgeCalculation();
-		}else{
+		} else {
 			LOCX += Map.WIDTH - MapRender.sx2;
 		}
-
 
 	}
 
@@ -53,12 +60,12 @@ public class View {
 	}
 
 	public void nudgeDown() {
-		if (MapRender.sy2 + nudgeCalculation() < Map.HEIGHT){
+		if (MapRender.sy2 + nudgeCalculation() < Map.HEIGHT) {
 			LOCY += nudgeCalculation();
-		}else{
+		} else {
 			LOCY += Map.HEIGHT - MapRender.sy2;
 		}
-		
+
 	}
 
 	private int nudgeCalculation() {
@@ -66,7 +73,7 @@ public class View {
 	}
 
 	public void zoomOut() {
-		if (distance < 15){
+		if (distance < 15) {
 			distance++;
 		}
 

@@ -6,9 +6,8 @@ import application_controller.*;
 
 public class UnitRender {
 	private BufferedImage image;
-	protected int locX;
-	protected int locY;
 	public String unitClass;
+	protected int tileX, tileY;
 
 	public void setImage(String name) {
 		image = ApplicationData.imagesLoader.getImage(name);
@@ -18,7 +17,16 @@ public class UnitRender {
 
 	}
 
+	public int getActualX() {
+		return (tileX * View.getScale()) - View.getRoundedX();
+	}
+
+	public int getActualY() {
+		return (tileY * View.getScale()) - View.getRoundedY();
+	}
+
 	public void draw(Graphics g) {
-		g.drawImage(image, locX, locY, View.getScale(), View.getScale(), null);
+		g.drawImage(image, getActualX(), getActualY(), View.getScale(),
+				View.getScale(), null);
 	}
 }
