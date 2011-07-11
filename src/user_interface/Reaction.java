@@ -84,8 +84,9 @@ public class Reaction extends Draw {
 			selectedUnit = ApplicationData.units.getUnitByLocation(modifiedX,
 					modifiedY);
 		} else if (selectedUnit != null) {
-			selectedUnit.dig(modifiedX, modifiedY);
+//			selectedUnit.dig(modifiedX, modifiedY);
 			changeElement(mouseX, mouseY, storedElement);
+			selectedUnit = null;
 		}
 
 	}
