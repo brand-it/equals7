@@ -1,5 +1,6 @@
 package units_manager;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -139,6 +140,8 @@ public class Pathfinder {
 	}
 
 	public void draw(Graphics g, int pWidth, int pHeight) {
+		// You really should never use this draw system but what the hell why not also its color change is due to
+		// code in I think it is the other draw boxes.
 		int sx1 = View.getModifiedLocX();
 		int sy1 = View.getModifiedLocY();
 		int sx2 = (convertActualToModified(pWidth) + View.getModifiedLocX()) + 1;
@@ -149,6 +152,8 @@ public class Pathfinder {
 			int countX = 0;
 			for(int x = sx1; x < sx2; x++){
 				if (nodes[x][y] != null){
+					g.setColor(Color.decode(Integer.toString((int)nodes[x][y].cost * 400)));
+					g.fillRect(countX * scale, countY * scale, View.getScale(), View.getScale());
 					g.drawRect(countX * scale, countY * scale, View.getScale(), View.getScale());
 				}
 				countX++;
