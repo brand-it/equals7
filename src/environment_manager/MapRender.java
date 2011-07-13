@@ -14,7 +14,7 @@ public class MapRender extends Tiles {
 	public static int sy1;
 	public static int sx2;
 	public static int sy2;
-	protected final static int TOTALIMAGES = 16;
+	protected final static int TOTALIMAGES = 50;
 	protected final static int TOTALELEMENTS = 5;
 	protected BufferedImage[][] images = new BufferedImage[TOTALELEMENTS][TOTALIMAGES];
 	protected Image[][] scaledImages = new Image[TOTALELEMENTS][TOTALIMAGES];
@@ -56,6 +56,7 @@ public class MapRender extends Tiles {
 
 	public void draw(Graphics g, int pWidth, int pHeight) {
 		try {
+			// This little bit of math right here needs to be moved but for now just copy
 			sx1 = View.getModifiedLocX();
 			sy1 = View.getModifiedLocY();
 			sx2 = (convertActualToModified(pWidth) + View.getModifiedLocX()) + 1;

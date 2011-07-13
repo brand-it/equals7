@@ -37,7 +37,7 @@ public class Map extends Tiles {
 			System.out.println("Generating Map");
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					elements[x][y] = new Tile(generator.nextInt(5));
+					elements[x][y] = new Tile(4);
 
 					count++;
 					System.out

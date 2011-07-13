@@ -12,6 +12,7 @@ public class Reaction extends Draw {
 	protected Buttons buttons;
 	protected int storedElement;
 
+
 	public Reaction(MapRender mapRender, Panel panel) {
 		// This builder is big but it needs to be that way Almost every thing
 		// needs to be accessed in the GUI
@@ -68,11 +69,14 @@ public class Reaction extends Draw {
 	}
 
 	public void changeStoredElementFloor() {
+		System.out.println("floor");
 		storedElement = ApplicationData.map.getElementByString("floor");
 	}
 
 	public void changeStoredElementStone() {
+		System.out.println("Stone");
 		storedElement = ApplicationData.map.getElementByString("stone");
+		System.out.println(storedElement);
 	}
 
 	public void leftClick(int mouseX, int mouseY) {
@@ -83,8 +87,8 @@ public class Reaction extends Draw {
 		if (ApplicationData.units.isUnit(modifiedX, modifiedY)) {
 			selectedUnit = ApplicationData.units.getUnitByLocation(modifiedX,
 					modifiedY);
-		} else if (selectedUnit != null) {
-//			selectedUnit.dig(modifiedX, modifiedY);
+		} else {
+			// selectedUnit.dig(modifiedX, modifiedY);
 			changeElement(mouseX, mouseY, storedElement);
 			selectedUnit = null;
 		}
@@ -97,8 +101,8 @@ public class Reaction extends Draw {
 		int modifiedY = getModfiedMouseY(mouseY);
 
 		if (selectedUnit != null) {
-			Pathfinder pathFinder = new Pathfinder();
-			Path path = pathFinder.findPath(selectedUnit.getX(),
+			pathfinder = new Pathfinder();
+			Path path = pathfinder.findPath(selectedUnit.getX(),
 					selectedUnit.getY(), modifiedX, modifiedY);
 			selectedUnit.newPath(path);
 		} else {

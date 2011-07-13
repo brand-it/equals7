@@ -1,11 +1,13 @@
 package units_manager;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import environment_manager.Map;
 
 import application_controller.ApplicationData;
+import application_controller.View;
 
 public class Pathfinder {
 	private Map map = ApplicationData.map;
@@ -51,8 +53,8 @@ public class Pathfinder {
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {
-				System.out.println("The system took a total of " + maxloops
-						+ " loops.");
+				// System.out.println("The system took a total of " + maxloops
+				// + " loops.");
 				break;
 			}
 			open.remove(current);
@@ -130,6 +132,30 @@ public class Pathfinder {
 			node.setParent(current);
 			open.add(node);
 		}
+	}
+	
+	private int convertActualToModified(int actual) {
+		return actual / View.getScale();
+	}
+
+	public void draw(Graphics g, int pWidth, int pHeight) {
+		int sx1 = View.getModifiedLocX();
+		int sy1 = View.getModifiedLocY();
+		int sx2 = (convertActualToModified(pWidth) + View.getModifiedLocX()) + 1;
+		int sy2 = (convertActualToModified(pHeight) + View.getModifiedLocY()) + 1;
+		int scale = View.getScale();
+		int countY = 0;
+		for(int y = sy1; y < sy2; y++){
+			int countX = 0;
+			for(int x = sx1; x < sx2; x++){
+				if (nodes[x][y] != null){
+					g.drawRect(countX * scale, countY * scale, View.getScale(), View.getScale());
+				}
+				countX++;
+			}
+			countY++;
+		}
+		
 	}
 
 	protected Node getNode(int x, int y) {

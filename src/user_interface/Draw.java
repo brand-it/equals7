@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 
+import units_manager.Pathfinder;
 import units_manager.Unit;
 import application_controller.ApplicationData;
 import application_controller.View;
@@ -15,6 +16,7 @@ public class Draw {
 	int locXRollover = 0;
 	protected JButton jButton;
 	protected Unit selectedUnit;
+	protected Pathfinder pathfinder;
 
 	public void highlightUnit(Graphics g) {
 		if (selectedUnit != null) {
@@ -36,6 +38,13 @@ public class Draw {
 		g.setColor(Color.blue);
 		g.drawRect(adjustmentMouseX, adjustmentMouseY, View.getScale(),
 				View.getScale());
+	}
+	
+	public void drawPathfinder(Graphics g, int pWidth, int pHeight){
+		if (pathfinder != null){
+			pathfinder.draw(g, pWidth, pHeight);
+		}
+		
 	}
 
 	public void drawEndLocation(Graphics g) {

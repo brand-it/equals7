@@ -47,7 +47,8 @@ public class Unit extends Mover {
 		int right = ApplicationData.map.moveRight(modifiedX);
 		Node node = new Node(modifiedX, modifiedY);
 		System.out.println(modifiedX + ", " + modifiedY);
-		if (euclidianCalculation(left, modifiedY, tileX, tileY) > node.cost && !ApplicationData.map.isBlocked(left, modifiedY)) {
+		if (euclidianCalculation(left, modifiedY, tileX, tileY) > node.cost
+				&& !ApplicationData.map.isBlocked(left, modifiedY)) {
 			node = new Node(left, modifiedY);
 			node.cost = euclidianCalculation(left, modifiedY, tileX, tileY);
 			System.out.println("left");
@@ -60,13 +61,15 @@ public class Unit extends Mover {
 			System.out.println("Right");
 		}
 		if (euclidianCalculation(modifiedX, down, tileX, tileY) > node.cost
-				&& !ApplicationData.map.isBlocked(modifiedX, down) || node == null) {
+				&& !ApplicationData.map.isBlocked(modifiedX, down)
+				|| node == null) {
 			node = new Node(modifiedX, down);
 			node.cost = euclidianCalculation(modifiedX, down, tileX, tileY);
 			System.out.println("Down");
 		}
 		if (euclidianCalculation(modifiedX, up, tileX, tileY) > node.cost
-				&& !ApplicationData.map.isBlocked(modifiedX, up) || node == null) {
+				&& !ApplicationData.map.isBlocked(modifiedX, up)
+				|| node == null) {
 			node = new Node(modifiedX, up);
 			node.cost = euclidianCalculation(modifiedX, up, tileX, tileY);
 			System.out.println("UP");
@@ -93,7 +96,7 @@ public class Unit extends Mover {
 			moveClosesOpenTile(modifiedX, modifiedY);
 		}
 
-//		ApplicationData.map.changeElement(1, 1, ApplicationData.map.floor());
+		// ApplicationData.map.changeElement(1, 1, ApplicationData.map.floor());
 	}
 
 	public Unit getUnitByLocation(int modifiedX, int modifiedY) {
