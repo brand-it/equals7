@@ -1,8 +1,25 @@
 package environment_manager;
 
 public class Tile extends Tiles {
-	protected int orentation = 0;
-	protected int element = 0;
+	private int orentation = 0;
+	private int element = 0;
+	private Zone zone;
+	
+	public boolean isFloor(){
+		return this.isFloor(element);
+	}
+	
+	public boolean isWall(){
+		return this.isWall(element);
+	}
+	
+	public void setOrentation(int orentation){
+		this.orentation = orentation;
+	}
+	
+	public void changeElement(int element){
+		this.element = element;
+	}
 
 	public Tile(int element) {
 		this.element = element;
@@ -16,12 +33,20 @@ public class Tile extends Tiles {
 	protected int getOrentation() {
 		return orentation;
 	}
-
-	protected boolean isWall() {
-		if (element < 4) {
+	
+	public boolean isZoneless(){
+		if (zone == null){
 			return true;
-		} else {
-			return false;
 		}
+		return false;
+	}
+	
+	public Zone getZone(){
+		return zone;
+	}
+
+	public void setZone(Zone zone) {
+		this.zone = zone;
+		
 	}
 }

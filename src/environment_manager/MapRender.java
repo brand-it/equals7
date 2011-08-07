@@ -1,5 +1,6 @@
 package environment_manager;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -10,11 +11,7 @@ import application_controller.View;
 public class MapRender extends Tiles {
 	// Use this method to tell the system to recalculate the render size
 
-	public static int sx1;
-	public static int sy1;
-	public static int sx2;
-	public static int sy2;
-	protected final static int TOTALIMAGES = 50;
+	protected final static int TOTALIMAGES = 16;
 	protected final static int TOTALELEMENTS = 5;
 	protected BufferedImage[][] images = new BufferedImage[TOTALELEMENTS][TOTALIMAGES];
 	protected Image[][] scaledImages = new Image[TOTALELEMENTS][TOTALIMAGES];
@@ -27,13 +24,6 @@ public class MapRender extends Tiles {
 	private void moveToSafeLocation() {
 		View.LOCX = 0;
 		View.LOCY = 0;
-	}
-
-	// Convert x or y variable for use later on don't need Two methods for
-	// both X and Y
-
-	private int convertActualToModified(int actual) {
-		return actual / View.getScale();
 	}
 
 	private void buildImages() {
@@ -53,14 +43,29 @@ public class MapRender extends Tiles {
 			}
 		}
 	}
+	
+	public void drawZones(Graphics g){
+		
+		int countY = 0;
+		for (int y = View.startY(); y < View.endY(); y++) {
+			int countX = 0;
+			for (int x = View.startX(); x < View.endX(); x++) {
+				Tile element = ApplicationData.map.elements[x][y];
+				if (element.getZone() != null){
+					g.setColor(Color.WHITE);
+					g.drawString(Integer.toString(element.getZone().getNumber()), (countX * scale) + 20, (countY * scale) + 20);
+				}
+				
+				countX++;
+			}
+			countY++;
+		}
+	}
 
-	public void draw(Graphics g, int pWidth, int pHeight) {
+	public void draw(Graphics g) {
 		try {
 			// This little bit of math right here needs to be moved but for now just copy
-			sx1 = View.getModifiedLocX();
-			sy1 = View.getModifiedLocY();
-			sx2 = (convertActualToModified(pWidth) + View.getModifiedLocX()) + 1;
-			sy2 = (convertActualToModified(pHeight) + View.getModifiedLocY()) + 1;
+
 			int countY = 0;
 			if (scale != View.getScale()) {
 				scaleImages();
@@ -68,9 +73,9 @@ public class MapRender extends Tiles {
 			}
 
 			// Had to round up to make the stupid thing look nice on off numbers
-			for (int y = sy1; y < sy2; y++) {
+			for (int y = View.startY(); y < View.endY(); y++) {
 				int countX = 0;
-				for (int x = sx1; x < sx2; x++) {
+				for (int x = View.startX(); x < View.endX(); x++) {
 					Tile element = ApplicationData.map.elements[x][y];
 					g.drawImage(scaledImages[element.getElement()][element
 							.getOrentation()], (countX * scale),

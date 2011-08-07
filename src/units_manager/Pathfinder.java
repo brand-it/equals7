@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import environment_manager.Map;
-
 import application_controller.ApplicationData;
 import application_controller.View;
 
@@ -23,6 +21,7 @@ public class Pathfinder {
 	private ArrayList closed = new ArrayList();
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
+	private int notWastingTime = 20000;
 
 	@SuppressWarnings("unchecked")
 	public Path findPath(int startModifiedX, int startModifiedY, int modifiedX,
@@ -38,7 +37,10 @@ public class Pathfinder {
 		nodes[startLocationX][startLocationY] = new Node(startLocationX,
 				startLocationY);
 		nodes[destinationX][destinationY] = new Node(destinationX, destinationY);
-
+		if (map.isBlocked(destinationX, destinationY)){
+			return null;
+		}
+		
 		closed.clear();
 		open.clear();
 
@@ -47,15 +49,15 @@ public class Pathfinder {
 		closed.add(nodes[startLocationX][startLocationY]);
 
 		int maxloops = 0;// need to make while loop based on. current x and y ==
-							// your end tiles x
-		while (open.size() != 0) {
-			maxloops++; // Basically We don't loop threw the array top to bottom
-						// we just
+		int timeWasted = 0;
+		// your end tiles x
+		while (open.size() != 0 && notWastingTime > timeWasted) {
+			timeWasted++;
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {
-				// System.out.println("The system took a total of " + maxloops
-				// + " loops.");
+				 System.out.println("The system took a total of " + maxloops
+				 + " loops.");
 				break;
 			}
 			open.remove(current);
@@ -64,13 +66,18 @@ public class Pathfinder {
 			fValueNeighbours(current);
 
 		}
-
+		Path path = new Path();
+		Node target;
 		if (nodes[destinationX][destinationY].parent == null) {
+			System.out.println("NULL PATH");
+			System.out.println(nodes[startLocationX][startLocationY].cost);
 			return null;
+		}else{
+			target = nodes[destinationX][destinationY];
 		}
 
-		Path path = new Path();
-		Node target = nodes[destinationX][destinationY];
+		
+		
 		while (target != nodes[startLocationX][startLocationY]) {
 			path.prependStep(target.x, target.y);
 			target = target.parent;
@@ -81,7 +88,7 @@ public class Pathfinder {
 		return path;
 
 	}
-
+	
 	protected boolean inClosedList(Node node) {
 		return closed.contains(node);
 	}
@@ -148,11 +155,12 @@ public class Pathfinder {
 		int sy2 = (convertActualToModified(pHeight) + View.getModifiedLocY()) + 1;
 		int scale = View.getScale();
 		int countY = 0;
+		
 		for(int y = sy1; y < sy2; y++){
 			int countX = 0;
 			for(int x = sx1; x < sx2; x++){
 				if (nodes[x][y] != null){
-					g.setColor(Color.decode(Integer.toString((int)nodes[x][y].cost * 400)));
+					g.setColor(Color.decode(Integer.toString((int)nodes[x][y].cost * 100)));
 					g.fillRect(countX * scale, countY * scale, View.getScale(), View.getScale());
 					g.drawRect(countX * scale, countY * scale, View.getScale(), View.getScale());
 				}

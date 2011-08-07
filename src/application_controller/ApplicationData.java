@@ -13,6 +13,7 @@ public class ApplicationData {
 		imagesLoader = new ImagesLoader(IMS_INFO);
 		units = new Units();
 		map = new Map();
+//		map.setZones();
 
 	}
 }

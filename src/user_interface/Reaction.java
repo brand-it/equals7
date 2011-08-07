@@ -50,10 +50,10 @@ public class Reaction extends Draw {
 		if (mouseY < 1) {
 			view.nudgeUp();
 		}
-		if (mouseX > panel.pWidth - 1) {
+		if (mouseX > View.panelWidth() - 1) {
 			view.nudgeRight();
 		}
-		if (mouseY > panel.pHeight - 1) {
+		if (mouseY > View.panelHeight() - 1) {
 			view.nudgeDown();
 		}
 	}

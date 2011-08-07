@@ -78,16 +78,6 @@ public class Tiles {
 		}
 	}
 
-	// Think of these two methods as basically this the tile you are trying to
-	// change by view
-	// is not always perfectly Square you need to find the margin of error
-	// This system is very difficult to work with need to use this in the other
-	// system
-	// But don't know were yet
-	// This finds the off set of the object for X
-	protected int getTile(int actual) {
-		return actual;
-	}
 
 	public int getElementByString(String element) {
 

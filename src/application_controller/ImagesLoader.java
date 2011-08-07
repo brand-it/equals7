@@ -381,8 +381,6 @@ public class ImagesLoader {
 			loadCount++;
 			imsList.add(grid[i]);
 		}
-		System.out.println();
-
 		if (loadCount == 0)
 			System.out.println("No images loaded for " + name);
 		else

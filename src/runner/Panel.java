@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import application_controller.ApplicationData;
+import application_controller.View;
 import environment_manager.MapRender;
 import user_interface.*;
 
@@ -24,10 +25,6 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 	 */
 	private static final long serialVersionUID = 7712717603765541381L;
 	// This is all the image data that may be loaded into the game
-
-	public int pWidth = 900; // size of panel this variable will most certainly
-								// change as soon as the game starts
-	public int pHeight = 700;
 
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
@@ -62,7 +59,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 		this.period = period;
 
 		setDoubleBuffered(false);
-		setPreferredSize(new Dimension(pWidth, pWidth));
+		setPreferredSize(new Dimension(View.panelWidth(), View.panelHeight()));
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		requestFocus(); // the JPanel now has focus, so receives key events
@@ -100,12 +97,12 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 		if (!isPaused) {
 			if (mouseX < 0) {
 				mouseX = 0;
-			} else if (mouseX > pWidth) {
-				mouseX = pWidth;
+			} else if (mouseX > View.panelWidth()) {
+				mouseX = View.panelWidth();
 			} else if (mouseY < 0) {
 				mouseY = 0;
-			} else if (mouseY > pHeight) {
-				mouseY = pHeight;
+			} else if (mouseY > View.panelHeight()) {
+				mouseY = View.panelHeight();
 			} else {
 				mouseX += x;
 				mouseY += y;
@@ -266,10 +263,11 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 
 	public void resizeCanves(int width, int height) {
 		createDBImage(width, height);
-		pHeight = getHeight();
-		pWidth = getWidth();
-		pCenterX = pWidth / 2;
-		pCenterY = pHeight / 2;
+		View.setPDimensions(width, height);
+		View.updateRenderWidthHeight();
+		View.setPDimensions(getWidth(), getHeight());
+		pCenterX = View.panelWidth() / 2;
+		pCenterY = View.panelHeight() / 2;
 		setCenter();
 	}
 
@@ -303,13 +301,15 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 
 		}
 		// For every thing draw it right here.
-		mapRender.draw(dbg, pWidth, pHeight);
-		reaction.drawPathfinder(dbg, pWidth, pHeight);
+		mapRender.draw(dbg);
+//		reaction.drawPathfinder(dbg, pWidth, pHeight);
 		ApplicationData.units.draw(dbg);
 		reaction.highlightUnit(dbg);
 		reaction.drawMouse(dbg, mouseX, mouseY);
 		reaction.drawBox(dbg, mouseX, mouseY);
 		reaction.drawEndLocation(dbg);
+//		mapRender.drawZones(dbg);
+		
 		
 	}
 

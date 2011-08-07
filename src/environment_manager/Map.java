@@ -10,8 +10,8 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Map extends Tiles {
-	public static final int HEIGHT = 2000;
-	public static final int WIDTH = 2000;
+	public static final int HEIGHT = 1000;
+	public static final int WIDTH = 1000;
 	protected Tile[][] elements = new Tile[WIDTH][HEIGHT];
 	private String saveDir = "./saves/map.dat";
 
@@ -38,7 +38,6 @@ public class Map extends Tiles {
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
 					elements[x][y] = new Tile(generator.nextInt(5));
-
 					count++;
 
 				}
@@ -46,7 +45,6 @@ public class Map extends Tiles {
 				.println("Percentage: "
 						+ percent.format((float) count
 								/ (float) totalTiles));
-				System.out.println("Map Generated");
 			}
 
 
@@ -54,6 +52,27 @@ public class Map extends Tiles {
 			e.printStackTrace();
 		}
 		orientation();
+	}
+	
+	public void setZones(){
+		System.out.println("Building the Zones");
+		int count = 0;
+		int zoneNumber = 0;
+		int totalTiles = HEIGHT * WIDTH;
+		DecimalFormat percent = new DecimalFormat("0.0#%");
+		for (int y = 0; y < HEIGHT; y++) {
+			for (int x = 0; x < WIDTH; x++) {
+				if (elements[x][y].isFloor() && elements[x][y].isZoneless()){
+					zoneNumber++;
+					count++;
+					new ZoneBuilder(x, y, zoneNumber);
+				}
+			}
+			System.out
+			.println("Percentage: "
+					+ percent.format((float) count
+							/ (float) totalTiles));
+		}
 	}
 
 	public int returnElement(int modfiedX, int modfiedY) {
@@ -63,7 +82,7 @@ public class Map extends Tiles {
 
 	public void changeElement(int modfiedX, int modfiedY, int element) {
 		// This is the only system that uses Modified X and Modified Y
-		elements[modfiedX][modfiedY].element = element;
+		elements[modfiedX][modfiedY].changeElement(element);
 		fastOrientation(modfiedX, modfiedY);
 	}
 
@@ -93,7 +112,7 @@ public class Map extends Tiles {
 						total += right;
 					}
 				}
-				elements[x][y].orentation = total;
+				elements[x][y].setOrentation(total);
 			}
 		}
 	}
@@ -107,6 +126,10 @@ public class Map extends Tiles {
 			return x + 1;
 		}
 		return x;
+	}
+	
+	public Tile getTile(int x, int y){
+		return elements[x][y];
 	}
 
 	/**
@@ -184,7 +207,7 @@ public class Map extends Tiles {
 						total += right;
 					}
 				}
-				elements[x][y].orentation = total;
+				elements[x][y].setOrentation(total);
 			}
 		}
 	}
@@ -204,7 +227,7 @@ public class Map extends Tiles {
 			outputStream = new ObjectOutputStream(new FileOutputStream(saveDir));
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
-					outputStream.writeInt(elements[x][y].element);
+					outputStream.writeInt(elements[x][y].getElement());
 				}
 			}
 			outputStream.close();
