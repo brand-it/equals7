@@ -2,15 +2,12 @@ package user_interface;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import javax.swing.JButton;
-
 import units_manager.Pathfinder;
 import units_manager.Unit;
-import application_controller.ApplicationData;
 import application_controller.View;
 
-public class Draw {
+public class Draw extends Gui{
 	private static final int MOUSESIZE = 25;
 	int locYRollover = 0;
 	int locXRollover = 0;

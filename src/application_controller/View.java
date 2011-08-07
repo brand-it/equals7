@@ -13,13 +13,13 @@ public class View {
 	private static int ex;
 	private static int ey;
 	
-	// the number is all way negative.
+	// the number is all ways negative.
 	public static int LOCX = 0;
 	public static int LOCY = 0;
 	// When you scroll in and out in the game you change the distance you are
 	// view the objects
 	public static int distance = 2;
-	public static int SCALEDTILE = Tiles.SIZE;
+	private static final int ZOOMLIMIT = 5;
 
 	private static int NUDGE = 10;
 
@@ -85,7 +85,7 @@ public class View {
 	}
 
 	public void zoomOut() {
-		if (distance < 5) {
+		if (distance < ZOOMLIMIT) {
 			distance++;
 		}
 		updateRenderWidthHeight();

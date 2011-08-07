@@ -200,6 +200,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 	// Basically if you you want things to move and stuff you call this...
 	private void gameUpdate() {
 		if (!isPaused && !gameOver) {
+			reaction.hovered(mouseX, mouseY);
 			reaction.moveMap(mouseX, mouseY);
 			ApplicationData.units.move();
 		}
@@ -308,6 +309,7 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 		reaction.drawMouse(dbg, mouseX, mouseY);
 		reaction.drawBox(dbg, mouseX, mouseY);
 		reaction.drawEndLocation(dbg);
+		reaction.drawInteface(dbg);
 //		mapRender.drawZones(dbg);
 		
 		

@@ -9,7 +9,6 @@ import units_manager.*;
 public class Reaction extends Draw {
 
 	protected Panel panel;
-	protected Buttons buttons;
 	protected int storedElement;
 
 
