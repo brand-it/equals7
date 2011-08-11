@@ -182,6 +182,13 @@ public class Map extends Tiles {
 		}
 		return false;
 	}
+	
+	public boolean isOpen(int x, int y){
+		if (elements[x][y].isFloor()){
+			return true;
+		}
+		return false;
+	}
 
 	private void orientation() {
 		int total;

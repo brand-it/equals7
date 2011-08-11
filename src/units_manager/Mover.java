@@ -13,7 +13,8 @@ public class Mover extends UnitRender {
 	private Path path = null;
 	// The unit movement speed is a basic division
 	// You want the unit to move faster you divided by a smaller number.
-	public int movementSpeed = 40;
+	public static final int MOVEMENTSPEED = 10;
+	public int range;
 	// The delay is basic when you choose to make the unit pause a second before
 	// moving. 0 = no delay 1 means pause
 	// once and then keep moving.
@@ -31,7 +32,7 @@ public class Mover extends UnitRender {
 	}
 
 	public void moveUnit() {
-		if (movementSpeed == delay) {
+		if (MOVEMENTSPEED == delay) {
 			stepsTaken++;
 			delay = 0;
 			if (stepsTaken < path.getLength()) {

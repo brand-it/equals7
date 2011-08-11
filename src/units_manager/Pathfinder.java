@@ -21,7 +21,7 @@ public class Pathfinder {
 	private ArrayList closed = new ArrayList();
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
-	private int notWastingTime = 20000;
+	private static int WASTABLETIME = 20000;
 
 	@SuppressWarnings("unchecked")
 	public Path findPath(int startModifiedX, int startModifiedY, int modifiedX,
@@ -47,17 +47,14 @@ public class Pathfinder {
 		fValueNeighbours(nodes[startLocationX][startLocationY]);
 		open.remove(nodes[startLocationX][startLocationY]);
 		closed.add(nodes[startLocationX][startLocationY]);
-
-		int maxloops = 0;// need to make while loop based on. current x and y ==
+		
 		int timeWasted = 0;
 		// your end tiles x
-		while (open.size() != 0 && notWastingTime > timeWasted) {
+		while (open.size() != 0 && WASTABLETIME > timeWasted) {
 			timeWasted++;
 			// keep pulling the one on top.
 			Node current = getFirstInOpen();
 			if (current == nodes[destinationX][destinationY]) {
-				 System.out.println("The system took a total of " + maxloops
-				 + " loops.");
 				break;
 			}
 			open.remove(current);

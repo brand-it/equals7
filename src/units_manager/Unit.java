@@ -1,9 +1,10 @@
 package units_manager;
 
-import environment_manager.ZoneBuilder;
 import application_controller.ApplicationData;
 
-public class Unit extends Mover {
+public class Unit extends Mover implements Comparable<Unit> {
+
+	
 	// On creation set the units Location this will be based off of mouseX and
 	// mouseY
 	// It will round off and put it square in the center of the tile for you.
@@ -23,6 +24,14 @@ public class Unit extends Mover {
 	public int getY() {
 		return tileY;
 	}
+	
+	public int getInitiative(){
+		return initiative;
+	}
+	
+	public void setInitiative(int initiative){
+		this.initiative = initiative;
+	}
 
 	private void setup(String unitClass, int modifiedX, int modifiedY) {
 		// Unit Current Location it is set center of a tile. After that it does
@@ -36,11 +45,16 @@ public class Unit extends Mover {
 	private void unitSetup() {
 		// This data will need to be set in some sort of binary files
 		if (unitClass == "dwarf") {
-			movementSpeed = 10;
+			range = 4;
 		}
 
 	}
-
+	// 
+	// 
+	/*
+	 * this system has problems needs more work will move to the closet open tile but tile not checked to see if there
+	 * is a path.
+	 */
 	public void moveClosesOpenTile(int modifiedX, int modifiedY) {
 		int left = ApplicationData.map.moveLeft(modifiedX);
 		int up = ApplicationData.map.moveUp(modifiedY);
@@ -133,5 +147,24 @@ public class Unit extends Mover {
 			this.x = x;
 			this.y = y;
 		}
+	}
+
+	@Override
+	public int compareTo(Unit unit) {
+		
+		if (unit.initiative > initiative){
+			return -1;
+		} else if ( unit.initiative < initiative){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+
+	public boolean rangeCheck(Path path) {
+		if (path.getLength() <= range+1){
+			return true;
+		}
+		return false;
 	}
 }

@@ -122,6 +122,15 @@ public class View {
 		return ey;
 	}
 	
+
+	public static int getActualX(int x) {
+		return (x * View.getScale()) - View.getRoundedX();
+	}
+
+	public static int getActualY(int y) {
+		return (y * View.getScale()) - View.getRoundedY();
+	}
+	
 	public static void setPDimensions(int width, int height){
 		pWidth = width;
 		pHeight = height;

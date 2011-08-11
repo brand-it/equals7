@@ -59,23 +59,29 @@ public class Reaction extends Draw {
 
 	public void keyPressed(int key) {
 		// This is going to handle all the default key input for the game
+		System.out.println("Key Number is: " + key);
 		if (key == 50) {
 			changeStoredElementStone();
 		}
 		if (key == 49) {
 			changeStoredElementFloor();
 		}
+		if (key == 67){
+			ApplicationData.turnsController.compressInitiative();
+		}
+		if (key == 86){
+			ApplicationData.turnsController.gotToNextTurn();
+		}
 	}
 
 	public void changeStoredElementFloor() {
-		System.out.println("floor");
+		System.out.println("Setting Stored Element to Floor");
 		storedElement = ApplicationData.map.getElementByString("floor");
 	}
 
 	public void changeStoredElementStone() {
-		System.out.println("Stone");
+		System.out.println("Setting Stored Element to Stone");
 		storedElement = ApplicationData.map.getElementByString("stone");
-		System.out.println(storedElement);
 	}
 
 	public void leftClick(int mouseX, int mouseY) {
@@ -86,6 +92,7 @@ public class Reaction extends Draw {
 		if (ApplicationData.units.isUnit(modifiedX, modifiedY)) {
 			selectedUnit = ApplicationData.units.getUnitByLocation(modifiedX,
 					modifiedY);
+			this.buildMoveArea();
 		} else {
 			// selectedUnit.dig(modifiedX, modifiedY);
 			changeElement(mouseX, mouseY, storedElement);
@@ -103,10 +110,14 @@ public class Reaction extends Draw {
 			pathfinder = new Pathfinder();
 			Path path = pathfinder.findPath(selectedUnit.getX(),
 					selectedUnit.getY(), modifiedX, modifiedY);
-			selectedUnit.newPath(path);
+			if (selectedUnit.rangeCheck(path)){
+				this.clearMoveArea();
+				selectedUnit.newPath(path);
+			}
+			
 		} else {
 			Unit unit = new Unit("dwarf", modifiedX, modifiedY);
-			ApplicationData.units.save(unit);
+			ApplicationData.units.add(unit);
 		}
 	}
 

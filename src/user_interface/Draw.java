@@ -2,18 +2,19 @@ package user_interface;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import javax.swing.JButton;
-import units_manager.Pathfinder;
-import units_manager.Unit;
 import application_controller.View;
 
 public class Draw extends Gui{
+	
+	/*
+	 * This draws things that are not directly related to the GUI but do help the user get notified of 
+	 * things that are changing on the screen.
+	 */
+	
 	private static final int MOUSESIZE = 25;
 	int locYRollover = 0;
 	int locXRollover = 0;
-	protected JButton jButton;
-	protected Unit selectedUnit;
-	protected Pathfinder pathfinder;
+
 
 	public void highlightUnit(Graphics g) {
 		if (selectedUnit != null) {
