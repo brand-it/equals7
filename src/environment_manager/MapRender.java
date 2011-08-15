@@ -43,19 +43,21 @@ public class MapRender extends Tiles {
 			}
 		}
 	}
-	
-	public void drawZones(Graphics g){
-		
+
+	public void drawZones(Graphics g) {
+
 		int countY = 0;
 		for (int y = View.startY(); y < View.endY(); y++) {
 			int countX = 0;
 			for (int x = View.startX(); x < View.endX(); x++) {
 				Tile element = ApplicationData.map.elements[x][y];
-				if (element.getZone() != null){
+				if (element.getZone() != null) {
 					g.setColor(Color.WHITE);
-					g.drawString(Integer.toString(element.getZone().getNumber()), (countX * scale) + 20, (countY * scale) + 20);
+					g.drawString(
+							Integer.toString(element.getZone().getNumber()),
+							(countX * scale) + 20, (countY * scale) + 20);
 				}
-				
+
 				countX++;
 			}
 			countY++;
@@ -64,7 +66,8 @@ public class MapRender extends Tiles {
 
 	public void draw(Graphics g) {
 		try {
-			// This little bit of math right here needs to be moved but for now just copy
+			// This little bit of math right here needs to be moved but for now
+			// just copy
 
 			int countY = 0;
 			if (scale != View.getScale()) {

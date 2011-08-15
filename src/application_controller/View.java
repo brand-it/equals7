@@ -12,7 +12,7 @@ public class View {
 	private static int sy;
 	private static int ex;
 	private static int ey;
-	
+
 	// the number is all ways negative.
 	public static int LOCX = 0;
 	public static int LOCY = 0;
@@ -46,7 +46,7 @@ public class View {
 	public void nudgeLeft() {
 		if (LOCX >= nudgeCalculation()) {
 			LOCX -= nudgeCalculation();
-		}else {
+		} else {
 			LOCX -= sx;
 		}
 		updateRenderWidthHeight();
@@ -97,31 +97,30 @@ public class View {
 		}
 		updateRenderWidthHeight();
 	}
-	
-	public static int panelHeight(){
+
+	public static int panelHeight() {
 		return pHeight;
 	}
-	
-	public static int panelWidth(){
+
+	public static int panelWidth() {
 		return pWidth;
 	}
-	
-	public static int startX(){
+
+	public static int startX() {
 		return sx;
 	}
-	
-	public static int startY(){
+
+	public static int startY() {
 		return sy;
 	}
-	
-	public static int endX(){
+
+	public static int endX() {
 		return ex;
 	}
-	
-	public static int endY(){
+
+	public static int endY() {
 		return ey;
 	}
-	
 
 	public static int getActualX(int x) {
 		return (x * View.getScale()) - View.getRoundedX();
@@ -130,14 +129,15 @@ public class View {
 	public static int getActualY(int y) {
 		return (y * View.getScale()) - View.getRoundedY();
 	}
-	
-	public static void setPDimensions(int width, int height){
+
+	public static void setPDimensions(int width, int height) {
 		pWidth = width;
 		pHeight = height;
 	}
-	
-	// this will update the render width and height of the map and anything else that uses this.
-	public static void updateRenderWidthHeight(){
+
+	// this will update the render width and height of the map and anything else
+	// that uses this.
+	public static void updateRenderWidthHeight() {
 		sx = View.getModifiedLocX();
 		sy = View.getModifiedLocY();
 		ex = ((pWidth / getScale()) + View.getModifiedLocX()) + 1;

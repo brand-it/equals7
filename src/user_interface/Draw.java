@@ -4,17 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import application_controller.View;
 
-public class Draw extends Gui{
-	
+public class Draw extends Gui {
+
 	/*
-	 * This draws things that are not directly related to the GUI but do help the user get notified of 
-	 * things that are changing on the screen.
+	 * This draws things that are not directly related to the GUI but do help
+	 * the user get notified of things that are changing on the screen.
 	 */
-	
+
 	private static final int MOUSESIZE = 25;
 	int locYRollover = 0;
 	int locXRollover = 0;
-
 
 	public void highlightUnit(Graphics g) {
 		if (selectedUnit != null) {
@@ -37,12 +36,12 @@ public class Draw extends Gui{
 		g.drawRect(adjustmentMouseX, adjustmentMouseY, View.getScale(),
 				View.getScale());
 	}
-	
-	public void drawPathfinder(Graphics g, int pWidth, int pHeight){
-		if (pathfinder != null){
+
+	public void drawPathfinder(Graphics g, int pWidth, int pHeight) {
+		if (pathfinder != null) {
 			pathfinder.draw(g, pWidth, pHeight);
 		}
-		
+
 	}
 
 	public void drawEndLocation(Graphics g) {

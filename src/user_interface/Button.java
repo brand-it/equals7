@@ -5,19 +5,19 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import application_controller.ApplicationData;
 
-public class Button{
+public class Button {
 
 	protected int buttonX, buttonY, buttonH, buttonW;
 	private BufferedImage image;
 	private Color color;
-	
-	public void setBounds(int x, int y, int width, int height){
+
+	public void setBounds(int x, int y, int width, int height) {
 		buttonX = x;
 		buttonY = y;
 		buttonH = height;
 		buttonW = width;
 	}
-	
+
 	public void changeLocations(int x, int y) {
 		buttonX = x;
 		buttonY = y;

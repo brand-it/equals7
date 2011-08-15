@@ -15,7 +15,7 @@ public class ApplicationData {
 		units = new Units();
 		turnsController = new TurnsController();
 		map = new Map();
-//		map.setZones();
+		// map.setZones();
 
 	}
 }

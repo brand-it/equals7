@@ -9,7 +9,7 @@ public class UnitRender {
 	public String unitClass;
 	protected int tileX, tileY;
 	// Every unit has a turn value of 0
-	public int initiative = 0;
+	public int initiative = 1;
 
 	public void setImage(String name) {
 		image = ApplicationData.imagesLoader.getImage(name);
@@ -30,6 +30,7 @@ public class UnitRender {
 	public void draw(Graphics g) {
 		g.drawImage(image, getActualX(), getActualY(), View.getScale(),
 				View.getScale(), null);
-		g.drawString(Integer.toString(initiative), getActualX(), getActualY() - 10);
+		g.drawString(Integer.toString(initiative), getActualX(),
+				getActualY() - 10);
 	}
 }

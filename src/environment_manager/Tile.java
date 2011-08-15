@@ -4,20 +4,20 @@ public class Tile extends Tiles {
 	private int orentation = 0;
 	private int element = 0;
 	private Zone zone;
-	
-	public boolean isFloor(){
+
+	public boolean isFloor() {
 		return this.isFloor(element);
 	}
-	
-	public boolean isWall(){
+
+	public boolean isWall() {
 		return this.isWall(element);
 	}
-	
-	public void setOrentation(int orentation){
+
+	public void setOrentation(int orentation) {
 		this.orentation = orentation;
 	}
-	
-	public void changeElement(int element){
+
+	public void changeElement(int element) {
 		this.element = element;
 	}
 
@@ -33,20 +33,20 @@ public class Tile extends Tiles {
 	protected int getOrentation() {
 		return orentation;
 	}
-	
-	public boolean isZoneless(){
-		if (zone == null){
+
+	public boolean isZoneless() {
+		if (zone == null) {
 			return true;
 		}
 		return false;
 	}
-	
-	public Zone getZone(){
+
+	public Zone getZone() {
 		return zone;
 	}
 
 	public void setZone(Zone zone) {
 		this.zone = zone;
-		
+
 	}
 }

@@ -4,7 +4,6 @@ import application_controller.ApplicationData;
 
 public class Unit extends Mover implements Comparable<Unit> {
 
-	
 	// On creation set the units Location this will be based off of mouseX and
 	// mouseY
 	// It will round off and put it square in the center of the tile for you.
@@ -24,12 +23,12 @@ public class Unit extends Mover implements Comparable<Unit> {
 	public int getY() {
 		return tileY;
 	}
-	
-	public int getInitiative(){
+
+	public int getInitiative() {
 		return initiative;
 	}
-	
-	public void setInitiative(int initiative){
+
+	public void setInitiative(int initiative) {
 		this.initiative = initiative;
 	}
 
@@ -49,11 +48,12 @@ public class Unit extends Mover implements Comparable<Unit> {
 		}
 
 	}
-	// 
-	// 
+
+	//
+	//
 	/*
-	 * this system has problems needs more work will move to the closet open tile but tile not checked to see if there
-	 * is a path.
+	 * this system has problems needs more work will move to the closet open
+	 * tile but tile not checked to see if there is a path.
 	 */
 	public void moveClosesOpenTile(int modifiedX, int modifiedY) {
 		int left = ApplicationData.map.moveLeft(modifiedX);
@@ -151,19 +151,21 @@ public class Unit extends Mover implements Comparable<Unit> {
 
 	@Override
 	public int compareTo(Unit unit) {
-		
-		if (unit.initiative > initiative){
+
+		if (unit.initiative > initiative) {
 			return -1;
-		} else if ( unit.initiative < initiative){
+		} else if (unit.initiative < initiative) {
 			return 1;
-		}else{
+		} else {
 			return 0;
 		}
 	}
 
 	public boolean rangeCheck(Path path) {
-		if (path.getLength() <= range+1){
-			return true;
+		if (path != null){
+			if (path.getLength() <= range + 1) {
+				return true;
+			}
 		}
 		return false;
 	}

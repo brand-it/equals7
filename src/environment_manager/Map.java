@@ -41,20 +41,17 @@ public class Map extends Tiles {
 					count++;
 
 				}
-				System.out
-				.println("Percentage: "
-						+ percent.format((float) count
-								/ (float) totalTiles));
+				System.out.println("Percentage: "
+						+ percent.format((float) count / (float) totalTiles));
 			}
-
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		orientation();
 	}
-	
-	public void setZones(){
+
+	public void setZones() {
 		System.out.println("Building the Zones");
 		int count = 0;
 		int zoneNumber = 0;
@@ -62,16 +59,14 @@ public class Map extends Tiles {
 		DecimalFormat percent = new DecimalFormat("0.0#%");
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-				if (elements[x][y].isFloor() && elements[x][y].isZoneless()){
+				if (elements[x][y].isFloor() && elements[x][y].isZoneless()) {
 					zoneNumber++;
 					count++;
 					new ZoneBuilder(x, y, zoneNumber);
 				}
 			}
-			System.out
-			.println("Percentage: "
-					+ percent.format((float) count
-							/ (float) totalTiles));
+			System.out.println("Percentage: "
+					+ percent.format((float) count / (float) totalTiles));
 		}
 	}
 
@@ -127,8 +122,8 @@ public class Map extends Tiles {
 		}
 		return x;
 	}
-	
-	public Tile getTile(int x, int y){
+
+	public Tile getTile(int x, int y) {
 		return elements[x][y];
 	}
 
@@ -182,9 +177,9 @@ public class Map extends Tiles {
 		}
 		return false;
 	}
-	
-	public boolean isOpen(int x, int y){
-		if (elements[x][y].isFloor()){
+
+	public boolean isOpen(int x, int y) {
+		if (elements[x][y].isFloor()) {
 			return true;
 		}
 		return false;

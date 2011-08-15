@@ -78,7 +78,6 @@ public class Tiles {
 		}
 	}
 
-
 	public int getElementByString(String element) {
 
 		// there are two words in the system for floor. One that says

@@ -37,17 +37,17 @@ public class Pathfinder {
 		nodes[startLocationX][startLocationY] = new Node(startLocationX,
 				startLocationY);
 		nodes[destinationX][destinationY] = new Node(destinationX, destinationY);
-		if (map.isBlocked(destinationX, destinationY)){
+		if (map.isBlocked(destinationX, destinationY)) {
 			return null;
 		}
-		
+
 		closed.clear();
 		open.clear();
 
 		fValueNeighbours(nodes[startLocationX][startLocationY]);
 		open.remove(nodes[startLocationX][startLocationY]);
 		closed.add(nodes[startLocationX][startLocationY]);
-		
+
 		int timeWasted = 0;
 		// your end tiles x
 		while (open.size() != 0 && WASTABLETIME > timeWasted) {
@@ -66,15 +66,11 @@ public class Pathfinder {
 		Path path = new Path();
 		Node target;
 		if (nodes[destinationX][destinationY].parent == null) {
-			System.out.println("NULL PATH");
-			System.out.println(nodes[startLocationX][startLocationY].cost);
 			return null;
-		}else{
+		} else {
 			target = nodes[destinationX][destinationY];
 		}
 
-		
-		
 		while (target != nodes[startLocationX][startLocationY]) {
 			path.prependStep(target.x, target.y);
 			target = target.parent;
@@ -85,7 +81,7 @@ public class Pathfinder {
 		return path;
 
 	}
-	
+
 	protected boolean inClosedList(Node node) {
 		return closed.contains(node);
 	}
@@ -138,13 +134,14 @@ public class Pathfinder {
 			open.add(node);
 		}
 	}
-	
+
 	private int convertActualToModified(int actual) {
 		return actual / View.getScale();
 	}
 
 	public void draw(Graphics g, int pWidth, int pHeight) {
-		// You really should never use this draw system but what the hell why not also its color change is due to
+		// You really should never use this draw system but what the hell why
+		// not also its color change is due to
 		// code in I think it is the other draw boxes.
 		int sx1 = View.getModifiedLocX();
 		int sy1 = View.getModifiedLocY();
@@ -152,20 +149,23 @@ public class Pathfinder {
 		int sy2 = (convertActualToModified(pHeight) + View.getModifiedLocY()) + 1;
 		int scale = View.getScale();
 		int countY = 0;
-		
-		for(int y = sy1; y < sy2; y++){
+
+		for (int y = sy1; y < sy2; y++) {
 			int countX = 0;
-			for(int x = sx1; x < sx2; x++){
-				if (nodes[x][y] != null){
-					g.setColor(Color.decode(Integer.toString((int)nodes[x][y].cost * 100)));
-					g.fillRect(countX * scale, countY * scale, View.getScale(), View.getScale());
-					g.drawRect(countX * scale, countY * scale, View.getScale(), View.getScale());
+			for (int x = sx1; x < sx2; x++) {
+				if (nodes[x][y] != null) {
+					g.setColor(Color.decode(Integer
+							.toString((int) nodes[x][y].cost * 100)));
+					g.fillRect(countX * scale, countY * scale, View.getScale(),
+							View.getScale());
+					g.drawRect(countX * scale, countY * scale, View.getScale(),
+							View.getScale());
 				}
 				countX++;
 			}
 			countY++;
 		}
-		
+
 	}
 
 	protected Node getNode(int x, int y) {

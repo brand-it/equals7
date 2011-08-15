@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Units {
 	public ArrayList<Unit> units = new ArrayList<Unit>();
-	
+
 	public Unit getUnitByIndex(int index) {
 		return units.get(index);
 	}
@@ -14,11 +14,11 @@ public class Units {
 	 * 
 	 * @return ArrayList<Unit>
 	 */
-	public ArrayList<Unit> getUnitsArray(){
+	public ArrayList<Unit> getUnitsArray() {
 		return units;
 	}
-	
-	public int size(){
+
+	public int size() {
 		return units.size();
 	}
 
@@ -45,8 +45,8 @@ public class Units {
 		// If the location you have selected contains no unit return null
 		return null;
 	}
-	
-	public void add(Unit unit){
+
+	public void add(Unit unit) {
 		units.add(unit);
 	}
 
@@ -55,7 +55,7 @@ public class Units {
 			units.get(i).move();
 		}
 	}
-	
+
 	public void draw(Graphics g) {
 		for (int u = 0; u < units.size(); u++) {
 			getUnitByIndex(u).draw(g);

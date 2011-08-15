@@ -303,16 +303,16 @@ public class Panel extends JPanel implements MouseMotionListener, Runnable,
 		}
 		// For every thing draw it right here.
 		mapRender.draw(dbg);
-//		reaction.drawPathfinder(dbg, pWidth, pHeight);
+		// reaction.drawPathfinder(dbg, pWidth, pHeight);
+		reaction.drawMoveArea(dbg);
 		ApplicationData.units.draw(dbg);
 		reaction.highlightUnit(dbg);
 		reaction.drawMouse(dbg, mouseX, mouseY);
 		reaction.drawBox(dbg, mouseX, mouseY);
 		reaction.drawEndLocation(dbg);
-		reaction.drawInteface(dbg);
-//		mapRender.drawZones(dbg);
-		
-		
+		reaction.drawButtons(dbg);
+		// mapRender.drawZones(dbg);
+
 	}
 
 	private void paintScreen()

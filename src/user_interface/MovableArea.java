@@ -9,76 +9,77 @@ import application_controller.ApplicationData;
 import application_controller.View;
 
 public class MovableArea {
+	
 	private Map map = ApplicationData.map;
-	
-	private ArrayList<Node> closed = new ArrayList<Node>();
 	private ArrayList<Node> open = new ArrayList<Node>();
-	private Node[][] nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
-	public ArrayList<Node> movableArea = new ArrayList<Node>();
+	private ArrayList<Node> movableArea = new ArrayList<Node>();
 	private Unit unit;
-	
-	public ArrayList<Node> buildMoveArea(Unit unit){
+	private Node[][] nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
+	private static final int marginOfError = 500;
+
+	public ArrayList<Node> buildMoveArea(Unit unit) {
 		this.unit = unit;
-		Node startNode = new Node(unit.getX(), unit.getY(), unit.getX(), unit.getY());
-		addNodes(startNode);
-		
-		while(open.size() != 0){
+		// this is your core your start location
+		Node node = createNode(0, unit.getX(), unit.getY());
+		node.setAlpha(0);
+		int loopNumber = 0;
+		while (open.size() != 0) {
 			Node current = getFirstInOpen();
 			addNodes(current);
-			movableArea.add(current);
 			open.remove(current);
-			closed.add(current);
+			
+			if (marginOfError == loopNumber){
+				System.out.println("This loop has lasted to long Exiting.");
+				break;
+			}
+			loopNumber++;
 		}
 		return movableArea;
 	}
-	
+
 	protected Node getFirstInOpen() {
 		return open.get(0);
 	}
 
-	
 	private void addNodes(Node current) {
-		// This is the setup for the node
-		Node node;
+		// This will add the four nodes around the target location as long as they have not all ready been added.
+		int nextRange = current.getRange() + 1;
+		// use these number they will make sure you are not out of bounds
 		int up = map.moveUp(current.y1);
 		int down = map.moveDown(current.y1);
 		int right = map.moveRight(current.x1);
 		int left = map.moveLeft(current.x1);
 		
-		node = getNode(current.x1, up);
-		addToOpen(node);
+		createNode(nextRange, current.getX(), up);
 
-		node = getNode(current.x1, down);
-		addToOpen(node);
-		
-		node = getNode(right, current.y1);
-		addToOpen(node);
-		
-		node = getNode(left, current.y1);
-		addToOpen(node);
+		createNode(nextRange, current.getX(), down);
+
+		createNode(nextRange, left, current.getY());
+
+		createNode(nextRange, right, current.getY());
 	}
-	
-	protected Node getNode(int x, int y) {
+
+	protected Node createNode(int range, int x, int y) {
 		Node node;
+	
 		if (nodes[x][y] == null) {
-			node = nodes[x][y] = new Node(x, y, unit.getX(), unit.getY());
-			System.out.println("X, Y " + x + ", " + y);
-			System.out.println("Range: " + node.range);
+			node = nodes[x][y] = new Node(range, x, y);
 		} else {
 			node = nodes[x][y];
 		}
+		addToOpen(node);
 		return node;
 	}
-	
-	private void addToOpen(Node node){
-		if (!isBlocked(node) && !inClosedList(node)
-				&& !inOpenList(node) && node.range <= unit.range){
+
+	private void addToOpen(Node node) {
+		if (!isBlocked(node) && !inOpenList(node) && node.getRange() <= unit.range && !inMovable(node)) {
+			movableArea.add(node);
 			open.add(node);
 		}
 	}
 	
-	protected boolean inClosedList(Node node) {
-		return closed.contains(node);
+	protected boolean inMovable(Node node){
+		return movableArea.contains(node);
 	}
 	
 	protected boolean inOpenList(Node node) {
@@ -86,48 +87,56 @@ public class MovableArea {
 	}
 
 	public boolean isBlocked(Node node) {
-		return ApplicationData.map.isBlocked(node.x1, node.y1);
+		return map.isBlocked(node.x1, node.y1);
 	}
-	
+
 	public class Node {
-		protected int x1, y1;
-		protected double range;
+		private int x1, y1;
+		private int range = 0;
 		private float alpha = 0.50f;
 		private Color color = new Color(1, 1, 1, alpha);
-		private Node parent;
-		
+
 		/**
-		 * The system uses range to calculate the distance of the node you are trying to go to.
+		 * The system uses range to calculate the distance of the node you are
+		 * trying to go to.
 		 * 
 		 * If out of range node should not be added the arrar open list.
+		 * 
 		 * @param x1
 		 * @param y1
 		 * @param x2
 		 * @param y2
 		 */
-		public Node(int x1, int y1, int x2, int y2){
-			range(x1, y1, x2, y2);
+		public Node(int range, int x, int y) {
+			x1 = x;
+			y1 = y;
+			setRange(range);
 		}
-		
-		public void setAlpha(float alpha){
+
+		public void setAlpha(float alpha) {
 			this.alpha = alpha;
 		}
 
-		private void range(int x1, int y1, int x2, int y2){
-			range = Math.sqrt((Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)));
-			this.x1 = x1;
-			this.y1 = y1;
+		public void setRange(int range) {
+			this.range = range;
 		}
 		
-		public double setParent(Node parent) {
-			range = parent.range + 1;
-			this.parent = parent;
+		public int getX(){
+			return x1;
+		}
+		
+		public int getY(){
+			return y1;
+		}
+	
+		public int getRange(){
 			return range;
 		}
-		
-		public void draw(Graphics g){
+
+		public void draw(Graphics g) {
 			g.setColor(color);
-			g.fillRect(View.getActualX(x1), View.getActualY(y1), View.getScale(), View.getScale());
+			g.fillRect(View.getActualX(x1), View.getActualY(y1),
+					View.getScale(), View.getScale());
 		}
 	}
 }

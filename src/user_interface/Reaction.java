@@ -11,7 +11,6 @@ public class Reaction extends Draw {
 	protected Panel panel;
 	protected int storedElement;
 
-
 	public Reaction(MapRender mapRender, Panel panel) {
 		// This builder is big but it needs to be that way Almost every thing
 		// needs to be accessed in the GUI
@@ -59,6 +58,7 @@ public class Reaction extends Draw {
 
 	public void keyPressed(int key) {
 		// This is going to handle all the default key input for the game
+		TurnsController turnsController = ApplicationData.turnsController;
 		System.out.println("Key Number is: " + key);
 		if (key == 50) {
 			changeStoredElementStone();
@@ -66,11 +66,12 @@ public class Reaction extends Draw {
 		if (key == 49) {
 			changeStoredElementFloor();
 		}
-		if (key == 67){
-			ApplicationData.turnsController.compressInitiative();
+		if (key == 67) {
+			turnsController.compressInitiative();
+			setSelectedUnit(turnsController.getUnit());
 		}
-		if (key == 86){
-			ApplicationData.turnsController.gotToNextTurn();
+		if (key == 86) {
+			nextTurn();
 		}
 	}
 
@@ -90,15 +91,20 @@ public class Reaction extends Draw {
 		int modifiedY = getModfiedMouseY(mouseY);
 
 		if (ApplicationData.units.isUnit(modifiedX, modifiedY)) {
-			selectedUnit = ApplicationData.units.getUnitByLocation(modifiedX,
-					modifiedY);
-			this.buildMoveArea();
+			setSelectedUnit(ApplicationData.units.getUnitByLocation(modifiedX,
+					modifiedY));
 		} else {
 			// selectedUnit.dig(modifiedX, modifiedY);
 			changeElement(mouseX, mouseY, storedElement);
-			selectedUnit = null;
+			setSelectedUnit(null);
 		}
 
+	}
+	
+	private void setSelectedUnit(Unit unit){
+		selectedUnit = unit;
+		clearMoveArea();
+		buildMoveArea();
 	}
 
 	public void rightClick(int mouseX, int mouseY) {
@@ -110,15 +116,20 @@ public class Reaction extends Draw {
 			pathfinder = new Pathfinder();
 			Path path = pathfinder.findPath(selectedUnit.getX(),
 					selectedUnit.getY(), modifiedX, modifiedY);
-			if (selectedUnit.rangeCheck(path)){
-				this.clearMoveArea();
+			if (selectedUnit.rangeCheck(path)) {
 				selectedUnit.newPath(path);
+				nextTurn();
 			}
-			
+
 		} else {
 			Unit unit = new Unit("dwarf", modifiedX, modifiedY);
 			ApplicationData.units.add(unit);
 		}
+	}
+	
+	private void nextTurn(){
+		ApplicationData.turnsController.gotToNextTurn();
+		setSelectedUnit(ApplicationData.turnsController.getUnit());
 	}
 
 	public void wheelMouse(MouseWheelEvent e) {
