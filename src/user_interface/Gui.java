@@ -18,19 +18,17 @@ public class Gui {
 	 * This will always be called when the Reaction system is built in the panel
 	 * system. oh it is also extended by the draw method
 	 */
-	protected Button attack = new Button();
-	protected Button move = new Button();
-
+	protected ActionsMenu actionsMenu;
+	
 	public ArrayList<Node> movableArea = new ArrayList<Node>();
 
 	Map map = ApplicationData.map;
-	protected Unit selectedUnit;
+	public Unit selectedUnit;
 	protected Pathfinder pathfinder;
+	
 
 	public Gui() {
 		movableArea.clear();
-		move.setBounds(50, 50, 20, 20);
-		attack.setBounds(20, 20, 20, 20);
 	}
 
 	public void clearMoveArea() {
@@ -43,9 +41,9 @@ public class Gui {
 	}
 
 	public void hovered(int mouseX, int mouseY) {
-		attack.hovered(mouseX, mouseY);
-		move.hovered(mouseX, mouseY);
+		actionsMenu.hovered(mouseX, mouseY);
 	}
+	
 
 	public void drawMoveArea(Graphics g) {
 		int loop = 0;
@@ -54,8 +52,8 @@ public class Gui {
 			loop++;
 		}
 	}
-	public void drawButtons(Graphics g){
-		attack.draw(g);
-		move.draw(g);
+	
+	public void drawMenus(Graphics g){
+		actionsMenu.draw(g);
 	}
 }

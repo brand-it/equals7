@@ -15,6 +15,7 @@ public class Reaction extends Draw {
 		// This builder is big but it needs to be that way Almost every thing
 		// needs to be accessed in the GUI
 		this.panel = panel;
+		actionsMenu = new ActionsMenu(this);
 
 	}
 
@@ -59,7 +60,6 @@ public class Reaction extends Draw {
 	public void keyPressed(int key) {
 		// This is going to handle all the default key input for the game
 		TurnsController turnsController = ApplicationData.turnsController;
-		System.out.println("Key Number is: " + key);
 		if (key == 50) {
 			changeStoredElementStone();
 		}
@@ -85,26 +85,28 @@ public class Reaction extends Draw {
 		storedElement = ApplicationData.map.getElementByString("stone");
 	}
 
-	public void leftClick(int mouseX, int mouseY) {
-
-		int modifiedX = getModfiedMouseX(mouseX);
-		int modifiedY = getModfiedMouseY(mouseY);
-
-		if (ApplicationData.units.isUnit(modifiedX, modifiedY)) {
-			setSelectedUnit(ApplicationData.units.getUnitByLocation(modifiedX,
-					modifiedY));
-		} else {
-			// selectedUnit.dig(modifiedX, modifiedY);
-			changeElement(mouseX, mouseY, storedElement);
-			setSelectedUnit(null);
+	
+	private void setSelectedUnit(Unit unit){
+		if (unit != null){
+			selectedUnit = unit;
+			clearMoveArea();
+			buildMoveArea();
 		}
 
 	}
 	
-	private void setSelectedUnit(Unit unit){
-		selectedUnit = unit;
-		clearMoveArea();
-		buildMoveArea();
+	public void leftClick(int mouseX, int mouseY) {
+
+//		int modifiedX = getModfiedMouseX(mouseX);
+//		int modifiedY = getModfiedMouseY(mouseY);
+		if(!actionsMenu.clicked(mouseX, mouseY)){
+			actionsMenu.setActionMenuLocation(mouseX, mouseY);
+			actionsMenu.showActionMenu();
+		} else {
+			actionsMenu = new ActionsMenu(this);
+		}
+
+
 	}
 
 	public void rightClick(int mouseX, int mouseY) {
@@ -127,8 +129,8 @@ public class Reaction extends Draw {
 		}
 	}
 	
-	private void nextTurn(){
-		ApplicationData.turnsController.gotToNextTurn();
+	public void nextTurn(){
+		ApplicationData.turnsController.goToNextTurn();
 		setSelectedUnit(ApplicationData.turnsController.getUnit());
 	}
 

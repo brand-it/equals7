@@ -43,18 +43,4 @@ public class Draw extends Gui {
 		}
 
 	}
-
-	public void drawEndLocation(Graphics g) {
-		if (selectedUnit != null) {
-			if (selectedUnit.ifPath()) {
-				g.setColor(Color.orange);
-				int adjustmentMouseX = (selectedUnit.getEndX() * View
-						.getScale()) - View.getRoundedX();
-				int adjustmentMouseY = (selectedUnit.getEndY() * View
-						.getScale()) - View.getRoundedY();
-				g.drawRect(adjustmentMouseX, adjustmentMouseY, View.getScale(),
-						View.getScale());
-			}
-		}
-	}
 }

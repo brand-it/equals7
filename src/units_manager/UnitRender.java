@@ -30,7 +30,7 @@ public class UnitRender {
 	public void draw(Graphics g) {
 		g.drawImage(image, getActualX(), getActualY(), View.getScale(),
 				View.getScale(), null);
-		g.drawString(Integer.toString(initiative), getActualX(),
-				getActualY() - 10);
+//		g.drawString(Integer.toString(initiative), getActualX(),
+//				getActualY() - 10);
 	}
 }

@@ -10,6 +10,11 @@ public class Button {
 	protected int buttonX, buttonY, buttonH, buttonW;
 	private BufferedImage image;
 	private Color color;
+	private String text;
+	
+	public Button(String text){
+		this.text = text;
+	}
 
 	public void setBounds(int x, int y, int width, int height) {
 		buttonX = x;
@@ -62,6 +67,8 @@ public class Button {
 	public void draw(Graphics g) {
 		g.setColor(color);
 		g.fillRect(buttonX, buttonY, buttonW, buttonH);
+		g.setColor(Color.blue);
+		g.drawString(text, buttonX, buttonY + 15);
 	}
 
 }

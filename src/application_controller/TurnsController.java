@@ -34,7 +34,7 @@ public class TurnsController {
 		return unit;
 	}
 
-	public void gotToNextTurn() {
+	public void goToNextTurn() {
 		Collections.rotate(units, 1);
 		compressInitiative();
 		unit = getFirst();
@@ -58,7 +58,6 @@ public class TurnsController {
 		Unit unit;
 		while (units.size() > loopNumber) {
 			unit = units.get(loopNumber);
-			System.out.println(unit.initiative);
 			if (unit.getInitiative() == 0 && loopNumber == 0) {
 				initiative = 0;
 			} else if (unit.getInitiative() == 0) {
