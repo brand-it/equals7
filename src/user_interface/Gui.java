@@ -20,7 +20,8 @@ public class Gui {
 	 */
 	protected ActionsMenu actionsMenu;
 	
-	public ArrayList<Node> movableArea = new ArrayList<Node>();
+	public ArrayList<Node> moveableArea = new ArrayList<Node>();
+	public ArrayList<AttackRange.Node> attackRange = new ArrayList<AttackRange.Node>();
 
 	Map map = ApplicationData.map;
 	public Unit selectedUnit;
@@ -28,16 +29,25 @@ public class Gui {
 	
 
 	public Gui() {
-		movableArea.clear();
+		moveableArea.clear();
 	}
 
 	public void clearMoveArea() {
-		movableArea.clear();
+		moveableArea.clear();
 	}
 
 	public void buildMoveArea() {
 		MovableArea moveableArea = new MovableArea();
-		movableArea = moveableArea.buildMoveArea(selectedUnit);
+		this.moveableArea = moveableArea.buildMoveArea(selectedUnit);
+	}
+	
+	public void clearAttackRange(){
+		attackRange.clear();
+	}
+	
+	public void buildAttackRange(){
+		AttackRange attackRange = new AttackRange();
+		this.attackRange = attackRange.buildAttackArea(selectedUnit);
 	}
 
 	public void hovered(int mouseX, int mouseY) {
@@ -45,12 +55,25 @@ public class Gui {
 	}
 	
 
-	public void drawMoveArea(Graphics g) {
+	private void drawMoveArea(Graphics g) {
 		int loop = 0;
-		while (movableArea.size() > loop) {
-			movableArea.get(loop).draw(g);
+		while (moveableArea.size() > loop) {
+			moveableArea.get(loop).draw(g);
 			loop++;
 		}
+	}
+	
+	private void drawAttackArea(Graphics g){
+		int loop = 0;
+		while (attackRange.size() > loop) {
+			attackRange.get(loop).draw(g);
+			loop++;
+		}
+	}
+	
+	public void drawAreas(Graphics g){
+		drawAttackArea(g);
+		drawMoveArea(g);
 	}
 	
 	public void drawMenus(Graphics g){

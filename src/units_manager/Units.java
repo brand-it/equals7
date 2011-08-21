@@ -32,11 +32,11 @@ public class Units {
 	}
 
 	// This will return null if there is no dwarf at the location you selected
-	public Unit getUnitByLocation(int modifedX, int modifedY) {
+	public Unit getUnitByLocation(int modifiedX, int modifiedY) {
 		Unit unit;
 		for (int u = 0; u < units.size(); u++) {
 			// only leave loop if there is unit
-			unit = getUnitByIndex(u).getUnitByLocation(modifedX, modifedY);
+			unit = getUnitByIndex(u).getUnitByLocation(modifiedX, modifiedY);
 			// Brake loop if a unit is returned
 			if (unit != null) {
 				return unit;
@@ -48,6 +48,10 @@ public class Units {
 
 	public void add(Unit unit) {
 		units.add(unit);
+	}
+	
+	public void remove(Unit unit){
+		units.remove(unit);
 	}
 
 	public void move() {

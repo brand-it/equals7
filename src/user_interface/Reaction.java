@@ -10,6 +10,7 @@ public class Reaction extends Draw {
 
 	protected Panel panel;
 	protected int storedElement;
+	protected boolean attackMode, moveMode;
 
 	public Reaction(MapRender mapRender, Panel panel) {
 		// This builder is big but it needs to be that way Almost every thing
@@ -89,10 +90,28 @@ public class Reaction extends Draw {
 	private void setSelectedUnit(Unit unit){
 		if (unit != null){
 			selectedUnit = unit;
-			clearMoveArea();
-			buildMoveArea();
 		}
 
+	}
+	
+	public void moveMode(){
+		if (selectedUnit != null){
+			clearAttackRange();
+			clearMoveArea();
+			buildMoveArea();
+			moveMode = true;
+			attackMode = false;
+		}
+	}
+	
+	public void attackMode(){
+		if(selectedUnit != null){
+			clearMoveArea();
+			clearAttackRange();
+			buildAttackRange();
+			moveMode = false;
+			attackMode = true;
+		}
 	}
 	
 	public void leftClick(int mouseX, int mouseY) {
@@ -113,15 +132,24 @@ public class Reaction extends Draw {
 
 		int modifiedX = getModfiedMouseX(mouseX);
 		int modifiedY = getModfiedMouseY(mouseY);
-
+		
 		if (selectedUnit != null) {
-			pathfinder = new Pathfinder();
-			Path path = pathfinder.findPath(selectedUnit.getX(),
-					selectedUnit.getY(), modifiedX, modifiedY);
-			if (selectedUnit.rangeCheck(path)) {
-				selectedUnit.newPath(path);
+			if (attackMode){
+				selectedUnit.setTarget(ApplicationData.units.getUnitByLocation(modifiedX, modifiedY));
+				selectedUnit.attackTarget();
 				nextTurn();
+				moveMode();
+			} else if (moveMode){
+				pathfinder = new Pathfinder();
+				Path path = pathfinder.findPath(selectedUnit.getX(),
+						selectedUnit.getY(), modifiedX, modifiedY);
+				if (selectedUnit.rangeCheck(path)) {
+					selectedUnit.newPath(path);
+					nextTurn();
+					moveMode();
+				}
 			}
+
 
 		} else {
 			Unit unit = new Unit("dwarf", modifiedX, modifiedY);
